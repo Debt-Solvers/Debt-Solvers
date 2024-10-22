@@ -1,16 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp">
 
-    <EditText
-        android:id="@+id/editTextText"
+    <ImageView
+        android:id="@+id/ivWelcomeImage"
+        android:layout_width="260dp"
+        android:layout_height="323dp"
+        android:src="@drawable/welcome_logo" />
+
+    <TextView
+        android:id="@+id/tvWelcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Hello Testing 1234!" />
+        android:text="DebtSolvers"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:paddingTop="16dp" />
+
+    <TextView
+        android:id="@+id/tvWelcomeSubtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Manage your finances and keep track of your spending."
+        android:textSize="14sp"
+        android:gravity="center"
+        android:paddingTop="8dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingTop="32dp">
+
+        <Button
+            android:id="@+id/btnSignInMain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign in" />
+
+        <Button
+            android:id="@+id/btnRegisterMain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:layout_marginStart="16dp"/>
+    </LinearLayout>
 </LinearLayout>
-
-
