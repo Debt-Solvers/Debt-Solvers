@@ -21,7 +21,7 @@
         android:id="@+id/tvWelcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="DebtSolvers"
+        android:text="@string/appTitle"
         android:fontFamily="@font/poppins_bold"
         android:textSize="24sp"
         android:gravity="center"
@@ -31,11 +31,10 @@
         android:id="@+id/tvWelcomeSubtext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Manage your finances and keep track of your spending."
+        android:text="@string/appDescription"
         android:fontFamily="@font/poppins_regular"
         android:textSize="14sp"
         android:gravity="center"
-
         android:paddingTop="8dp" />
 
     <LinearLayout
@@ -51,7 +50,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Sign in"
+            android:text="@string/signIn"
             android:textColor="@color/backgroundColor"
             android:backgroundTint="@color/secondaryColor"
             app:cornerRadius="16dp"
@@ -62,7 +61,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Register"
+            android:text="@string/register"
             android:textColor="@color/backgroundColor"
             android:backgroundTint="@color/primaryColor"
             app:cornerRadius="16dp"
