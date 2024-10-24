@@ -7,11 +7,15 @@
     android:gravity="center"
     android:padding="16dp">
 
-    <ImageView
-        android:id="@+id/ivWelcomeImage"
-        android:layout_width="260dp"
-        android:layout_height="323dp"
-        android:src="@drawable/welcome_logo" />
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerImgSlider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart = "80dp"
+        android:paddingEnd="80dp"
+        />
+
+
 
     <TextView
         android:id="@+id/tvWelcomeText"
@@ -43,7 +47,7 @@
 
 
         <Button
-            android:id="@+id/btnSignIn"
+            android:id="@+id/btnSignInMain"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -54,7 +58,7 @@
             android:layout_margin="8dp"/>
 
         <Button
-            android:id="@+id/btnRegister"
+            android:id="@+id/btnRegisterMain"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
