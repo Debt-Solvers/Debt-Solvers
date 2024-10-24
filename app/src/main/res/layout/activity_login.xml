@@ -14,7 +14,7 @@
         android:fontFamily="@font/poppins_bold"
         android:gravity="center"
         android:textColor="@color/secondaryColor"
-        android:text="Lets Sign you in"
+        android:text="@string/signTitle"
         android:textSize="36sp"
         android:layout_marginTop="40dp"
         />
@@ -25,7 +25,7 @@
         android:fontFamily="@font/poppins_bold"
         android:gravity="center"
         android:textColor="@color/secondaryColor"
-        android:text="Welcome Back, We missed you"
+        android:text="@string/welcomeBack"
         android:textSize="14sp"
         />
 

@@ -4,19 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
+    android:gravity="top"
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/tvRegisterWelcome"
+        android:id="@+id/welcomeLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lets Register Account"
-        android:textSize="24sp"
-        android:gravity="center" />
-
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/secondaryColor"
+        android:text="@string/registerTitle"
+        android:textSize="36sp"
+        android:layout_marginTop="40dp"
+        />
+    <TextView
+        android:id="@+id/welcomeMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="center"
+        android:textColor="@color/secondaryColor"
+        android:text="@string/welcomeNew"
+        android:textSize="14sp"
+        />
     <EditText
         android:id="@+id/etName"
+        android:fontFamily="@font/poppins_regular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Name"
@@ -24,6 +37,7 @@
 
     <EditText
         android:id="@+id/etBusinessName"
+        android:fontFamily="@font/poppins_regular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Business name"
@@ -31,14 +45,16 @@
 
     <EditText
         android:id="@+id/etPhone"
+        android:fontFamily="@font/poppins_regular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Phone"
+        android:hint="Phone Number"
         android:inputType="phone"
         android:paddingTop="8dp" />
 
     <EditText
         android:id="@+id/etEmail"
+        android:fontFamily="@font/poppins_regular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
@@ -47,6 +63,7 @@
 
     <EditText
         android:id="@+id/etPassword"
+        android:fontFamily="@font/poppins_regular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
@@ -54,14 +71,18 @@
         android:paddingTop="8dp" />
 
     <Button
-        android:id="@+id/btnRegister"
+        android:id="@+id/btnSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sign Up"
+        android:text="@string/signUp"
+        android:textColor="@color/backgroundColor"
+        android:backgroundTint="@color/primaryColor"
+        android:fontFamily="@font/poppins_regular"
         android:paddingTop="24dp" />
 
     <TextView
         android:id="@+id/alreadyHaveAnAccount"
+        android:fontFamily="@font/poppins_regular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/haveAnAccount"

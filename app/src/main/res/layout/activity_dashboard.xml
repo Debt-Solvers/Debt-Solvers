@@ -19,7 +19,7 @@
         android:id="@+id/tvWelcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="DebtSolvers"
+        android:text="@string/appTitle"
         android:textSize="24sp"
         android:gravity="center"
         android:paddingTop="16dp" />
@@ -29,7 +29,7 @@
         android:id="@+id/tvWelcomeSubtext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Manage your finances and keep track of your spending."
+        android:text="@string/appDescription"
         android:textSize="14sp"
         android:gravity="center"
         android:paddingTop="8dp" />
