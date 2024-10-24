@@ -12,6 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Lets Sign you in"
+        android:fontFamily="@font/poppins_regular"
         android:textSize="24sp"
         android:gravity="center" />
 
@@ -20,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email, phone, or username"
+        android:fontFamily="@font/poppins_regular"
         android:inputType="textEmailAddress"
         android:paddingTop="16dp" />
 
@@ -28,6 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
+        android:fontFamily="@font/poppins_regular"
         android:inputType="textPassword"
         android:paddingTop="16dp" />
 
@@ -36,6 +39,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign in"
+        android:textColor="@color/backgroundColor"
+        android:backgroundTint="@color/secondaryColor"
+        android:fontFamily="@font/poppins_regular"
         android:paddingTop="24dp" />
 
     <TextView
@@ -43,6 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Forgot Password?"
+        android:fontFamily="@font/poppins_regular"
         android:gravity="center"
         android:paddingTop="8dp" />
     <TextView
@@ -58,6 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/registerAccount"
+        android:fontFamily="@font/poppins_regular"
         android:gravity="center"
         android:paddingTop="16dp"
         style="@style/NoUnderlineEditText"/>

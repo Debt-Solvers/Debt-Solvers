@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
                     sliderHandle.removeCallbacks(sliderRun)
-                    sliderHandle.postDelayed(sliderRun, 2000)
+                    sliderHandle.postDelayed(sliderRun, 10000)
                 }
             }
         )
@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        sliderHandle.postDelayed(sliderRun, 2000)
+        sliderHandle.postDelayed(sliderRun, 10000)
     }
 
     private fun itemSliderView() {
