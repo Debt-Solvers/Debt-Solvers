@@ -8,8 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="blue">#3498db</color>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
-    <color name="colorBackground">#F4F4F9</color>
+    <color name="primaryColor">#5E4BD4</color> <!-- Light purple -->
+    <color name="secondaryColor">#000000</color> <!-- Black for text -->
+    <color name="backgroundColor">#FFFFFF</color> <!-- White -->
 </resources>
