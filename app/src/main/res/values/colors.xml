@@ -10,5 +10,6 @@
     <color name="blue">#3498db</color>
     <color name="primaryColor">#5E4BD4</color> <!-- Light purple -->
     <color name="secondaryColor">#000000</color> <!-- Black for text -->
-    <color name="backgroundColor">#FFFFFF</color> <!-- White -->
+    <color name="backgroundColor">#FFFFFF</color>
+    <color name="lightBackground">#efeff0</color>
 </resources>
