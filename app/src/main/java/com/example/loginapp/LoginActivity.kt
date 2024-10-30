@@ -201,15 +201,29 @@ class LoginActivity : AppCompatActivity() {
         try {
             val res = JSONObject(responseData)
             val success = res.getBoolean("success")
+            // get token from response
+            val token = res.optString("token")
 
-            if (success) {
+            if (success && token.isNotEmpty()) {
+
+                /*
+                SharedPreferences is a way to store small amounts of data as key-value pairs.
+                Below creates an instance of sharedPreferences where it stores the token sent from
+                the backend to persist throughout the session.
+                Basically it makes it so that the same user is recognized throughout the entire app while
+                logged in.
+                 */
+
+                val sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE)
+                sharedPreferences.edit().putString("authToken", token).apply()
+
                 // Login successful, navigate to DashboardActivity
                 val intent = Intent(this, DashboardActivity::class.java)
                 startActivity(intent)
                 finish()
             } else {
                 // Show error message from the server
-                val message = res.getString("message")
+                val message = res.optString("message", "Login Failed")
                 signInStatus.text = message
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
             }
@@ -233,6 +247,8 @@ class LoginActivity : AppCompatActivity() {
             val email = emailEditText.text.toString()
             if (email.isNotEmpty()) {
                 // Handle password reset logic here
+                resetPassword(email, dialog)
+
                 Toast.makeText(this, "Password reset link sent to $email", Toast.LENGTH_SHORT)
                     .show()
                 dialog.dismiss()
@@ -243,9 +259,43 @@ class LoginActivity : AppCompatActivity() {
         tvBackToLogin.setOnClickListener {
             dialog.dismiss()
         }
-
         dialog.show()
+    }
 
+    private fun resetPassword(email: String, dialog: Dialog) {
+
+        val backEndURL = "http://your-backend-url/resetPassword"
+
+        val passwordResetData = JSONObject().apply(){
+            put("email", email)
+        }
+        // Convert JSON object to request body
+        val requestBody = passwordResetData.toString().toRequestBody(("application/json; charset=utf-8").toMediaType())
+
+        // Create HTTP Request
+        val request = Request.Builder()
+            .url(backEndURL)
+            .post(requestBody)
+            .build()
+
+        // Do an async request
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                runOnUiThread {
+                    Toast.makeText(this@LoginActivity, "Network error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onResponse(call: Call, response: Response) {
+                runOnUiThread {
+                    if (response.isSuccessful) {
+                        Toast.makeText(this@LoginActivity, "Password reset link sent to $email", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                    } else {
+                        Toast.makeText(this@LoginActivity, "Failed to send reset link. Please try again.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        })
     }
 }
 
