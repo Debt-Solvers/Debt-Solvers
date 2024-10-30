@@ -66,7 +66,7 @@ class DashboardActivity : AppCompatActivity() {
             })
         } else {
             /*
-                Redirects the user to the login page if there is no token of ir the token validation fails.
+                Redirects the user to the login page if there is no token of ir the token validation fails.o
              */
             Toast.makeText(this, "Please log in again", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, LoginActivity::class.java)
