@@ -77,12 +77,22 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     private fun logout() {
-//        val sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE)
-//        sharedPreferences.edit().remove("authToken").apply()
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
 
+        val sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        // Remove the token
+        editor.remove("authToken").apply()
+
+        //Checks to make sure if the user token is removed first before moving pages.
+        if (sharedPreferences.getString("authToken", null) == null) {
+            //If the token is removed ...
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            Toast.makeText(this, "Logout failed. Please try again.", Toast.LENGTH_SHORT).show()
+        }
+    }
 
 }
