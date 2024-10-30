@@ -18,7 +18,9 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -32,6 +34,10 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var signInButton: Button
     private lateinit var signInStatus: TextView
     private lateinit var forgotPW: TextView
+
+    // Create to use the login View Model
+    private val loginViewModel: LoginViewModel by viewModels()
+//    private lateinit var loginViewModel: LoginViewModel
 
     // Initialize OkHttpClient which handles HTTP responses and requests
     // controls sending and receiving data
@@ -99,6 +105,18 @@ class LoginActivity : AppCompatActivity() {
         register.text = spannableString
         register.movementMethod = LinkMovementMethod.getInstance()
 
+
+        // Observe the Login Status
+        loginViewModel.loginStatus.observe(this, Observer { status ->
+            signInStatus.text = status
+            if (status == "Login Successful!") {
+                // Go to dashboard on successful login
+                val intent = Intent(this, DashboardActivity::class.java)
+                startActivity(intent)
+                finish() // Close LoginActivity
+            }
+        })
+
         // Set up login button click listener
         signInButton.setOnClickListener {
             val user = username.text.toString()
@@ -124,116 +142,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun login(username: String, password: String) {
 
-        val backEndURL = "http://your-backend-url/login"
-
-        // Create a JSON object with the login data
-        val userLoginData = JSONObject().apply{
-            put("username", username)
-            put("password", password)
-        }
-
-
-        // Create a request body with the JSON data
-        // userLoginData.toString() converts the JSON object back to a string
-        // .toRequestBody is part of kotlin extension function that changes a string into a Request body which is the
-        //format and actual content of the data that will be sent to the backend.
-        //MediaType specifies the type of content being sent in the request body which we define as JSON using UTF-8 enconding.
-        val requestBody = userLoginData.toString().toRequestBody(("application/json; charset=utf-8").toMediaType())
-
-        // Log the JSON object and request body to the console
-        Log.d("LoginActivity", "RequestBody JSON: ${userLoginData.toString()}")
-//        Log.d("LoginActivity", "RequestBody: ${requestBody.toString()}")
-
-        // Request.builder helps create the http request. It defines the URL, HTTP method,(GET, POST), headers
-        // and request body. After everything is ready, it will create the actual "Request" object to send to the
-        //server through the url.
-
-        val request = Request.Builder()
-            .url(backEndURL)
-            .post(requestBody)
-            //.addHeader("Authorization", "token")
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            //calls back to this this function if some failure happen like no internet
-            // Call is the object that represents the HTTP failed request
-            override fun onFailure(call: Call, e: IOException) {
-                //Handles the response to failure
-                runOnUiThread {
-
-                    signInStatus.text = "Network error. Please try again."
-                    Toast.makeText(
-                        this@LoginActivity,
-                        "Network error: ${e.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-
-                //Handles the response from the server
-                //basically when the server sends a response whether it is the data or something else.
-                // response.body?.string() basically checks if the body is not null if it isn't then it will
-                // return the string of the body.
-                val responseData = response.body?.string()
-                if (response.isSuccessful) {
-                    if (responseData != null) {
-                        handleLoginResponse(responseData)
-                    }
-                } else {
-                    runOnUiThread {
-                        signInStatus.text = "Invalid credentials!"
-                        Toast.makeText(
-                            this@LoginActivity,
-                            "Invalid credentials!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-        })
-    }
-
-    private fun handleLoginResponse(responseData: String) {
-
-        try {
-            val res = JSONObject(responseData)
-            val success = res.getBoolean("success")
-            // get token from response
-            val token = res.optString("token")
-
-            if (success && token.isNotEmpty()) {
-
-                /*
-                SharedPreferences is a way to store small amounts of data as key-value pairs.
-                Below creates an instance of sharedPreferences where it stores the token sent from
-                the backend to persist throughout the session.
-                Basically it makes it so that the same user is recognized throughout the entire app while
-                logged in.
-                 */
-
-                val sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE)
-                sharedPreferences.edit().putString("authToken", token).apply()
-
-                // Login successful, navigate to DashboardActivity
-                val intent = Intent(this, DashboardActivity::class.java)
-                startActivity(intent)
-                finish()
-            } else {
-                // Show error message from the server
-                val message = res.optString("message", "Login Failed")
-                signInStatus.text = message
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            signInStatus.text = "An error occurred."
-            Toast.makeText(this, "An error occurred: ${e.message}", Toast.LENGTH_SHORT).show()
-        }
-    }
 
     private fun showForgotPasswordDialog() {
         val dialog = Dialog(this)
@@ -247,8 +156,9 @@ class LoginActivity : AppCompatActivity() {
         btnRestartPassword.setOnClickListener {
             val email = emailEditText.text.toString()
             if (email.isNotEmpty()) {
-                // Handle password reset logic here
-                resetPassword(email, dialog)
+
+                // call the viewModel to handle the password reset
+                loginViewModel.resetPassword(email, dialog)
 
                 Toast.makeText(this, "Password reset link sent to $email", Toast.LENGTH_SHORT)
                     .show()
@@ -263,41 +173,7 @@ class LoginActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun resetPassword(email: String, dialog: Dialog) {
 
-        val backEndURL = "http://your-backend-url/resetPassword"
-
-        val passwordResetData = JSONObject().apply(){
-            put("email", email)
-        }
-        // Convert JSON object to request body
-        val requestBody = passwordResetData.toString().toRequestBody(("application/json; charset=utf-8").toMediaType())
-
-        // Create HTTP Request
-        val request = Request.Builder()
-            .url(backEndURL)
-            .post(requestBody)
-            .build()
-
-        // Do an async request
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                runOnUiThread {
-                    Toast.makeText(this@LoginActivity, "Network error: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
-            override fun onResponse(call: Call, response: Response) {
-                runOnUiThread {
-                    if (response.isSuccessful) {
-                        Toast.makeText(this@LoginActivity, "Password reset link sent to $email", Toast.LENGTH_SHORT).show()
-                        dialog.dismiss()
-                    } else {
-                        Toast.makeText(this@LoginActivity, "Failed to send reset link. Please try again.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        })
-    }
 }
 
 
