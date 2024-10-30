@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import okhttp3.*
@@ -15,7 +16,7 @@ import java.io.IOException
 
 class DashboardActivity : AppCompatActivity() {
 
-    private lateinit var logOutButton: Button
+    private lateinit var logOutButton: TextView
 
     val client = OkHttpClient()
 
@@ -33,7 +34,7 @@ class DashboardActivity : AppCompatActivity() {
         /*
         Get the data from the server when you move to the dashboard
          */
-        fetchDataFromServer()
+//        fetchDataFromServer()
     }
 
 
@@ -76,8 +77,8 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     private fun logout() {
-        val sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE)
-        sharedPreferences.edit().remove("authToken").apply()
+//        val sharedPreferences = getSharedPreferences("UserSession", MODE_PRIVATE)
+//        sharedPreferences.edit().remove("authToken").apply()
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()

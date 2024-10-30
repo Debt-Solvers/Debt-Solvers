@@ -236,10 +236,11 @@
                         android:layout_width="80dp"
                         android:layout_height="80dp"/>
                     <TextView
+                        android:id="@+id/btnLogout"
                         android:layout_marginTop="12dp"
                         android:textColor="@color/secondaryColor"
                         android:textSize="18sp"
-                        android:text="Calendar"
+                        android:text="Logout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
