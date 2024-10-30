@@ -3,4 +3,14 @@
     <string name="haveAnAccount">Already have an account? Login</string>
     <string name="registerAccount">Don\'t have an account? Register</string>
     <string name="forgotPassword">Forgot Password?</string>
+    <string name="signIn">Sign In</string>
+    <string name="signUp">Sign Up</string>
+    <string name="register">Register</string>
+    <string name="appDescription">Manage your finances and keep track of your spending.</string>
+    <string name="appTitle">Debt Solvers</string>
+    <string name="welcomeBack">Welcome back we missed you</string>
+    <string name="welcomeNew">Welcome, and hope you enjoy your stay</string>
+    <string name="signTitle">Lets sign you in</string>
+    <string name="registerTitle">Lets register your account</string>
+
 </resources>

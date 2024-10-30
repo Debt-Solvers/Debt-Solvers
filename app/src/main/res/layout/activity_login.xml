@@ -4,30 +4,46 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
+    android:gravity="top"
     android:padding="16dp">
 
     <TextView
         android:id="@+id/welcomeLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lets Sign you in"
-        android:textSize="24sp"
-        android:gravity="center" />
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="center"
+        android:textColor="@color/secondaryColor"
+        android:text="@string/signTitle"
+        android:textSize="36sp"
+        android:layout_marginTop="40dp"
+        />
+    <TextView
+        android:id="@+id/welcomeMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="center"
+        android:textColor="@color/secondaryColor"
+        android:text="@string/welcomeBack"
+        android:textSize="14sp"
+        />
 
     <EditText
         android:id="@+id/loginEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email, phone, or username"
+        android:fontFamily="@font/poppins_regular"
         android:inputType="textEmailAddress"
-        android:paddingTop="16dp" />
+        android:paddingTop="30dp" />
 
     <EditText
         android:id="@+id/loginPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
+        android:fontFamily="@font/poppins_regular"
         android:inputType="textPassword"
         android:paddingTop="16dp" />
 
@@ -35,16 +51,21 @@
         android:id="@+id/btnSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sign in"
+        android:text="@string/signIn"
+        android:textColor="@color/backgroundColor"
+        android:backgroundTint="@color/primaryColor"
+        android:fontFamily="@font/poppins_regular"
         android:paddingTop="24dp" />
 
     <TextView
         android:id="@+id/forgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Forgot Password?"
+        android:fontFamily="@font/poppins_regular"
         android:gravity="center"
-        android:paddingTop="8dp" />
+        android:paddingTop="8dp"
+        android:text="@string/forgotPassword" />
+
     <TextView
         android:id="@+id/signIn_status"
         android:layout_width="wrap_content"
@@ -58,6 +79,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/registerAccount"
+        android:fontFamily="@font/poppins_regular"
         android:gravity="center"
         android:paddingTop="16dp"
         style="@style/NoUnderlineEditText"/>
