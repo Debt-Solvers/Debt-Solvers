@@ -3,20 +3,16 @@ package com.example.loginapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
 import java.io.IOException
 
 class DashboardActivity : AppCompatActivity() {
 
     private lateinit var logOutButton: TextView
+    private lateinit var expenseButton: TextView
 
     val client = OkHttpClient()
 
@@ -27,9 +23,13 @@ class DashboardActivity : AppCompatActivity() {
         /*
         Reference the logout button and set an event that when it is clicked, it does the logout function.
          */
-        logOutButton = findViewById(R.id.btnLogout)
+        logOutButton = findViewById(R.id.logoutView)
         logOutButton.setOnClickListener{
             logout()
+        }
+        expenseButton = findViewById(R.id.expenseView)
+        expenseButton.setOnClickListener {
+            expenseView()
         }
         /*
         Get the data from the server when you move to the dashboard
@@ -94,5 +94,15 @@ class DashboardActivity : AppCompatActivity() {
             Toast.makeText(this, "Logout failed. Please try again.", Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun expenseView() {
+
+        val intent = Intent(this, ExpenseActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+
+
 
 }

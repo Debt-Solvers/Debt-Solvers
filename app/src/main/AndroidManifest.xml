@@ -38,7 +38,13 @@
         <activity
             android:name=".DashboardActivity"
             android:exported="true"
-            android:label="login_activity"
+            android:label="dashboard_activity"
+            android:theme="@style/Theme.LoginApp">
+        </activity>
+        <activity
+            android:name=".ExpenseActivity"
+            android:exported="true"
+            android:label="expense_activity"
             android:theme="@style/Theme.LoginApp">
         </activity>
 
