@@ -8,6 +8,7 @@ import com.example.loginapp.databinding.ActivityMainBinding
 
 class DashboardActivity : AppCompatActivity() {
 
+    
     private lateinit var binding: ActivityDashboardBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +28,6 @@ class DashboardActivity : AppCompatActivity() {
                 else ->{
 
                 }
-
 
         }
             true
