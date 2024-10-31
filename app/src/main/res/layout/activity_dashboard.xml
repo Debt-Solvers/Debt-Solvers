@@ -8,8 +8,6 @@
     android:orientation="vertical"
     tools:context=".DashboardActivity">
 
-
-
     <FrameLayout
         android:id="@+id/frame_layout"
         android:layout_width="0dp"
