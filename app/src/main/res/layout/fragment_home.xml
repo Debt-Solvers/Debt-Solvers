@@ -222,68 +222,7 @@
                     android:fontFamily="@font/roboto_bold" />
 
             </LinearLayout>
-            <LinearLayout
-                android:id="@+id/expenseView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:background="@drawable/white_rectangle_background"
-                android:gravity="center"
-                android:orientation="vertical"
-                app:layout_constraintStart_toEndOf="@id/layoutGoal"
-                android:padding="15dp"
-                app:layout_constraintDimensionRatio="H, 1:1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layoutFinance">
 
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_margin="8dp"
-                    android:contentDescription="@string/app_name"
-                    android:padding="8dp"
-                    android:src="@drawable/testimg3"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Expense"
-                    android:textColor="@color/secondaryColor"
-                    android:textSize="20sp"
-                    android:fontFamily="@font/roboto_bold" />
-
-            </LinearLayout>
-            <LinearLayout
-                android:id="@+id/logoutView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:background="@drawable/white_rectangle_background"
-                android:gravity="center"
-                android:orientation="vertical"
-                app:layout_constraintStart_toEndOf="@id/layoutGoal"
-                android:padding="15dp"
-                app:layout_constraintDimensionRatio="H, 1:1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/layoutFinance">
-
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_margin="8dp"
-                    android:contentDescription="@string/app_name"
-                    android:padding="8dp"
-                    android:src="@drawable/testimg3"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Logout"
-                    android:textColor="@color/secondaryColor"
-                    android:textSize="20sp"
-                    android:fontFamily="@font/roboto_bold" />
-
-            </LinearLayout>
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
