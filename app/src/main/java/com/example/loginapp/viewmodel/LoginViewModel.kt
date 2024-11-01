@@ -29,6 +29,14 @@ class LoginViewModel : ViewModel() {
     //Define the client for http requests
     private val client = OkHttpClient()
 
+    fun login2(username: String, password: String) {
+        if (username.isEmpty() || password.isEmpty()) {
+            _loginStatus.value = "Please enter both fields!"
+            return
+        } else if (username == "admin" && password == "password") {
+            _loginStatus.value = "Login Successful!"
+        }
+    }
     //Login Function
     fun login(username: String, password: String) {
         // Validate username and password

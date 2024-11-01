@@ -117,12 +117,13 @@ class LoginActivity : AppCompatActivity() {
 
             // Simple login validation
             if (user.isNotEmpty() && pass.isNotEmpty()) {
-                if (user == "admin" && pass == "password") { // Dummy credentials
+//                if (user == "admin" && pass == "password") { // Dummy credentials
                     // Start MainActivity on successful login
-                    val intent = Intent(this, DashboardActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
+//                    val intent = Intent(this, DashboardActivity::class.java)
+//                    startActivity(intent)
+//                    finish()
+//                }
+                loginViewModel.login2(user,pass)
 //                loginViewModel.login(user,pass)
 
             } else {
