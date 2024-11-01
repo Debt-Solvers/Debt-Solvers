@@ -28,29 +28,30 @@
         android:textSize="14sp"
         />
     <EditText
-        android:id="@+id/etName"
+        android:id="@+id/etFirstName"
         android:fontFamily="@font/poppins_regular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Name"
+        android:hint="First Name"
         android:paddingTop="16dp" />
 
     <EditText
-        android:id="@+id/etBusinessName"
+        android:id="@+id/etLastName"
         android:fontFamily="@font/poppins_regular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Business name"
-        android:paddingTop="8dp" />
+        android:hint="Last Name"
+        android:paddingTop="16dp" />
 
-    <EditText
-        android:id="@+id/etPhone"
-        android:fontFamily="@font/poppins_regular"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Phone Number"
-        android:inputType="phone"
-        android:paddingTop="8dp" />
+<!--    <EditText-->
+<!--        android:id="@+id/etPhone"-->
+<!--        android:fontFamily="@font/poppins_regular"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:hint="Phone Number"-->
+<!--        android:inputType="phone"-->
+<!--        android:paddingTop="8dp" />-->
+
 
     <EditText
         android:id="@+id/etEmail"
@@ -89,4 +90,6 @@
         android:gravity="center"
         android:paddingTop="16dp"
         style="@style/NoUnderlineEditText"/>
+
+
 </LinearLayout>
