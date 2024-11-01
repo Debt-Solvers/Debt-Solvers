@@ -24,3 +24,4 @@ data class RegisterErrResponse(
 data class errorData(
     val error: String
 )
+
