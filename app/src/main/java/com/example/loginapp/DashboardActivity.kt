@@ -15,8 +15,8 @@ import java.io.IOException
 class DashboardActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDashboardBinding
-    private lateinit var logOutButton: TextView
-    private lateinit var expenseButton: TextView
+//    private lateinit var logOutButton: TextView
+//    private lateinit var expenseButton: TextView
 
 //    val client = OkHttpClient()
 
@@ -45,14 +45,14 @@ class DashboardActivity : AppCompatActivity() {
         /*
       Reference the logout button and set an event that when it is clicked, it does the logout function.
        */
-        logOutButton = findViewById(R.id.logoutView)
-        logOutButton.setOnClickListener{
-            logout()
-        }
-        expenseButton = findViewById(R.id.expenseView)
-        expenseButton.setOnClickListener {
-            expenseView()
-        }
+//        logOutButton = findViewById(R.id.logoutView)
+//        logOutButton.setOnClickListener{
+//            logout()
+//        }
+//        expenseButton = findViewById(R.id.expenseView)
+//        expenseButton.setOnClickListener {
+//            expenseView()
+//        }
         /*
         Get the data from the server when you move to the dashboard
         */
