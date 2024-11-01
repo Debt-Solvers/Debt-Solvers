@@ -12,5 +12,11 @@
     <string name="welcomeNew">Welcome, and hope you enjoy your stay</string>
     <string name="signTitle">Lets sign you in</string>
     <string name="registerTitle">Lets register your account</string>
+    <string name="dummy_text">Did you know that Debt Solvers is simply the best in the industry</string>
+    <string name="home">Home</string>
+    <string name="account">Account</string>
+    <string name="settings">Settings</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

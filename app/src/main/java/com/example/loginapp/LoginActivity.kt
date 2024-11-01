@@ -9,6 +9,7 @@ import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.View
 //import android.text.SpannableString
 import androidx.appcompat.app.AppCompatActivity
@@ -102,8 +103,9 @@ class LoginActivity : AppCompatActivity() {
         // Observe the Login Status
         loginViewModel.loginStatus.observe(this, Observer { status ->
             signInStatus.text = status
-            if (status == "Login Successful!") {
+            if (status == "Login successful!") {
                 // Go to dashboard on successful login
+                Log.d("LoginActivity", "LoginViewModel")
                 val intent = Intent(this, DashboardActivity::class.java)
                 startActivity(intent)
                 finish() // Close LoginActivity
@@ -117,13 +119,15 @@ class LoginActivity : AppCompatActivity() {
 
             // Simple login validation
             if (user.isNotEmpty() && pass.isNotEmpty()) {
-                if (user == "admin" && pass == "password") { // Dummy credentials
+//                if (user == "admin" && pass == "password") { // Dummy credentials
                     // Start MainActivity on successful login
-                    val intent = Intent(this, DashboardActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                }
-//                loginViewModel.login(user,pass)
+                    Log.d("LoginActivity", "Login signIn $user, $pass",)
+//                    val intent = Intent(this, DashboardActivity::class.java)
+//                    startActivity(intent)
+//                    finish()
+//                    loginViewModel.setLoginStatus("Login Successful!")
+//                }
+                loginViewModel.login(user,pass)
 
             } else {
                 signInStatus.text = "Please enter both fields!"

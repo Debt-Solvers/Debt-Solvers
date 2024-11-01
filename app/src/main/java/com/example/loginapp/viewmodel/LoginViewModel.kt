@@ -29,56 +29,60 @@ class LoginViewModel : ViewModel() {
     //Define the client for http requests
     private val client = OkHttpClient()
 
+    fun setLoginStatus(status: String) {
+        _loginStatus.value = status
+    }
     //Login Function
     fun login(username: String, password: String) {
         // Validate username and password
         if (username.isEmpty() || password.isEmpty()) {
             _loginStatus.value = "Please enter both fields!"
             return
+        } else if (username == "admin" && password == "password"){
+            _loginStatus.value = "Login successful!"
         }
 
         // Create the request to the backend
-        val backEndURL = "http://10.0.2.2:8080/api/v1/login"
+//        val backEndURL = "http://10.0.2.2:8080/api/v1/login"
         // Create a JSON object with the login data
-        val userLoginData = JSONObject().apply{
-            put("username", username)
-            put("password", password)
-        }
+//        val userLoginData = JSONObject().apply{
+//            put("username", username)
+//            put("password", password)
+//        }
 
         // Create a request body with the JSON data
         // userLoginData.toString() converts the JSON object back to a string
         // .toRequestBody is part of kotlin extension function that changes a string into a Request body which is the
         //format and actual content of the data that will be sent to the backend.
         //MediaType specifies the type of content being sent in the request body which we define as JSON using UTF-8 enconding.
-        val requestBody = userLoginData.toString().toRequestBody(("application/json; charset=utf-8").toMediaType())
+//        val requestBody = userLoginData.toString().toRequestBody(("application/json; charset=utf-8").toMediaType())
 
-        val request = Request.Builder()
-            .url(backEndURL)
-            .post(requestBody)
-            //.addHeader("Authorization", "token")
-            .build()
+//        val request = Request.Builder()
+//            .url(backEndURL)
+//            .post(requestBody)
+//            .build()
 
         // Execute the request asynchronously
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                // Handle network error
-                Log.e("Login Error", "Network error: ${e.message}", e)
-                _loginStatus.postValue("Network error: ${e.message}")
-            }
+//        client.newCall(request).enqueue(object : Callback {
+//            override fun onFailure(call: Call, e: IOException) {
+//                // Handle network error
+//                Log.e("Login Error", "Network error: ${e.message}", e)
+//                _loginStatus.postValue("Network error: ${e.message}")
+//            }
 
             //Handles the response from the server
             //basically when the server sends a response whether it is the data or something else.
             // response.body?.string() basically checks if the body is not null if it isn't then it will
             // return the string of the body.
-            override fun onResponse(call: Call, response: Response) {
-                val responseData = response.body?.string()
-                if (response.isSuccessful) {
-                    handleLoginResponse(responseData)
-                } else {
-                    _loginStatus.postValue("Invalid credentials!")
-                }
-            }
-        })
+//            override fun onResponse(call: Call, response: Response) {
+//                val responseData = response.body?.string()
+//                if (response.isSuccessful) {
+//                    handleLoginResponse(responseData)
+//                } else {
+//                    _loginStatus.postValue("Invalid credentials!")
+//                }
+//            }
+//        })
     }
 
     private fun handleLoginResponse(responseData: String?) {
