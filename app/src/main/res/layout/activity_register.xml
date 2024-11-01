@@ -90,6 +90,4 @@
         android:gravity="center"
         android:paddingTop="16dp"
         style="@style/NoUnderlineEditText"/>
-
-
 </LinearLayout>

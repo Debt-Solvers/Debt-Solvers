@@ -1,5 +1,6 @@
 package com.example.loginapp
 
+import RegisterRequest
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
@@ -12,8 +13,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -26,22 +31,23 @@ class RegisterActivity : AppCompatActivity() {
     // It also defines the name and you can initialize it later in the code.
     // Used to reference the properties in the layout.xml files.
 
-    private lateinit var nameEditText: EditText
+    private lateinit var firstNameEditText: EditText
+    private lateinit var lastNameEditText: EditText
     private lateinit var phoneEditText: EditText
     private lateinit var emailEditText: EditText
     private lateinit var passwordEditText: EditText
     private lateinit var registerButton: Button
     private lateinit var accountTextView: TextView
 
-    val client = OkHttpClient()
+    private val registerViewModel : RegisterViewModel by viewModels()
+//    val client = OkHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
-
-        nameEditText = findViewById(R.id.etName)
-        phoneEditText = findViewById(R.id.etPhone)
+        firstNameEditText = findViewById(R.id.etFirstName)
+        lastNameEditText = findViewById(R.id.etLastName)
         emailEditText = findViewById(R.id.etEmail)
         passwordEditText = findViewById(R.id.etPassword)
         registerButton = findViewById(R.id.btnRegister)
@@ -50,20 +56,39 @@ class RegisterActivity : AppCompatActivity() {
         // Set up the clickable Login Text span
         clickableLoginText()
 
+        // Observe registration status
+        registerViewModel.registrationStatus.observe(this, Observer { result ->
+            when (result) {
+                is RegisterViewModel.RegistrationResult.Success -> {
+                    Log.d("RegisterActivity", "Registration successful: ${result.response}")
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                is RegisterViewModel.RegistrationResult.Error -> {
+                    Log.e("RegisterActivity", "Registration error: ${result.message}")
+                    Toast.makeText(this, "Error: ${result.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+
+
+
         //Handles what happens after we click the register button
 
         registerButton.setOnClickListener{
 
-            val name = nameEditText.text.toString().trim()
-            val phone = phoneEditText.text.toString().trim()
+            val firstName = firstNameEditText.text.toString().trim()
+            val lastName = lastNameEditText.text.toString().trim()
             val email = emailEditText.text.toString().trim()
             val password = passwordEditText.text.toString().trim()
 
             //Need to do validation to make sure the sections aren't empty.
-            if (name.isNotEmpty() && phone.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
+            if (firstName.isNotEmpty() && lastName.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
 
                 //Calls the method register which handles the process
-                register(name, phone, email, password)
+                registerViewModel.register(firstName, lastName, email, password)
+//                register(firstName, lastName, email, password)
             } else {
                 // Log error if fields are empty
                 Log.d("RegisterActivity", "Please fill in all fields")
@@ -71,83 +96,75 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    //Handles the actual Registration Request to the backend
 
-    private fun register(name: String, phone: String, email: String, password: String) {
-        val backEndURL = "http://your-backend-url/register"
 
-        //Create JSON object of the userData
-        /*
-               { name: "Bob",
-                 phone: "xxx-xxx-xxxx",
-                 email: "yyyyy@zzzz.com",
-                 password: 'Hello"
-
-               }
-         */
-       val userRegisterData = JSONObject().apply{
-            put("name", name)
-            put("phone", phone)
-            put("email", email)
-            put("password", password)
-        }
-
-        val requestBody = userRegisterData.toString().toRequestBody(("application/json; charset=utf-8").toMediaType())
-
-        Log.d("RegisterActivity", "RequestBody JSON: ${userRegisterData.toString()}")
-
-        val request = Request.Builder()
-            .url(backEndURL)
-            .post(requestBody)
-            .build()
-
-        // Does the async http request
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-
-                Log.e("RegisterActivity", "Network error: ${e.message}")
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-
-                if (response.isSuccessful) {
-                    // Handle success
-                    val responseData = response.body?.string()
-                    Log.d("RegisterActivity", "Registration successful: $responseData")
-
-                    if (responseData != null){
-                        handleRegisterResponse(responseData)
-                    }
-                } else {
-                    // Handle errors
-                    Log.e("RegisterActivity", "Registration failed: ${response.message}")
-                }
-            }
-        })
-
-    }
-
-    private fun handleRegisterResponse(responseData: String) {
-
-        try {
-            val res = JSONObject(responseData)
-            val success = res.getBoolean("success")
-
-            if (success) {
-                // Login successful, navigate to DashboardActivity
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                finish()
-            } else {
-                // Show error message from the server
-                val message = res.getString("message")
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(this, "An error occurred: ${e.message}", Toast.LENGTH_SHORT).show()
-        }
-    }
+//    private fun register(firstName: String, lastName: String, email: String, password: String) {
+//        val backEndURL = "http://10.0.2.2:8080/api/v1/signup"
+//        val requestData = RegisterRequest(firstName, lastName, email, password)
+//        val userRegisterData = Json.encodeToString(requestData)
+//        val requestBody = userRegisterData.toRequestBody(("application/json; charset=utf-8").toMediaType())
+//
+//        Log.d("RegisterActivity", "RequestBody JSON: ${userRegisterData.toString()}")
+//
+//        val request = Request.Builder()
+//            .url(backEndURL)
+//            .post(requestBody)
+//            .build()
+//
+//        // Does the async http request
+//        client.newCall(request).enqueue(object : Callback {
+//            override fun onFailure(call: Call, e: IOException) {
+//
+//                Log.e("RegisterActivity", "Network error: ${e.message}")
+//            }
+//
+//            override fun onResponse(call: Call, response: Response) {
+//
+//                response.body?.string()?.let { responseBody ->
+////                    val regResponse = Json.decodeFromString<RegisterResponse>(responseBody)
+//                    Log.d("RegisterActivity", "RegistrationCheck $responseBody")
+//                    val regResponse = Json.decodeFromString<RegisterResponse>(responseBody)
+////                    val regResponseJSON = JSONObject(regResponse)
+//                      handleRegisterResponse(regResponse)
+//
+////                    handleRegisterResponse(responseBody)
+////
+////                    handleRegisterResponse(regResponseJSON)
+//                }
+//            }
+//        })
+//
+//    }
+//
+//    private fun handleRegisterResponse(responseData: RegisterResponse) {
+//
+//
+//        Log.d("RegisterActivity", "responseData  $responseData")
+//        Log.d("RegisterActivity", "Response status: ${responseData.status}")
+//        Log.d("RegisterActivity", "Response message: ${responseData.message}")
+//        Log.d("RegisterActivity", "User ID: ${responseData.data.userId}")
+//
+//        try {
+//            val status = responseData.status
+//            val message = responseData.message
+//
+//            if (status == 201) {
+//                Log.d("RegisterActivity", "Status is success: ${responseData.status}")
+//                val userData = responseData.data
+//
+//                if (userData.userId.isNotEmpty()){
+//                    Log.d("RegisterActivity", "User ID not empty ${userData.userId}")
+//                    val intent = Intent(this, LoginActivity::class.java)
+//                    startActivity(intent)
+//                    finish()
+//                }
+//            }
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            Toast.makeText(this, "An error occurred: ${e.message}", Toast.LENGTH_SHORT).show()
+//        }
+//
+//    }
 
 
 
