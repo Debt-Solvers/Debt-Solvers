@@ -1,6 +1,7 @@
 package com.example.loginapp
 
 import android.app.Dialog
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -38,7 +39,7 @@ class LoginViewModel : ViewModel() {
         }
 
         // Create the request to the backend
-        val backEndURL = "http://your-backend-url/login"
+        val backEndURL = "http://10.0.2.2:8080/api/v1/login"
         // Create a JSON object with the login data
         val userLoginData = JSONObject().apply{
             put("username", username)
@@ -52,7 +53,6 @@ class LoginViewModel : ViewModel() {
         //MediaType specifies the type of content being sent in the request body which we define as JSON using UTF-8 enconding.
         val requestBody = userLoginData.toString().toRequestBody(("application/json; charset=utf-8").toMediaType())
 
-
         val request = Request.Builder()
             .url(backEndURL)
             .post(requestBody)
@@ -63,6 +63,7 @@ class LoginViewModel : ViewModel() {
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 // Handle network error
+                Log.e("Login Error", "Network error: ${e.message}", e)
                 _loginStatus.postValue("Network error: ${e.message}")
             }
 
@@ -93,6 +94,7 @@ class LoginViewModel : ViewModel() {
                 if (success && token.isNotEmpty()) {
                     // Save the token or perform any other success actions
                     _loginStatus.postValue("Login Successful!")
+
                 } else {
                     _loginStatus.postValue("Login Failed: ${res.optString("message", "Unknown error")}")
                 }

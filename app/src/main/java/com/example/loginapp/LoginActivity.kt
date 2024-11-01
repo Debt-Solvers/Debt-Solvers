@@ -124,17 +124,13 @@ class LoginActivity : AppCompatActivity() {
 
             // Simple login validation
             if (user.isNotEmpty() && pass.isNotEmpty()) {
-                if (user == "admin" && pass == "password") { // Dummy credentials
-                    // Start MainActivity on successful login
-                    val intent = Intent(this, DashboardActivity::class.java)
-                    startActivity(intent)
-                    finish() // Close LoginActivity
-                }
-//                } else {
-//                    signInStatus.text = "Invalid credentials!"
-//                    Toast.makeText(this, "Invalid credentials!", Toast.LENGTH_SHORT).show()
-//                }
-//                login(user,pass)
+//                if (user == "admin" && pass == "password") { // Dummy credentials
+//                    // Start MainActivity on successful login
+//                    val intent = Intent(this, DashboardActivity::class.java)
+//                    startActivity(intent)
+//                    finish() // Close LoginActivity
+                loginViewModel.login(user,pass)
+
             } else {
                 signInStatus.text = "Please enter both fields!"
                 Toast.makeText(this, "Please enter both fields!", Toast.LENGTH_SHORT).show()
