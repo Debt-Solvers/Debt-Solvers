@@ -9,23 +9,18 @@ import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import android.view.View
 //import android.text.SpannableString
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import com.example.loginapp.viewmodel.LoginViewModel
 import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
-import java.io.IOException
 
 class LoginActivity : AppCompatActivity() {
 
@@ -37,11 +32,9 @@ class LoginActivity : AppCompatActivity() {
 
     // Create to use the login View Model
     private val loginViewModel: LoginViewModel by viewModels()
-//    private lateinit var loginViewModel: LoginViewModel
 
     // Initialize OkHttpClient which handles HTTP responses and requests
     // controls sending and receiving data
-    val client = OkHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,12 +117,13 @@ class LoginActivity : AppCompatActivity() {
 
             // Simple login validation
             if (user.isNotEmpty() && pass.isNotEmpty()) {
-//                if (user == "admin" && pass == "password") { // Dummy credentials
-//                    // Start MainActivity on successful login
-//                    val intent = Intent(this, DashboardActivity::class.java)
-//                    startActivity(intent)
-//                    finish() // Close LoginActivity
-                loginViewModel.login(user,pass)
+                if (user == "admin" && pass == "password") { // Dummy credentials
+                    // Start MainActivity on successful login
+                    val intent = Intent(this, DashboardActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+//                loginViewModel.login(user,pass)
 
             } else {
                 signInStatus.text = "Please enter both fields!"

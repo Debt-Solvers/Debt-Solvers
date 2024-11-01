@@ -1,9 +1,10 @@
-package com.example.loginapp
+package com.example.loginapp.viewmodel
 import RegisterRequest
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.loginapp.RegisterErrResponse
+import com.example.loginapp.RegisterResponse
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.*

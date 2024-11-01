@@ -1,8 +1,7 @@
-package com.example.loginapp
+package com.example.loginapp.viewmodel
 
 import android.app.Dialog
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

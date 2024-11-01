@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.example.loginapp.viewmodel.RegisterViewModel
 
 
 class RegisterActivity : AppCompatActivity() {
