@@ -28,6 +28,17 @@ class DashboardActivity : AppCompatActivity() {
 
                 }
 
+            }
+            true
+        }
+        binding.navView.setNavigationItemSelectedListener{
+            when(it.itemId){
+
+                R.id.nav_home -> replaceFragment(HomeFragment())
+                R.id.nav_about -> replaceFragment(AboutFragment())
+                else ->{
+
+                }
 
             }
             true
