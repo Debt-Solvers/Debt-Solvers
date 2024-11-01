@@ -34,6 +34,17 @@
         android:background="@color/secondaryColor"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
         />
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:layout_constraintRight_toRightOf="@id/viewDivider"
+        android:id="@+id/nav_view"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/nav_header"
+        app:menu="@menu/sidebar_menu"
+        app:itemIconTint="@color/purple_700"
+        app:itemTextColor="@color/purple_700"/>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
