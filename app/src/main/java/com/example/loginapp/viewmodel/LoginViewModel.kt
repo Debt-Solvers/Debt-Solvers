@@ -1,10 +1,18 @@
 package com.example.loginapp.viewmodel
 
+import LoginRequest
 import android.app.Dialog
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.loginapp.LoginErrResponse
+import com.example.loginapp.LoginResponse
+import com.example.loginapp.RegisterErrResponse
+import com.example.loginapp.RegisterResponse
+import com.example.loginapp.viewmodel.RegisterViewModel.RegistrationResult
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -13,101 +21,79 @@ import java.io.IOException
 
 class LoginViewModel : ViewModel() {
 
-    /*
-  Live data can only be observed.
-  _loginStatus is a mutable live data object that holds a string value. It can be changed internally inside
-  View Model.
-  "_" is notation for private and mutable
-  get() = _loginStatus means outside of the Login ViewModel, you can only access the loginStatus property which is immutable.
-   */
-    private val _loginStatus = MutableLiveData<String>()
-    val loginStatus: LiveData<String> get() = _loginStatus
+    private val _loginStatus = MutableLiveData<LoginResult>()
+    val loginStatus: LiveData<LoginResult> get() = _loginStatus
 
     private val _resetPWStatus = MutableLiveData<String>()
     val resetPWStatus: LiveData<String> get() = _resetPWStatus
 
-    //Define the client for http requests
     private val client = OkHttpClient()
 
-    fun setLoginStatus(status: String) {
-        _loginStatus.value = status
+    sealed class LoginResult {
+        data class Success(val response: LoginResponse) : LoginResult()
+        data class Error(val message: String?) : LoginResult()
     }
+
+
     //Login Function
     fun login(username: String, password: String) {
-        // Validate username and password
-        if (username.isEmpty() || password.isEmpty()) {
-            _loginStatus.value = "Please enter both fields!"
-            return
-        } else if (username == "admin" && password == "password"){
-            _loginStatus.value = "Login successful!"
-        }
 
-        // Create the request to the backend
-//        val backEndURL = "http://10.0.2.2:8080/api/v1/login"
-        // Create a JSON object with the login data
-//        val userLoginData = JSONObject().apply{
-//            put("username", username)
-//            put("password", password)
-//        }
+        val backEndURL = "http://10.0.2.2:8080/api/v1/login"
+        val requestData = LoginRequest(username, password)
+        val userLoginData = Json.encodeToString(requestData)
+        val requestBody = userLoginData.toRequestBody(("application/json; charset=utf-8").toMediaType())
 
-        // Create a request body with the JSON data
-        // userLoginData.toString() converts the JSON object back to a string
-        // .toRequestBody is part of kotlin extension function that changes a string into a Request body which is the
-        //format and actual content of the data that will be sent to the backend.
-        //MediaType specifies the type of content being sent in the request body which we define as JSON using UTF-8 enconding.
-//        val requestBody = userLoginData.toString().toRequestBody(("application/json; charset=utf-8").toMediaType())
+        val request = Request.Builder()
+            .url(backEndURL)
+            .post(requestBody)
+            .build()
 
-//        val request = Request.Builder()
-//            .url(backEndURL)
-//            .post(requestBody)
-//            .build()
+//        Log.d("LoginActivity", "userLoginData: $userLoginData")
+        // Does the async http request
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+//                Log.e("LoginActivity", "Network error: ${e.message}")
+                _loginStatus.postValue(LoginResult.Error(e.message))
+            }
 
-        // Execute the request asynchronously
-//        client.newCall(request).enqueue(object : Callback {
-//            override fun onFailure(call: Call, e: IOException) {
-//                // Handle network error
-//                Log.e("Login Error", "Network error: ${e.message}", e)
-//                _loginStatus.postValue("Network error: ${e.message}")
-//            }
+            override fun onResponse(call: Call, response: Response) {
+//                Log.d("LoginActivity", "onRsponse")
+                val responseBody = response.body?.string()
+//                Log.d("LoginActivity", "responseBody1, $responseBody")
+                if (response.isSuccessful && responseBody != null) {
+//                    Log.d("LoginActivity", "responseBody: $responseBody")
+                    val loginResponse = Json.decodeFromString<LoginResponse>(responseBody)
+//                    Log.d("LoginActivity", "loginResponse: $loginResponse")
+                    handleLoginResponse(loginResponse)
+                } else {
 
-            //Handles the response from the server
-            //basically when the server sends a response whether it is the data or something else.
-            // response.body?.string() basically checks if the body is not null if it isn't then it will
-            // return the string of the body.
-//            override fun onResponse(call: Call, response: Response) {
-//                val responseData = response.body?.string()
-//                if (response.isSuccessful) {
-//                    handleLoginResponse(responseData)
-//                } else {
-//                    _loginStatus.postValue("Invalid credentials!")
-//                }
-//            }
-//        })
+                    if (responseBody != null) {
+                        try {
+                            val errorResponse = Json.decodeFromString<LoginErrResponse>(responseBody)
+                            Log.e("LoginActivity", "loginErrResponse: $errorResponse")
+                            _loginStatus.postValue(LoginResult.Error(errorResponse.message))
+                        } catch (e: Exception) {
+                            // Fallback in case the error response structure doesn't match
+                            Log.e("LoginActivity", "loginErrResponse Exception")
+                            _loginStatus.postValue(LoginResult.Error("Login failed: ${response.message}"))
+                        }
+                    } else {
+                        Log.e("LoginActivity", "loginErrResponse not successful and null")
+                        _loginStatus.postValue(LoginResult.Error("Login failed: ${response.message}"))
+                    }
+                }
+            }
+        })
+
     }
 
-    private fun handleLoginResponse(responseData: String?) {
-        // ?.let block makes sure the code only runs if responseData is not null.
-        responseData?.let {
-            try {
-                // "it" inside JSON object refers to the responseData parameter when it is not null.
-                val res = JSONObject(it)
-                val success = res.getBoolean("success")
-                val token = res.optString("token")
+    private fun handleLoginResponse(responseData: LoginResponse) {
 
-                if (success && token.isNotEmpty()) {
-                    // Save the token or perform any other success actions
-                    _loginStatus.postValue("Login Successful!")
-
-                } else {
-                    _loginStatus.postValue("Login Failed: ${res.optString("message", "Unknown error")}")
-                }
-            } catch (e: Exception) {
-                _loginStatus.postValue("An error occurred: ${e.message}")
-            }
-            // ?:run is basically the same as else statement for the let block.
-        } ?: run {
-            _loginStatus.postValue("Response is empty!")
-        }
+                Log.d("LoginActivity", "responseData  $responseData")
+        Log.d("LoginActivity", "Response status: ${responseData.status}")
+        Log.d("LoginActivity", "Response message: ${responseData.message}")
+//        Log.d("RegisterActivity", "User ID: ${responseData.data.userId}")
+        _loginStatus.postValue(LoginResult.Success(responseData))
     }
 
      fun resetPassword(email: String, dialog: Dialog) {

@@ -21,38 +21,39 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.example.loginapp.viewmodel.LoginViewModel
+import com.example.loginapp.viewmodel.RegisterViewModel
 import okhttp3.*
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var username: EditText
+    private lateinit var email: EditText
     private lateinit var password: EditText
     private lateinit var signInButton: Button
     private lateinit var signInStatus: TextView
+    private lateinit var registerTextView: TextView
+    private lateinit var errorText: TextView
     private lateinit var forgotPW: TextView
 
     // Create to use the login View Model
     private val loginViewModel: LoginViewModel by viewModels()
 
-    // Initialize OkHttpClient which handles HTTP responses and requests
-    // controls sending and receiving data
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
 
-        username = findViewById(R.id.loginEmail)
+        email = findViewById(R.id.loginEmail)
         password = findViewById(R.id.loginPassword)
         signInButton = findViewById(R.id.btnSignIn)
         signInStatus = findViewById(R.id.signIn_status)
+        registerTextView = findViewById<TextView>(R.id.registerAccount)
+        errorText = findViewById(R.id.tvloginErrMessage)
 
-        val newRegisterColor = resources.getColor(R.color.blue,theme)
 
         // Set up clickable registration text
-        val register = findViewById<TextView>(R.id.registerAccount)
-        val registerText = getString(R.string.registerAccount)
-        val spannableString = SpannableString(registerText)
+        clickableRegisterText()
+
 
         // Set up forgot password Textview
         val forgotPasswordText = findViewById<TextView>(R.id.forgotPassword)
@@ -65,73 +66,39 @@ class LoginActivity : AppCompatActivity() {
         signInBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.purple_500))
 
 
-        val clickableSpan = object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                // Redirect to the RegisterActivity when "Register now" is clicked
-                val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
-                startActivity(intent)
-            }
-            override fun updateDrawState(ds: TextPaint) {
-                super.updateDrawState(ds)
-                ds.color = newRegisterColor// Set the color for the text
-                ds.isUnderlineText = false // If you want to underline the text
-            }
-        }
-
-        // Find and set the "Register now" span
-        val loginStartIndex = registerText.indexOf("Register")
-        spannableString.setSpan(
-            clickableSpan,
-            loginStartIndex,
-            loginStartIndex + "Register".length,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        //Set a foreground color for the register option in login page.
-        spannableString.setSpan(
-            ForegroundColorSpan(newRegisterColor),
-            loginStartIndex,
-            loginStartIndex + "Register".length,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-
-
-        // Set the spannable string to the TextView
-        register.text = spannableString
-        register.movementMethod = LinkMovementMethod.getInstance()
-
-
         // Observe the Login Status
-        loginViewModel.loginStatus.observe(this, Observer { status ->
-            signInStatus.text = status
-            if (status == "Login successful!") {
-                // Go to dashboard on successful login
-                Log.d("LoginActivity", "LoginViewModel")
-                val intent = Intent(this, DashboardActivity::class.java)
-                startActivity(intent)
-                finish() // Close LoginActivity
+        loginViewModel.loginStatus.observe(this, Observer { result ->
+            when (result) {
+                is LoginViewModel.LoginResult.Success -> {
+
+                    errorText.visibility = View.GONE
+                    val intent = Intent(this, DashboardActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                is LoginViewModel.LoginResult.Error -> {
+//                    Log.e("RegisterActivity", "Registration error: ${result.message}")
+//                    Toast.makeText(this, "Error: ${result.message}", Toast.LENGTH_SHORT).show()
+                    errorText.apply {
+                        text = result.message
+                        visibility = View.VISIBLE
+                    }
+                }
             }
         })
 
         // Set up login button click listener
         signInButton.setOnClickListener {
-            val user = username.text.toString()
+            val user = email.text.toString()
             val pass = password.text.toString()
 
             // Simple login validation
             if (user.isNotEmpty() && pass.isNotEmpty()) {
-//                if (user == "admin" && pass == "password") { // Dummy credentials
-                    // Start MainActivity on successful login
-                    Log.d("LoginActivity", "Login signIn $user, $pass",)
-//                    val intent = Intent(this, DashboardActivity::class.java)
-//                    startActivity(intent)
-//                    finish()
-//                    loginViewModel.setLoginStatus("Login Successful!")
-//                }
                 loginViewModel.login(user,pass)
-
             } else {
-                signInStatus.text = "Please enter both fields!"
-                Toast.makeText(this, "Please enter both fields!", Toast.LENGTH_SHORT).show()
+//                signInStatus.text = "Please enter both fields!"
+//                Toast.makeText(this, "Please enter both fields!", Toast.LENGTH_SHORT).show()
+                Log.d("LoginActivity", "Please fill in all fields")
             }
         }
     }
@@ -165,6 +132,47 @@ class LoginActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    private fun clickableRegisterText(){
+
+        val registerText = getString(R.string.registerAccount)
+        val spannableString = SpannableString(registerText)
+        val newRegisterColor = resources.getColor(R.color.blue,theme)
+
+        val clickableSpan = object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                // Redirect to the RegisterActivity when "Register now" is clicked
+                val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+                startActivity(intent)
+            }
+            override fun updateDrawState(ds: TextPaint) {
+                super.updateDrawState(ds)
+                ds.color = newRegisterColor// Set the color for the text
+                ds.isUnderlineText = false // If you want to underline the text
+            }
+        }
+        // Find and set the "Register now" span
+        val loginStartIndex = registerText.indexOf("Register")
+        spannableString.setSpan(
+            clickableSpan,
+            loginStartIndex,
+            loginStartIndex + "Register".length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        //Set a foreground color for the register option in login page.
+        spannableString.setSpan(
+            ForegroundColorSpan(newRegisterColor),
+            loginStartIndex,
+            loginStartIndex + "Register".length,
+            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+
+
+        // Set the spannable string to the TextView
+        registerTextView.text = spannableString
+        registerTextView.movementMethod = LinkMovementMethod.getInstance()
+
     }
 
 
