@@ -5,12 +5,19 @@
         android:icon="@drawable/ic_home"
         android:title="@string/home"/>
 
-    <item android:id="@+id/menuAccount"
+    <item android:id="@+id/menuProfile"
         android:icon="@drawable/ic_account_circle"
-        android:title="@string/account"/>
+        android:title="@string/profile"/>
+
+    <item android:title=""/>
+
+
+    <item android:id="@+id/menuStats"
+
+        android:title="Stats"/>
 
     <item android:id="@+id/menuSettings"
-        android:icon="@drawable/ic_settings"
-        android:title="@string/settings"/>
+
+        android:title="Budget"/>
 
 </menu>

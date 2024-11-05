@@ -35,8 +35,9 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when(item.itemId){
                 R.id.menuHome -> replaceFragment(HomeFragment())
-                R.id.menuAccount -> replaceFragment(ProfileFragment())
+                R.id.menuProfile -> replaceFragment(ProfileFragment())
                 R.id.menuSettings -> replaceFragment(SettingsFragment())
+                R.id.menuStats -> replaceFragment(StatsFragment())
             }
             true
         }

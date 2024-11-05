@@ -37,28 +37,31 @@
                 android:layout_gravity="bottom"
                 app:backgroundTint="@color/primaryColor"
                 app:fabCradleMargin="10dp"
-                app:fabCradleRoundedCornerRadius="50dp">
+                app:fabCradleRoundedCornerRadius="50dp"
+                app:fabAlignmentMode="center">
 
                 <com.google.android.material.bottomnavigation.BottomNavigationView
                     android:id="@+id/bottomNavigationView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:labelVisibilityMode="labeled"
+                    app:itemTextColor="@color/secondaryColor"
                     android:background="@android:color/transparent"
                     app:menu="@menu/navigation_menu" />
 
             </com.google.android.material.bottomappbar.BottomAppBar>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:backgroundTint="@color/primaryColor"
                 android:contentDescription="TODO"
                 android:src="@drawable/baseline_add_24"
-                app:layout_anchor="@id/bottomAppBar"
-                app:maxImageSize="40dp"
-                android:layout_gravity="center"
-                android:id="@+id/fab"/>
+                app:layout_anchor="@id/bottomNavigationView"
+                app:layout_anchorGravity="top"
+                app:maxImageSize="40dp" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
