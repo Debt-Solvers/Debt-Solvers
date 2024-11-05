@@ -1,17 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/teal_200"
+    android:background="@color/backgroundColor"
     tools:context=".ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Profile Fragment"
-        android:textSize="26sp"
-        android:layout_gravity="center"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/top_background"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/profile"
+                        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView"
+                        app:layout_constraintStart_toStartOf="@+id/imageView"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Example Name"
+                        android:layout_marginTop="16dp"
+                        android:textSize="25sp"
+                        android:fontFamily="@font/roboto_bold"
+                        app:layout_constraintEnd_toEndOf="@+id/imageView4"
+                        app:layout_constraintStart_toStartOf="@+id/imageView4"
+                        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="example@example.ca"
+                        app:layout_constraintEnd_toEndOf="@+id/textView"
+                        app:layout_constraintStart_toStartOf="@+id/textView"
+                        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/accountSettings"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:layout_marginStart="32dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="32dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@drawable/white_rectangle_background"
+                            android:drawableStart="@drawable/ic_2"
+                            android:drawablePadding="20dp"
+                            android:fontFamily="@font/roboto_bold"
+                            android:paddingStart="20dp"
+                            android:text="Account Settings"
+                            android:textAlignment="viewStart"
+                            android:textSize="18sp"
+                            style="@android:style/Widget.Button" />
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/personalInformation"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:layout_marginStart="32dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="32dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@drawable/white_rectangle_background"
+                            android:drawableStart="@drawable/ic_3"
+                            android:drawablePadding="20dp"
+                            android:fontFamily="@font/roboto_bold"
+                            android:paddingStart="20dp"
+                            android:text="Personal Information"
+                            android:textAlignment="viewStart"
+                            android:textSize="18sp"
+                            style="@android:style/Widget.Button" />
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/notifications"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:layout_marginStart="32dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="32dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@drawable/white_rectangle_background"
+                            android:drawableStart="@drawable/ic_4"
+                            android:drawablePadding="20dp"
+                            android:fontFamily="@font/roboto_bold"
+                            android:paddingStart="20dp"
+                            android:text="Notifications"
+                            android:textAlignment="viewStart"
+                            style="@android:style/Widget.Button"
+                            android:textSize="18sp" />
+
+
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

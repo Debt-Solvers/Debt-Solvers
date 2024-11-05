@@ -160,7 +160,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/layoutBudget"
+                android:id="@+id/layoutPayments"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
@@ -231,7 +231,7 @@
                 android:padding="20dp"
                 app:layout_constraintEnd_toEndOf="@id/layoutGroup"
                 app:layout_constraintStart_toStartOf="@id/layoutGoal"
-                app:layout_constraintTop_toBottomOf="@id/layoutBudget">
+                app:layout_constraintTop_toBottomOf="@id/layoutPayments">
 
                 <TextView
                     android:id="@+id/textTrending"

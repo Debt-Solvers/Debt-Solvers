@@ -23,6 +23,15 @@ class HomeFragment : Fragment() {
         view.findViewById<LinearLayout>(R.id.layoutFinance)?.setOnClickListener{
             navigateToFragment(FinanceFragment())
         }
+        view.findViewById<LinearLayout>(R.id.layoutGroup)?.setOnClickListener{
+            navigateToFragment(GroupsFragment())
+        }
+        view.findViewById<LinearLayout>(R.id.layoutPayments)?.setOnClickListener{
+            navigateToFragment(PaymentsFragment())
+        }
+        view.findViewById<LinearLayout>(R.id.layoutGoal)?.setOnClickListener{
+            navigateToFragment(GoalFragment())
+        }
     }
     private fun navigateToFragment(fragment: Fragment){
         (activity as? DashboardActivity)?.replaceFragment(fragment)

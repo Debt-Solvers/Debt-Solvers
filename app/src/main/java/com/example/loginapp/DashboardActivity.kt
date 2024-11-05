@@ -13,6 +13,7 @@ import com.example.loginapp.databinding.ActivityDashboardBinding
 import com.example.loginapp.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
 
+
 class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var binding: ActivityDashboardBinding
