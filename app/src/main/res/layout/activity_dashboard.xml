@@ -62,7 +62,12 @@
                 app:layout_anchor="@id/bottomNavigationView"
                 app:layout_anchorGravity="top"
                 app:maxImageSize="40dp" />
-
+            <ImageView
+                android:id="@+id/captured_image_view"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="16dp"
+                android:contentDescription="Captured Image" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
