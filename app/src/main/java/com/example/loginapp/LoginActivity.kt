@@ -24,6 +24,7 @@ import com.example.loginapp.viewmodel.LoginViewModel
 import com.example.loginapp.viewmodel.RegisterViewModel
 import okhttp3.*
 
+
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var email: EditText
@@ -33,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var registerTextView: TextView
     private lateinit var errorText: TextView
     private lateinit var forgotPW: TextView
+    private lateinit var responseText: TextView
 
     // Create to use the login View Model
     private val loginViewModel: LoginViewModel by viewModels()
@@ -49,6 +51,7 @@ class LoginActivity : AppCompatActivity() {
         signInStatus = findViewById(R.id.signIn_status)
         registerTextView = findViewById<TextView>(R.id.registerAccount)
         errorText = findViewById(R.id.tvloginErrMessage)
+        responseText = findViewById(R.id.responseDataTextView)
 
 
         // Set up clickable registration text
@@ -72,13 +75,15 @@ class LoginActivity : AppCompatActivity() {
                 is LoginViewModel.LoginResult.Success -> {
 
                     errorText.visibility = View.GONE
+//                    val encryptedToken = result.token
+//                    responseText.text = result.jsonResponse // Set the JSON response text
+//                    responseText.visibility = View.VISIBLE
+
                     val intent = Intent(this, DashboardActivity::class.java)
                     startActivity(intent)
                     finish()
                 }
                 is LoginViewModel.LoginResult.Error -> {
-//                    Log.e("RegisterActivity", "Registration error: ${result.message}")
-//                    Toast.makeText(this, "Error: ${result.message}", Toast.LENGTH_SHORT).show()
                     errorText.apply {
                         text = result.message
                         visibility = View.VISIBLE
