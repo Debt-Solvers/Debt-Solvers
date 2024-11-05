@@ -1,8 +1,12 @@
+//import com.google.protobuf.gradle.proto
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     kotlin("plugin.serialization") version "2.0.21"
+//    id("com.google.protobuf") version "0.9.4"
+
 
 }
 
@@ -41,16 +45,36 @@ android {
         viewBinding = true
         compose = true
     }
+//    sourceSets {
+//        getByName("main") {
+//            proto {
+//                srcDir("src/main/proto") // Proto file location
+//            }
+//        }
+//    }
 }
+//protobuf {
+//    protoc {
+//        artifact = "com.google.protobuf:protoc:3.24.1"
+//    }
+//    generateProtoTasks {
+//        all().forEach { task ->
+//            task.builtins {
+//                create("kotlin") {
+//                    option("lite") // Use the lite version for Kotlin
+//                }
+//            }
+//        }
+//    }
+//}
+
 
 dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation("androidx.appcompat:appcompat")
+    implementation(libs.appcompat)
     implementation(libs.google.material)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -60,7 +84,10 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.okhttp)
     implementation(libs.material)
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+    implementation(libs.kotlinx.serialization.json)
+//    implementation(libs.androidx.datastore)
+//    implementation(libs.protobuf.kotlin.lite)
+    implementation (libs.androidx.security.crypto)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
