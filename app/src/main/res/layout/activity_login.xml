@@ -91,6 +91,12 @@
         android:textColor="@android:color/holo_red_light"
         android:visibility="gone"
         android:paddingTop="8dp" />
+    <TextView
+        android:id="@+id/responseDataTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+    android:textSize="16sp" />
 
 </LinearLayout>
 
