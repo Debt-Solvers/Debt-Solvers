@@ -19,3 +19,9 @@ data class LoginRequest(
 data class EmailRequest(
     val email: String
 )
+
+@Serializable
+data class ConfirmResetRequest(
+    val token: String,
+    val new_password: String
+)

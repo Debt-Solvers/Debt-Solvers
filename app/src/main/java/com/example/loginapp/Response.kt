@@ -45,3 +45,33 @@ data class LoginErrResponse(
 
 )
 
+@Serializable
+data class resetPasswordReqResponse(
+    val status: Int,
+    val message: String,
+    val data: emailReqResponseData
+)
+
+@Serializable
+data class emailReqResponseData(
+    val message: String,
+    val status: String
+)
+
+@Serializable
+data class resetPasswordReqErrResponse(
+    val status: Int,
+    val message: String
+)
+
+@Serializable
+data class resetPasswordResponse(
+    val status: Int,
+    val message: String,
+)
+@Serializable
+data class resetPasswordErrResponse(
+    val status: Int,
+    val message: String
+)
+
