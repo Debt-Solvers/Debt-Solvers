@@ -3,6 +3,8 @@ package com.example.loginapp
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextPaint
@@ -36,8 +38,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var forgotPW: TextView
     private lateinit var responseText: TextView
 
-
-//    private var forgotPWClicked = false
     // Create to use the login View Model
     private val loginViewModel: LoginViewModel by viewModels()
 
@@ -93,6 +93,35 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
+//        loginViewModel.resetPWReqStatus.observe(this, Observer { result ->
+//            when (result) {
+//                is LoginViewModel.resetPasswordReqResult.Success -> {
+//                    Log.d("resetPassword", "Successfully send reset request: $result")
+//                    showResetTokenDialog()
+//                }
+//                is LoginViewModel.resetPasswordReqResult.Error -> {
+//                    Log.d("resetPassword", "Failed to send reset request: $result")
+//                }
+//            }
+//        })
+
+//        loginViewModel.resetPWStatus.observe(this, Observer { result ->
+//            when (result) {
+//                is LoginViewModel.resetPasswordResult.Success -> {
+//                    val response = result.response
+//                    val responseMessage = response.message
+//
+//                    Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
+//                    Log.d("resetPassword", "Successfully reset password: $result")
+//                }
+//                is LoginViewModel.resetPasswordResult.Error -> {
+//                    val responseErrMessage = result.message
+//                    Log.d("resetPassword", "Failed to reset password: $result")
+//                    Toast.makeText(this, responseErrMessage, Toast.LENGTH_LONG).show()
+//                }
+//            }
+//        })
+
         // Set up login button click listener
         signInButton.setOnClickListener {
             val user = email.text.toString()
@@ -113,37 +142,113 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-
     private fun showForgotPasswordDialog() {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.activity_forgot_password)
-
 
         val emailEditText = dialog.findViewById<EditText>(R.id.etEmail)
         val btnRestartPassword = dialog.findViewById<Button>(R.id.btnRestartPassword)
         val tvBackToLogin = dialog.findViewById<TextView>(R.id.tvBackToLogin)
 
+        // Observe resetPasswordReqStatus LiveData for success or error
+        loginViewModel.resetPWReqStatus.observe(this, Observer { result ->
+            when (result) {
+                is LoginViewModel.resetPasswordReqResult.Success -> {
+                    val response = result.response
+                    val message1 = response.message
+                    val message2 = response.data.message
+                    val responseMessage = message1 + " " + message2
+
+                    Log.d("resetPassword", "inside success result: $result")
+                    Log.d("resetPassword", "inside success response: $response")
+                    Log.d("resetPassword", "inside success response: $message1")
+                    Log.d("resetPassword", "inside success response: $responseMessage")
+
+                    Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
+                    dialog.dismiss()
+
+                    // Call showResetTokenDialog after a short delay to let the user see the message
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        showResetTokenDialog() // Show the reset token dialog
+                    }, 4000) // Adjust delay as needed
+                }
+                is LoginViewModel.resetPasswordReqResult.Error -> {
+                    val responseErrMessage = result.errorResponse.message
+                    Log.d("resetPassword", "Failed to send reset request: $result")
+                    Log.d("resetPassword", "result.messsage: $result.message")
+                    Toast.makeText(this, responseErrMessage, Toast.LENGTH_SHORT).show()
+                }
+                is LoginViewModel.resetPasswordReqResult.NetworkError -> {
+                    val networkErrMessage = result.networkResponse
+                    Log.d("resetPassword", "Failed to send reset request: $result")
+                    Toast.makeText(this, networkErrMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
 
         btnRestartPassword.setOnClickListener {
             val email = emailEditText.text.toString()
             if (email.isNotEmpty()) {
-                // call the viewModel to handle the password reset
-                loginViewModel.resetPassword(email)
-                Log.e("LoginActivity", "Inside the resetPasswordListener ")
-//                Toast.makeText(this, "Password reset link sent to $email", Toast.LENGTH_SHORT)
-//                    .show()
-                dialog.dismiss()
+                // Call the ViewModel to handle the password reset request
+                loginViewModel.resetPasswordRequest(email)
+                Log.e("LoginActivity", "Inside the resetPasswordListener")
             } else {
                 Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show()
             }
         }
+
         tvBackToLogin.setOnClickListener {
             dialog.dismiss()
         }
-//        forgotPWClicked=true
+
         dialog.show()
     }
 
+
+    private fun showResetTokenDialog() {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.activity_reset_password)
+
+        val tokenEditText = dialog.findViewById<EditText>(R.id.etResetToken)
+        val newPasswordEditText = dialog.findViewById<EditText>(R.id.etNewPassword)
+        val btnResetPassword = dialog.findViewById<Button>(R.id.btnResetPassword)
+
+        loginViewModel.resetPWStatus.observe(this, Observer { result ->
+            when (result) {
+                is LoginViewModel.resetPasswordResult.Success -> {
+                    val response = result.response
+                    val responseMessage = response.message
+
+                    Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
+                    Log.d("resetPassword", "Successfully reset password: $result")
+                    dialog.dismiss()
+                }
+                is LoginViewModel.resetPasswordResult.Error -> {
+                    val responseErrMessage = result.errorResponse.message
+                    Log.d("resetPassword", "Failed to reset password: $result")
+                    Toast.makeText(this, responseErrMessage, Toast.LENGTH_LONG).show()
+                }
+                is LoginViewModel.resetPasswordResult.NetworkError -> {
+                    val networkErrMessage = result.networkResponse
+                    Log.d("resetPassword", "Failed to send reset request: $result")
+                    Toast.makeText(this, networkErrMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+
+        btnResetPassword.setOnClickListener {
+            val token = tokenEditText.text.toString()
+            val newPassword = newPasswordEditText.text.toString()
+            if (token.isNotEmpty() && newPassword.isNotEmpty()) {
+                // Call the ViewModel to submit token and new password
+                loginViewModel.resetPassword(token, newPassword)
+
+            } else {
+                Toast.makeText(this, "Please fill in both fields", Toast.LENGTH_SHORT).show()
+            }
+        }
+        dialog.show()
+    }
     private fun clickableRegisterText(){
 
         val registerText = getString(R.string.registerAccount)
