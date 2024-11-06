@@ -173,7 +173,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Payments"
+                    android:text="History"
                     android:textColor="@color/secondaryColor"
                     android:textSize="20sp"
                     android:fontFamily="@font/roboto_bold" />

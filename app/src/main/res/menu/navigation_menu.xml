@@ -17,7 +17,7 @@
 
         android:title="Stats"/>
 
-    <item android:id="@+id/menuSettings"
+    <item android:id="@+id/menuBudget"
 
         android:title="Budget"/>
 

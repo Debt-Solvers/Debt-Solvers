@@ -73,7 +73,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             when(item.itemId){
                 R.id.menuHome -> replaceFragment(HomeFragment())
                 R.id.menuProfile -> replaceFragment(ProfileFragment())
-                R.id.menuSettings -> replaceFragment(SettingsFragment())
+                R.id.menuBudget -> replaceFragment(BudgetFragment())
                 R.id.menuStats -> replaceFragment(StatsFragment())
             }
             true
