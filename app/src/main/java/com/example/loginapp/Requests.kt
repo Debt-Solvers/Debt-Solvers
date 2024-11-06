@@ -14,3 +14,8 @@ data class LoginRequest(
     val email: String,
     val password: String
 )
+
+@Serializable
+data class EmailRequest(
+    val email: String
+)

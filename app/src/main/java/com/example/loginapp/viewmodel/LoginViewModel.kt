@@ -1,5 +1,6 @@
 package com.example.loginapp.viewmodel
 
+import EmailRequest
 import LoginRequest
 import android.app.Application
 import android.app.Dialog
@@ -42,8 +43,6 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         ) : LoginResult()
         data class Error(val message: String?) : LoginResult()
     }
-
-
 
     //Login Function
     fun login(username: String, password: String) {
@@ -100,65 +99,29 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         Log.d("LoginActivity", "responseData  $responseData")
         Log.d("LoginActivity", "Response status: ${responseData.status}")
         Log.d("LoginActivity", "Response message: ${responseData.message}")
-//        val jsonResponse = Json.encodeToString(responseData)
-
-//        // Access the application context from AndroidViewModel
-//        val context = getApplication<Application>().applicationContext
-//
-//        // Create or retrieve the MasterKey for encryption
-//        val masterKeyAlias = MasterKey.Builder(context)
-//            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-//            .build()
-//
-//        // Initialize EncryptedSharedPreferences
-//        val sharedPreferences = EncryptedSharedPreferences.create(
-//            context,
-//            "secure_prefs",
-//            masterKeyAlias,
-//            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-//            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-//        )
-//        if (sharedPreferences is EncryptedSharedPreferences) {
-//            // This is definitely an EncryptedSharedPreferences instance
-//            Log.d("SharedPreferencesCheck", "The sharedPreferences is encrypted.")
-//        } else {
-//            // This is not an EncryptedSharedPreferences instance
-//            Log.d("SharedPreferencesCheck", "The sharedPreferences is not encrypted.")
-//        }
-//
-//        // Store the token and user ID securely
-//        val editor = sharedPreferences.edit()
-//        editor.putString("auth_token", responseData.data.token)
-//        editor.putString("user_id", responseData.data.userId) // Optional: store additional user data
-//        editor.apply()
-//
-//        val token = sharedPreferences.getString("auth_token", null)
 
         // Update the login status with the success result
         tokenManager.saveToken(responseData.data.token, responseData.data.userId)
         _loginStatus.postValue(LoginResult.Success(responseData))
     }
 
-     fun resetPassword(email: String, dialog: Dialog) {
+    /*
+    Seems like expected response will be
+    {
+        "status": "...",
+        "message": "..."
+    }
+     */
+     fun resetPassword(email: String) {
+         val backEndURL = "http://10.0.2.2:8080/api/v1/password-reset"
+         val requestData = EmailRequest(email)
+         val emailResetData = Json.encodeToString(requestData)
+         val requestBody = emailResetData.toRequestBody(("application/json; charset=utf-8").toMediaType())
 
-        if (email.isEmpty()) {
-            _resetPWStatus.value = "Please enter your email!"
-            return
-        }
-
-        val backEndURL = "http://your-backend-url/resetPassword"
-
-        val passwordResetData = JSONObject().apply(){
-            put("email", email)
-        }
-        // Convert JSON object to request body
-        val requestBody = passwordResetData.toString().toRequestBody(("application/json; charset=utf-8").toMediaType())
-
-        // Create HTTP Request
-        val request = Request.Builder()
-            .url(backEndURL)
-            .post(requestBody)
-            .build()
+         val request = Request.Builder()
+             .url(backEndURL)
+             .post(requestBody)
+             .build()
 
         // Do an async request
         client.newCall(request).enqueue(object : Callback {

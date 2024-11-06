@@ -58,7 +58,7 @@
         android:paddingTop="24dp" />
 
     <TextView
-        android:id="@+id/forgotPassword"
+        android:id="@+id/tvForgotPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_regular"

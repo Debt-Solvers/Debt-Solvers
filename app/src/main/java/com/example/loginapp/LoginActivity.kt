@@ -36,6 +36,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var forgotPW: TextView
     private lateinit var responseText: TextView
 
+
+//    private var forgotPWClicked = false
     // Create to use the login View Model
     private val loginViewModel: LoginViewModel by viewModels()
 
@@ -44,14 +46,14 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-
         email = findViewById(R.id.loginEmail)
         password = findViewById(R.id.loginPassword)
         signInButton = findViewById(R.id.btnSignIn)
         signInStatus = findViewById(R.id.signIn_status)
-        registerTextView = findViewById<TextView>(R.id.registerAccount)
+        registerTextView = findViewById(R.id.registerAccount)
         errorText = findViewById(R.id.tvloginErrMessage)
         responseText = findViewById(R.id.responseDataTextView)
+        forgotPW = findViewById(R.id.tvForgotPassword)
 
 
         // Set up clickable registration text
@@ -59,8 +61,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         // Set up forgot password Textview
-        val forgotPasswordText = findViewById<TextView>(R.id.forgotPassword)
-        forgotPasswordText.setOnClickListener {
+        forgotPW.setOnClickListener {
             showForgotPasswordDialog()
         }
 
@@ -97,14 +98,17 @@ class LoginActivity : AppCompatActivity() {
             val user = email.text.toString()
             val pass = password.text.toString()
 
+
             // Simple login validation
             if (user.isNotEmpty() && pass.isNotEmpty()) {
                 loginViewModel.login(user,pass)
+
             } else {
 //                signInStatus.text = "Please enter both fields!"
 //                Toast.makeText(this, "Please enter both fields!", Toast.LENGTH_SHORT).show()
                 Log.d("LoginActivity", "Please fill in all fields")
             }
+
         }
     }
 
@@ -119,15 +123,15 @@ class LoginActivity : AppCompatActivity() {
         val btnRestartPassword = dialog.findViewById<Button>(R.id.btnRestartPassword)
         val tvBackToLogin = dialog.findViewById<TextView>(R.id.tvBackToLogin)
 
+
         btnRestartPassword.setOnClickListener {
             val email = emailEditText.text.toString()
             if (email.isNotEmpty()) {
-
                 // call the viewModel to handle the password reset
-                loginViewModel.resetPassword(email, dialog)
-
-                Toast.makeText(this, "Password reset link sent to $email", Toast.LENGTH_SHORT)
-                    .show()
+                loginViewModel.resetPassword(email)
+                Log.e("LoginActivity", "Inside the resetPasswordListener ")
+//                Toast.makeText(this, "Password reset link sent to $email", Toast.LENGTH_SHORT)
+//                    .show()
                 dialog.dismiss()
             } else {
                 Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show()
@@ -136,6 +140,7 @@ class LoginActivity : AppCompatActivity() {
         tvBackToLogin.setOnClickListener {
             dialog.dismiss()
         }
+//        forgotPWClicked=true
         dialog.show()
     }
 
