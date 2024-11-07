@@ -27,10 +27,10 @@ class TokenManager(context: Context) {
         }
     }
 
-
     fun getToken(): String? {
         return sharedPreferences.getString("auth_token", null)
     }
+
     fun getUserId(): String? {
         return sharedPreferences.getString("user_id", null)
     }

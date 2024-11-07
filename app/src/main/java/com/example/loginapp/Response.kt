@@ -1,4 +1,5 @@
 package com.example.loginapp
+
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -42,7 +43,6 @@ data class userResponseData(
 data class LoginErrResponse(
     val status: Int,
     val message: String,
-
 )
 
 @Serializable
@@ -69,9 +69,26 @@ data class resetPasswordResponse(
     val status: Int,
     val message: String,
 )
+
 @Serializable
 data class resetPasswordErrResponse(
     val status: Int,
     val message: String
 )
 
+@Serializable
+data class UserDataResponse(
+    val status: Int,
+    val message: String,
+    val data: InnerUserDataResponse,
+    val errors: String? = null  // Nullable to handle the case where there are no errors
+)
+
+@Serializable
+data class InnerUserDataResponse(
+    val first_name: String,
+    val last_name: String,
+    val email: String,
+    val created_at: String
+
+)

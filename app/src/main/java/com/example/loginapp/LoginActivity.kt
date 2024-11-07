@@ -1,5 +1,4 @@
 package com.example.loginapp
-
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +12,6 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
-//import android.text.SpannableString
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.EditText
@@ -23,8 +21,6 @@ import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.example.loginapp.viewmodel.LoginViewModel
-import com.example.loginapp.viewmodel.RegisterViewModel
-import okhttp3.*
 
 
 class LoginActivity : AppCompatActivity() {
@@ -41,7 +37,6 @@ class LoginActivity : AppCompatActivity() {
     // Create to use the login View Model
     private val loginViewModel: LoginViewModel by viewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -55,10 +50,8 @@ class LoginActivity : AppCompatActivity() {
         responseText = findViewById(R.id.responseDataTextView)
         forgotPW = findViewById(R.id.tvForgotPassword)
 
-
         // Set up clickable registration text
         clickableRegisterText()
-
 
         // Set up forgot password Textview
         forgotPW.setOnClickListener {
@@ -69,17 +62,12 @@ class LoginActivity : AppCompatActivity() {
         signInBtn.setTextColor(ContextCompat.getColor(this, R.color.white))
         signInBtn.setBackgroundColor(ContextCompat.getColor(this, R.color.purple_500))
 
-
         // Observe the Login Status
         loginViewModel.loginStatus.observe(this, Observer { result ->
             when (result) {
                 is LoginViewModel.LoginResult.Success -> {
 
                     errorText.visibility = View.GONE
-//                    val encryptedToken = result.token
-//                    responseText.text = result.jsonResponse // Set the JSON response text
-//                    responseText.visibility = View.VISIBLE
-
                     val intent = Intent(this, DashboardActivity::class.java)
                     startActivity(intent)
                     finish()
@@ -93,54 +81,19 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
-//        loginViewModel.resetPWReqStatus.observe(this, Observer { result ->
-//            when (result) {
-//                is LoginViewModel.resetPasswordReqResult.Success -> {
-//                    Log.d("resetPassword", "Successfully send reset request: $result")
-//                    showResetTokenDialog()
-//                }
-//                is LoginViewModel.resetPasswordReqResult.Error -> {
-//                    Log.d("resetPassword", "Failed to send reset request: $result")
-//                }
-//            }
-//        })
-
-//        loginViewModel.resetPWStatus.observe(this, Observer { result ->
-//            when (result) {
-//                is LoginViewModel.resetPasswordResult.Success -> {
-//                    val response = result.response
-//                    val responseMessage = response.message
-//
-//                    Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
-//                    Log.d("resetPassword", "Successfully reset password: $result")
-//                }
-//                is LoginViewModel.resetPasswordResult.Error -> {
-//                    val responseErrMessage = result.message
-//                    Log.d("resetPassword", "Failed to reset password: $result")
-//                    Toast.makeText(this, responseErrMessage, Toast.LENGTH_LONG).show()
-//                }
-//            }
-//        })
-
         // Set up login button click listener
         signInButton.setOnClickListener {
             val user = email.text.toString()
             val pass = password.text.toString()
 
-
             // Simple login validation
             if (user.isNotEmpty() && pass.isNotEmpty()) {
-                loginViewModel.login(user,pass)
-
+                loginViewModel.login(user, pass)
             } else {
-//                signInStatus.text = "Please enter both fields!"
-//                Toast.makeText(this, "Please enter both fields!", Toast.LENGTH_SHORT).show()
-                Log.d("LoginActivity", "Please fill in all fields")
+                Toast.makeText(this, "Please enter both fields!", Toast.LENGTH_SHORT).show()
             }
-
         }
     }
-
 
     private fun showForgotPasswordDialog() {
         val dialog = Dialog(this)
@@ -159,11 +112,6 @@ class LoginActivity : AppCompatActivity() {
                     val message2 = response.data.message
                     val responseMessage = message1 + " " + message2
 
-                    Log.d("resetPassword", "inside success result: $result")
-                    Log.d("resetPassword", "inside success response: $response")
-                    Log.d("resetPassword", "inside success response: $message1")
-                    Log.d("resetPassword", "inside success response: $responseMessage")
-
                     Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
                     dialog.dismiss()
 
@@ -172,15 +120,14 @@ class LoginActivity : AppCompatActivity() {
                         showResetTokenDialog() // Show the reset token dialog
                     }, 4000) // Adjust delay as needed
                 }
+
                 is LoginViewModel.resetPasswordReqResult.Error -> {
                     val responseErrMessage = result.errorResponse.message
-                    Log.d("resetPassword", "Failed to send reset request: $result")
-                    Log.d("resetPassword", "result.messsage: $result.message")
                     Toast.makeText(this, responseErrMessage, Toast.LENGTH_SHORT).show()
                 }
+
                 is LoginViewModel.resetPasswordReqResult.NetworkError -> {
                     val networkErrMessage = result.networkResponse
-                    Log.d("resetPassword", "Failed to send reset request: $result")
                     Toast.makeText(this, networkErrMessage, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -191,7 +138,6 @@ class LoginActivity : AppCompatActivity() {
             if (email.isNotEmpty()) {
                 // Call the ViewModel to handle the password reset request
                 loginViewModel.resetPasswordRequest(email)
-                Log.e("LoginActivity", "Inside the resetPasswordListener")
             } else {
                 Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show()
             }
@@ -220,17 +166,19 @@ class LoginActivity : AppCompatActivity() {
                     val responseMessage = response.message
 
                     Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
-                    Log.d("resetPassword", "Successfully reset password: $result")
+
                     dialog.dismiss()
                 }
+
                 is LoginViewModel.resetPasswordResult.Error -> {
                     val responseErrMessage = result.errorResponse.message
-                    Log.d("resetPassword", "Failed to reset password: $result")
+
                     Toast.makeText(this, responseErrMessage, Toast.LENGTH_LONG).show()
                 }
+
                 is LoginViewModel.resetPasswordResult.NetworkError -> {
                     val networkErrMessage = result.networkResponse
-                    Log.d("resetPassword", "Failed to send reset request: $result")
+
                     Toast.makeText(this, networkErrMessage, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -249,11 +197,12 @@ class LoginActivity : AppCompatActivity() {
         }
         dialog.show()
     }
-    private fun clickableRegisterText(){
+
+    private fun clickableRegisterText() {
 
         val registerText = getString(R.string.registerAccount)
         val spannableString = SpannableString(registerText)
-        val newRegisterColor = resources.getColor(R.color.blue,theme)
+        val newRegisterColor = resources.getColor(R.color.blue, theme)
 
         val clickableSpan = object : ClickableSpan() {
             override fun onClick(widget: View) {
@@ -261,6 +210,7 @@ class LoginActivity : AppCompatActivity() {
                 val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
                 startActivity(intent)
             }
+
             override fun updateDrawState(ds: TextPaint) {
                 super.updateDrawState(ds)
                 ds.color = newRegisterColor// Set the color for the text
