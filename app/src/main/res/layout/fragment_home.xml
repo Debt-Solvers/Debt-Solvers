@@ -43,17 +43,6 @@
             app:layout_constraintStart_toEndOf="@id/tvWelcomeText"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/imageMenu"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="15dp"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_menu"
-            app:layout_constraintBottom_toBottomOf="@id/tvWelcomeText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tvWelcomeText"
-            app:tint="@color/backgroundColor" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -64,7 +53,7 @@
             android:background="@drawable/white_rectangle_background"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageMenu">
+            app:layout_constraintTop_toBottomOf="@id/tvWelcomeText">
             <EditText
                 android:layout_width="0dp"
                 android:layout_height="48dp"
@@ -120,7 +109,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Goals"
+                    android:text="Notes"
                     android:textColor="@color/secondaryColor"
                     android:textSize="20sp"
                     android:fontFamily="@font/roboto_bold" />
@@ -152,7 +141,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Finance"
+                    android:text="Categories"
                     android:textColor="@color/secondaryColor"
                     android:textSize="20sp"
                     android:fontFamily="@font/roboto_bold" />
@@ -160,7 +149,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/layoutBudget"
+                android:id="@+id/layoutPayments"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
@@ -184,7 +173,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Payments"
+                    android:text="History"
                     android:textColor="@color/secondaryColor"
                     android:textSize="20sp"
                     android:fontFamily="@font/roboto_bold" />
@@ -231,7 +220,7 @@
                 android:padding="20dp"
                 app:layout_constraintEnd_toEndOf="@id/layoutGroup"
                 app:layout_constraintStart_toStartOf="@id/layoutGoal"
-                app:layout_constraintTop_toBottomOf="@id/layoutBudget">
+                app:layout_constraintTop_toBottomOf="@id/layoutPayments">
 
                 <TextView
                     android:id="@+id/textTrending"

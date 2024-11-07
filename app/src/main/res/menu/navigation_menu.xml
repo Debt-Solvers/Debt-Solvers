@@ -9,14 +9,15 @@
         android:icon="@drawable/ic_account_circle"
         android:title="@string/profile"/>
 
-    <item android:title=""/>
+    <item android:title=""
+        android:enabled="true"/>
 
 
     <item android:id="@+id/menuStats"
 
         android:title="Stats"/>
 
-    <item android:id="@+id/menuSettings"
+    <item android:id="@+id/menuBudget"
 
         android:title="Budget"/>
 

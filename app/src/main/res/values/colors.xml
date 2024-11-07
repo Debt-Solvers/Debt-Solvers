@@ -7,9 +7,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="grey">#616060</color>
     <color name="blue">#3498db</color>
+    <color name="red">#FF0011</color>
+    <color name="green">#1DFF00</color>
     <color name="primaryColor">#5E4BD4</color> <!-- Light purple -->
     <color name="secondaryColor">#000000</color> <!-- Black for text -->
-    <color name="backgroundColor">#FFFFFF</color>
+    <color name="backgroundColor">#E7E4E4</color>
     <color name="lightBackground">#efeff0</color>
 </resources>

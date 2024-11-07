@@ -1,0 +1,24 @@
+<!-- res/xml/preferences.xml -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="General Settings"
+        android:titleTextColor="@color/primaryColor"
+        android:background="@color/primaryColor">
+
+        <SwitchPreferenceCompat
+            android:key="notifications"
+            android:title="Enable Notifications"
+            android:summary="Receive notifications for updates"
+            android:defaultValue="true"
+            android:iconTint="@color/primaryColor"
+            android:titleTextColor="@color/primaryColor" />
+
+        <EditTextPreference
+            android:key="username"
+            android:title="Username"
+            android:summary="Set your username"
+            android:background="@color/white" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
