@@ -114,7 +114,7 @@ class LoginActivity : AppCompatActivity() {
 
                     Toast.makeText(this, responseMessage, Toast.LENGTH_LONG).show()
                     dialog.dismiss()
-
+                    Log.d("resetPassword", "Inside resetPWREqStatus" )
                     // Call showResetTokenDialog after a short delay to let the user see the message
                     Handler(Looper.getMainLooper()).postDelayed({
                         showResetTokenDialog() // Show the reset token dialog

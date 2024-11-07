@@ -62,8 +62,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         val backEndURL = "http://10.0.2.2:8080/api/v1/login"
         val requestData = LoginRequest(username, password)
         val userLoginData = Json.encodeToString(requestData)
-        val requestBody =
-            userLoginData.toRequestBody(("application/json; charset=utf-8").toMediaType())
+        val requestBody = userLoginData.toRequestBody(("application/json; charset=utf-8").toMediaType())
 
         val request = Request.Builder()
             .url(backEndURL)
@@ -120,9 +119,9 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         val backEndURL = "http://10.0.2.2:8080/api/v1/password-reset"
         val requestData = EmailRequest(email)
         val emailResetData = Json.encodeToString(requestData)
-        val requestBody =
-            emailResetData.toRequestBody(("application/json; charset=utf-8").toMediaType())
+        val requestBody = emailResetData.toRequestBody(("application/json; charset=utf-8").toMediaType())
 
+        Log.d("resetPassword", "Inside resetPassword" )
         val request = Request.Builder()
             .url(backEndURL)
             .post(requestBody)
@@ -136,7 +135,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
             override fun onResponse(call: Call, response: Response) {
                 val responseBody = response.body?.string()
-
+                Log.d("resetPassword", "Inside onResponse" )
 
                 if (responseBody.isNullOrEmpty()) {
                     Log.e("resetPassword", "responseBody is empty or null")
@@ -144,22 +143,23 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 }
 
                 if (response.isSuccessful) {
+                    Log.d("resetPassword", "Inside responnse is successful" )
                     try {
-                        val reqResponse =
-                            Json.decodeFromString<resetPasswordReqResponse>(responseBody)
+
+                        val reqResponse = Json.decodeFromString<resetPasswordReqResponse>(responseBody)
 
                         _resetPWReqStatus.postValue(resetPasswordReqResult.Success(reqResponse))
                     } catch (e: Exception) {
-
+                        Log.d("resetPassword", "Inside resetPassword, ${e.message}" )
+//                        _resetPWReqStatus.postValue(resetPasswordReqResult.Error(e.message))
                     }
                 } else {
                     try {
-                        val errResponse =
-                            Json.decodeFromString<resetPasswordReqErrResponse>(responseBody)
+                        val errResponse = Json.decodeFromString<resetPasswordReqErrResponse>(responseBody)
 
                         _resetPWReqStatus.postValue(resetPasswordReqResult.Error(errResponse))
                     } catch (e: Exception) {
-
+                        Log.d("ResetPasswordErrorException", "Error outside of expected errResponse: {$e.message}")
                     }
                 }
             }
