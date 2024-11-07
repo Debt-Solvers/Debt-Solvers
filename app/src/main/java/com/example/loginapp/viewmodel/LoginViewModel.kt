@@ -60,6 +60,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     fun login(username: String, password: String) {
 
         val backEndURL = "http://10.0.2.2:8080/api/v1/login"
+//        val backEndURL = "http://40.87.123.62:8080/api/v1/login"
         val requestData = LoginRequest(username, password)
         val userLoginData = Json.encodeToString(requestData)
         val requestBody = userLoginData.toRequestBody(("application/json; charset=utf-8").toMediaType())
@@ -130,6 +131,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         // Do an async request
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
+                Log.d("resetPassword", "Inside onFailure" )
                 _resetPWReqStatus.postValue(resetPasswordReqResult.NetworkError(e.message))
             }
 
@@ -143,7 +145,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 }
 
                 if (response.isSuccessful) {
-                    Log.d("resetPassword", "Inside responnse is successful" )
+                    Log.d("resetPassword", "Inside response is successful" )
                     try {
 
                         val reqResponse = Json.decodeFromString<resetPasswordReqResponse>(responseBody)
@@ -156,10 +158,10 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 } else {
                     try {
                         val errResponse = Json.decodeFromString<resetPasswordReqErrResponse>(responseBody)
-
+                        Log.d("resetPassword", "Inside errorResponse: $errResponse ")
                         _resetPWReqStatus.postValue(resetPasswordReqResult.Error(errResponse))
                     } catch (e: Exception) {
-                        Log.d("ResetPasswordErrorException", "Error outside of expected errResponse: {$e.message}")
+                        Log.d("resetPassword", "Error outside of expected errResponse: {$e.message}")
                     }
                 }
             }
