@@ -30,3 +30,9 @@ data class ChangeUserPasswordRequest(
     val oldPassword: String,
     val newPassword: String
 )
+@Serializable
+data class UpdateUserRequest(
+    val first_name: String,
+    val last_name: String,
+    val email: String
+)

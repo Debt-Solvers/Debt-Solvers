@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.loginapp.GetUserPasswordResponse
 import com.example.loginapp.model.UserRepository
 import com.example.loginapp.TokenManager
+import com.example.loginapp.UpdateUserResponse
 import com.example.loginapp.UserDataResponse
 import kotlinx.coroutines.launch
 
@@ -24,6 +25,9 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
 
     private val _changePassword = MutableLiveData<GetUserPasswordResponse?>()
     val changePassword: LiveData<GetUserPasswordResponse?> get() = _changePassword
+
+    private val _updateUser = MutableLiveData<UpdateUserResponse?>()
+    val updateUser: LiveData<UpdateUserResponse?> get() = _updateUser
 
     init {
         // Initial fetch of user data (optional)
@@ -67,6 +71,20 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
             override fun onError(error: String) {
                 Log.d("SharedViewModel", "ChangeUserPassword Failed: $error")
                 _changePassword.postValue(null)
+            }
+        })
+    }
+
+    fun updateUserInfo(firstName: String, lastName: String, email: String){
+        userRepository.updateUserInfo(firstName, lastName, email, object : UserRepository.UpdateUserCallBack {
+            override fun onSuccess(response: UpdateUserResponse) {
+                Log.d("SharedViewModel", "UpdateUser Success: $response")
+                _updateUser.postValue(response)
+            }
+
+            override fun onError(error: String) {
+                Log.d("SharedViewModel", "UpdateUser Failed: $error")
+                _updateUser.postValue(null)
             }
         })
     }

@@ -59,7 +59,7 @@ class UpdateUserFragment : Fragment() {
             val email = emailTextView.text.toString()
 
             if (firstName.isNotEmpty() && lastName.isNotEmpty() && email.isNotEmpty()){
-                //sharedViewModel.updateUserInfo(firstName,LastName,email)
+                sharedViewModel.updateUserInfo(firstName,lastName,email)
             } else {
                 Toast.makeText(context, "All fields are required", Toast.LENGTH_SHORT).show()
             }

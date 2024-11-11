@@ -1,10 +1,12 @@
 package com.example.loginapp.model
 
 import ChangeUserPasswordRequest
+import UpdateUserRequest
 import android.util.Log
 import com.example.loginapp.GetUserPasswordResponse
 import com.example.loginapp.InnerUserDataResponse
 import com.example.loginapp.TokenManager
+import com.example.loginapp.UpdateUserResponse
 import com.example.loginapp.UserDataResponse
 import com.example.loginapp.resetPasswordErrResponse
 import com.example.loginapp.resetPasswordResponse
@@ -35,6 +37,10 @@ class UserRepository(private val tokenManager: TokenManager) {
     }
     interface ChangeUserPasswordCallback {
         fun onSuccess(response: GetUserPasswordResponse)
+        fun onError(error: String)
+    }
+    interface UpdateUserCallBack {
+        fun onSuccess(response: UpdateUserResponse)
         fun onError(error: String)
     }
 
@@ -145,6 +151,52 @@ class UserRepository(private val tokenManager: TokenManager) {
         }else {
             callback.onError("No token found")
         }
+    }
+
+    fun updateUserInfo(firstName: String, lastName: String, email: String, callback: UpdateUserCallBack) {
+        val token = tokenManager.getToken()
+        val backEndURL = "http://10.0.2.2:8080/api/v1/user/update"
+        if (token != null) {
+            val requestData = UpdateUserRequest(firstName, lastName, email)
+            val updateUserData = Json.encodeToString(requestData)
+            val requestBody =
+                updateUserData.toRequestBody(("application/json; charset=utf-8").toMediaType())
+
+            val request = Request.Builder()
+                .url(backEndURL)
+                .post(requestBody)
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    Log.e("UserRepository", "Update User OnFailure error {$e.message}")
+                    callback.onError("UpdateUser onFailure")
+                }
+                override fun onResponse(call: Call, response: Response) {
+                    val responseBody = response.body?.string()
+                    if (responseBody.isNullOrEmpty()) {
+                        Log.e("UserRepository", "Update User responseBody is empty or null")
+                        return
+                    }
+                    Log.d("UserRepository", "Update User check before response $response")
+                    if (response.isSuccessful){
+                        Log.d("UserRepository", "Update User Inside if response is successful $response")
+                        val responseData = Json.decodeFromString<UpdateUserResponse>(responseBody)
+                        if (responseData !=null) {
+                            Log.d("UserRepository", "Update User Inside if responseData is not null $responseData")
+                            callback.onSuccess(responseData)
+                        } else {
+                            Log.d("UserRepository", " Update User ResponseData is null $responseData")
+                            callback.onError("Update User failed")
+                        }
+
+                    }
+                }
+            })
+
+        }else {
+                callback.onError("Update User No token found")
+            }
     }
 
 

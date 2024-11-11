@@ -100,3 +100,10 @@ data class GetUserPasswordResponse(
 
 )
 
+@Serializable
+data class UpdateUserResponse(
+    val status: String,
+    val message: String
+
+)
+
