@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".viewmodel.UpdateUserFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <EditText
+        android:id="@+id/etUpdateFirstName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="First_Name"
+        android:inputType="text"
+        android:minHeight="48dp"/>
+
+    <EditText
+        android:id="@+id/etUpdateLastName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Last_Name"
+        android:inputType="text"
+        android:minHeight="48dp"/>
+
+    <EditText
+        android:id="@+id/etUpdateEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"/>
+
+    <Button
+        android:id="@+id/UpdateUserButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update User Information" />
+
+</LinearLayout>
