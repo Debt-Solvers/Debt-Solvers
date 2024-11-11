@@ -19,6 +19,17 @@
             android:title="Username"
             android:summary="Set your username"
             android:background="@color/white" />
+
+        <Preference
+            android:key="change_password"
+            android:title="Change Password"
+            android:summary="Set your password"
+            android:background="@color/white" />
+        <Preference
+            android:key="update_userinfo"
+            android:title="Update User Info"
+            android:summary="Update your information"
+            android:background="@color/white" />
     </PreferenceCategory>
 
 </PreferenceScreen>
