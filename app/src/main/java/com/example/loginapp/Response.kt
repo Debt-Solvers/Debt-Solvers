@@ -92,3 +92,11 @@ data class InnerUserDataResponse(
     val created_at: String
 
 )
+
+@Serializable
+data class GetUserPasswordResponse(
+    val oldPassword: String,
+    val newPassword: String
+
+)
+
