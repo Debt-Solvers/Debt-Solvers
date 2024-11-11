@@ -30,6 +30,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import com.example.loginapp.viewmodel.SharedViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.File
 
@@ -43,6 +45,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
     private lateinit var tokenManager: TokenManager
     private lateinit var dashboardViewModel: DashboardViewModel
+    private val sharedViewModel: SharedViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,33 +98,63 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 openCamera()
             }
         }
+        // Observe user data
+        // Observe user data from SharedViewModel
+        sharedViewModel.userData.observe(this, Observer { userData ->
+            Log.d("DashboardActivity", "userData before check $userData")
+            if (userData != null) {
+                // Update UI with user data
+                Log.d("DashboardActivity", "if userData not null $userData")
+                displayUserData(userData)
 
-        tokenManager = TokenManager.getInstance(this)
-        dashboardViewModel = ViewModelProvider(
-            this,
-            DashboardViewModelFactory(tokenManager)
-        ).get(DashboardViewModel::class.java)
+            } else {
+                // Show an error message if fetching data failed
+                Log.d("DashboardActivity", "Failed to fetch userData $userData")
+//                Toast.makeText(this, "Failed to fetch user data", Toast.LENGTH_SHORT).show()
+            }
+        })
 
-        dashboardViewModel.logoutSuccess.observe(this) { success ->
+        sharedViewModel.logoutSuccess.observe(this, Observer { success ->
             if (success) {
+                Log.d("DashboardActivity", "Successfully logged out $success")
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 finish()
             } else {
-                Toast.makeText(this, "Logout failed", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this, "Logout failed", Toast.LENGTH_SHORT).show()
+                Log.d("DashboardActivity", "Failed to logged out $success")
             }
-        }
-        dashboardViewModel.userData.observe(this) { result ->
-            when (result) {
-                is DashboardViewModel.UserDataResult.Success -> {
-                    Log.d("DashboardViewModel", "Managed to get userData from get Request. $result")
-                }
-                is DashboardViewModel.UserDataResult.Error -> {
-                    Log.d("DashboardViewModel", "Failed to get UserData---- $result")
-                }
-            }
-        }
-        dashboardViewModel.getUserData()
+        })
+        sharedViewModel.fetchUserData()
+
+//        tokenManager = TokenManager.getInstance(this)
+//        dashboardViewModel = ViewModelProvider(
+//            this,
+//            DashboardViewModelFactory(tokenManager)
+//        ).get(DashboardViewModel::class.java)
+//
+//        dashboardViewModel.logoutSuccess.observe(this) { success ->
+//            if (success) {
+//                val intent = Intent(this, LoginActivity::class.java)
+//                startActivity(intent)
+//                finish()
+//            } else {
+//                Toast.makeText(this, "Logout failed", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//        dashboardViewModel.userData.observe(this) { result ->
+//            when (result) {
+//                is DashboardViewModel.UserDataResult.Success -> {
+//                    Log.d("DashboardViewModel", "Managed to get userData from get Request. $result")
+//                }
+//                is DashboardViewModel.UserDataResult.Error -> {
+//                    Log.d("DashboardViewModel", "Failed to get UserData---- $result")
+//                }
+//            }
+//        }
+//        dashboardViewModel.getUserData()
+
+
     }
 
     fun replaceFragment(fragment: Fragment){
@@ -138,7 +171,8 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             R.id.nav_about -> replaceFragment(ProfileFragment())
             R.id.nav_settings -> replaceFragment(SettingsFragment())
             //R.id.nav_share -> replaceFragment()
-            R.id.nav_logout -> dashboardViewModel.logout()
+//            R.id.nav_logout -> dashboardViewModel.logout()
+            R.id.nav_logout -> sharedViewModel.logout()
         }
         binding.drawerLayout.closeDrawer(GravityCompat.START)
         return true
@@ -209,6 +243,11 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             e.printStackTrace()
         }
         return uri
+    }
+
+    private fun displayUserData(userData: UserDataResponse) {
+
+        Log.d("DashboardActivity", "DisplayUserData: $userData")
     }
 
 }
