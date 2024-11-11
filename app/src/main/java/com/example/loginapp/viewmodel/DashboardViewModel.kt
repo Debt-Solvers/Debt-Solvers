@@ -29,7 +29,7 @@ class DashboardViewModel(private val tokenManager: TokenManager) : ViewModel() {
         val token = tokenManager.getToken()
         if (token != null) {
 //            val backEndURL = "http://10.0.2.2:8080/api/v1/logout"
-            val backEndURL = "http://13.92.253.71:8080/api/v1/logout"
+            val backEndURL = "http://172.173.146.127:8080/api/v1/logout"
             val request = Request.Builder()
                 .url(backEndURL)
 //                .post(RequestBody.create(null, ByteArray(0)))  // Empty body for logout request
@@ -62,7 +62,7 @@ class DashboardViewModel(private val tokenManager: TokenManager) : ViewModel() {
         val token = tokenManager.getToken()
         if (token != null) {
 //            val backEndURL = "http://10.0.2.2:8080/api/v1/user"
-            val backEndURL = "http://13.92.253.71:8080/api/v1/user"
+            val backEndURL = "http://172.173.146.127:8080/api/v1/user"
             val request = Request.Builder()
                 .url(backEndURL)
                 .get()
