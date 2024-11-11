@@ -95,14 +95,14 @@ data class InnerUserDataResponse(
 
 @Serializable
 data class GetUserPasswordResponse(
-    val oldPassword: String,
-    val newPassword: String
+    val status: Int,
+    val message: String
 
 )
 
 @Serializable
 data class UpdateUserResponse(
-    val status: String,
+    val status: Int,
     val message: String
 
 )

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.loginapp.R
@@ -27,11 +28,12 @@ class UpdateUserFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    private lateinit var sharedViewModel: SharedViewModel
+
     private lateinit var firstNameTextView: TextView
     private lateinit var lastNameTextView: TextView
     private lateinit var emailTextView: TextView
     private lateinit var updateUserButton: Button
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +66,19 @@ class UpdateUserFragment : Fragment() {
                 Toast.makeText(context, "All fields are required", Toast.LENGTH_SHORT).show()
             }
         }
+
+        sharedViewModel.updateUser.observe(viewLifecycleOwner, Observer { responseData ->
+            if (responseData !=null) {
+                val response = responseData.message
+                // Show success message
+                Toast.makeText(context, response, Toast.LENGTH_SHORT).show()
+                // Navigate back to previous fragment
+                parentFragmentManager.popBackStack()
+            } else {
+                // Show error message
+                Toast.makeText(context, "Failed to change password", Toast.LENGTH_SHORT).show()
+            }
+        })
         return binding
     }
 

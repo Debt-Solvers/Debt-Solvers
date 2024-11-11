@@ -63,21 +63,21 @@ class UserRepository(private val tokenManager: TokenManager) {
                         // Assuming you parse the response into a UserDataResponse object
                         val userData = parseUserData(response.body?.string())
                         if (userData !=null){
-                            Log.d("UserRepository", "this is userData not null $userData")
+//                            Log.d("UserRepository", "this is userData not null $userData")
                             callback.onSuccess(userData)
                         } else {
-                            Log.d("UserRepository", "this is userData null $userData")
+//                            Log.d("UserRepository", "this is userData null $userData")
+                            callback.onError("User Data is null")
                         }
 
                     } else {
                         callback.onError("Error fetching user data")
-                        Log.d("UserRepository", "this is userData failed to fetch data")
+//                        Log.d("UserRepository", "this is userData failed to fetch data")
                     }
                 }
             })
         } else {
             callback.onError("No token found")
-            Log.d("UserRepository", "this is userData no token found")
         }
     }
 
@@ -115,33 +115,30 @@ class UserRepository(private val tokenManager: TokenManager) {
         val backEndURL = "http://10.0.2.2:8080/api/v1/change-password"
         if (token != null) {
             val requestData = ChangeUserPasswordRequest(oldPassword, newPassword)
-            val emailResetData = Json.encodeToString(requestData)
-            val requestBody = emailResetData.toRequestBody(("application/json; charset=utf-8").toMediaType())
+            val passwordResetData = Json.encodeToString(requestData)
+            val requestBody = passwordResetData.toRequestBody(("application/json; charset=utf-8").toMediaType())
 
             val request = Request.Builder()
                 .url(backEndURL)
-                .post(requestBody)
+                .put(requestBody)
+                .addHeader("Authorization", "Bearer $token")
                 .build()
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    Log.e("UserRepository", "responseBody is empty or null")
                     callback.onError("passowrd change failed")
                 }
                 override fun onResponse(call: Call, response: Response) {
                     val responseBody = response.body?.string()
                     if (responseBody.isNullOrEmpty()) {
-                        Log.e("UserRepository", "responseBody is empty or null")
                         return
                     }
-                    Log.d("UserRepository", "check before response $response")
                     if (response.isSuccessful){
-                        Log.d("UserRepository", "Inside if response is successful $response")
                         val responseData = Json.decodeFromString<GetUserPasswordResponse>(responseBody)
                         if (responseData !=null) {
-                            Log.d("UserRepository", "Inside if responseData is not null $responseData")
+//                            Log.d("UserRepository", "Inside if responseData is not null $responseData")
                             callback.onSuccess(responseData)
                         } else {
-                            Log.d("UserRepository", "ResponseData is null $responseData")
+//                            Log.d("UserRepository", "ResponseData is null $responseData")
                             callback.onError("password-change failed")
                         }
 
@@ -164,29 +161,26 @@ class UserRepository(private val tokenManager: TokenManager) {
 
             val request = Request.Builder()
                 .url(backEndURL)
-                .post(requestBody)
+                .put(requestBody)
+                .addHeader("Authorization", "Bearer $token")
                 .build()
 
             client.newCall(request).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
-                    Log.e("UserRepository", "Update User OnFailure error {$e.message}")
                     callback.onError("UpdateUser onFailure")
                 }
                 override fun onResponse(call: Call, response: Response) {
                     val responseBody = response.body?.string()
                     if (responseBody.isNullOrEmpty()) {
-                        Log.e("UserRepository", "Update User responseBody is empty or null")
                         return
                     }
-                    Log.d("UserRepository", "Update User check before response $response")
                     if (response.isSuccessful){
-                        Log.d("UserRepository", "Update User Inside if response is successful $response")
                         val responseData = Json.decodeFromString<UpdateUserResponse>(responseBody)
                         if (responseData !=null) {
-                            Log.d("UserRepository", "Update User Inside if responseData is not null $responseData")
+//                            Log.d("UserRepository", "Update User Inside if responseData is not null $responseData")
                             callback.onSuccess(responseData)
                         } else {
-                            Log.d("UserRepository", " Update User ResponseData is null $responseData")
+//                            Log.d("UserRepository", " Update User ResponseData is null $responseData")
                             callback.onError("Update User failed")
                         }
 

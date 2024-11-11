@@ -80,6 +80,8 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
             override fun onSuccess(response: UpdateUserResponse) {
                 Log.d("SharedViewModel", "UpdateUser Success: $response")
                 _updateUser.postValue(response)
+                //Updates the user data
+                fetchUserData()
             }
 
             override fun onError(error: String) {

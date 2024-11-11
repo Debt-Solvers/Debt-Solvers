@@ -27,8 +27,9 @@ data class ConfirmResetRequest(
 )
 @Serializable
 data class ChangeUserPasswordRequest(
-    val oldPassword: String,
-    val newPassword: String
+    val current_password: String,
+    val new_password: String
+
 )
 @Serializable
 data class UpdateUserRequest(
