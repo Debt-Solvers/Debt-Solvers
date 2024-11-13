@@ -6,8 +6,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".GroupsFragment">
 
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutHeader"
         android:layout_width="match_parent"
@@ -45,7 +43,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
@@ -70,11 +67,19 @@
                 android:paddingStart="15dp"
                 android:paddingEnd="15dp"
                 android:textSize="16sp" />
-
         </LinearLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- RecyclerView for Group List -->
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewGroups"
+        android:layout_width="match_parent"
+        android:layout_height="578dp"
+        android:layout_marginTop="150dp"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@id/layoutHeader"
+        tools:listitem="@layout/item_group" />
 
 </FrameLayout>
