@@ -6,6 +6,18 @@
     android:padding="16dp">
 
     <!-- Group Name -->
+    <Button
+        android:id="@+id/home_button"
+        android:backgroundTint="@color/primaryColor"
+        android:textColor="@color/white"
+        android:layout_width="wrap_content"
+        android:fontFamily="@font/roboto_bold"
+        android:layout_height="40dp"
+        android:layout_margin="0dp"
+        android:layout_marginTop="15dp"
+        android:text="Back"
+        android:textSize="11sp" />
+
     <TextView
         android:id="@+id/groupNameTextView"
         android:layout_width="wrap_content"
@@ -37,7 +49,7 @@
         android:id="@+id/joinGroupButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Join Group"
+        android:text="Leave Group"
         android:backgroundTint="@color/primaryColor"
         android:textColor="@android:color/white" />
 
