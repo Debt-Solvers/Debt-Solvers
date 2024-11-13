@@ -104,6 +104,15 @@ data class GetUserPasswordResponse(
 data class UpdateUserResponse(
     val status: Int,
     val message: String
-
 )
+
+data class Transaction(
+    val label: String,
+    val amount: Double,
+)
+data class Category(
+    val category: String,
+    val amount: Double,
+)
+
 
