@@ -127,43 +127,22 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         })
         sharedViewModel.fetchUserData()
 
-//        tokenManager = TokenManager.getInstance(this)
-//        dashboardViewModel = ViewModelProvider(
-//            this,
-//            DashboardViewModelFactory(tokenManager)
-//        ).get(DashboardViewModel::class.java)
+    }
+
+//    fun replaceFragment(fragment: Fragment){
 //
-//        dashboardViewModel.logoutSuccess.observe(this) { success ->
-//            if (success) {
-//                val intent = Intent(this, LoginActivity::class.java)
-//                startActivity(intent)
-//                finish()
-//            } else {
-//                Toast.makeText(this, "Logout failed", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//        dashboardViewModel.userData.observe(this) { result ->
-//            when (result) {
-//                is DashboardViewModel.UserDataResult.Success -> {
-//                    Log.d("DashboardViewModel", "Managed to get userData from get Request. $result")
-//                }
-//                is DashboardViewModel.UserDataResult.Error -> {
-//                    Log.d("DashboardViewModel", "Failed to get UserData---- $result")
-//                }
-//            }
-//        }
-//        dashboardViewModel.getUserData()
+//        val fragmentTransaction = fragmentManager.beginTransaction()
+//        fragmentTransaction.replace(R.id.frame_layout, fragment)
+//        fragmentTransaction.commit()
+//
+//    }
+fun replaceFragment(fragment: Fragment) {
+    val fragmentTransaction = supportFragmentManager.beginTransaction()
+    fragmentTransaction.replace(R.id.frame_layout, fragment) // Replace the current fragment
+    fragmentTransaction.addToBackStack(null)  // Optional: Add the transaction to the back stack
+    fragmentTransaction.commit()  // Commit the transaction
+}
 
-
-    }
-
-    fun replaceFragment(fragment: Fragment){
-
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.frame_layout, fragment)
-        fragmentTransaction.commit()
-
-    }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
