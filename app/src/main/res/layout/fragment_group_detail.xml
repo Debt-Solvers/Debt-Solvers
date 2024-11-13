@@ -7,7 +7,7 @@
 
     <!-- Group Name -->
     <Button
-        android:id="@+id/home_button"
+        android:id="@+id/back_button"
         android:backgroundTint="@color/primaryColor"
         android:textColor="@color/white"
         android:layout_width="wrap_content"
