@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         viewPagerImgSlider.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
         val comPosPageTarn = CompositePageTransformer()
-        comPosPageTarn.addTransformer(MarginPageTransformer(40))
+        comPosPageTarn.addTransformer(MarginPageTransformer(400))
         comPosPageTarn.addTransformer { page, position ->
             val r :Float = 1 - abs(position)
             page.scaleY = 0.85f + r * 0.15f
@@ -95,9 +95,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun itemSliderView() {
-        sliderItemList.add(SliderItem(R.drawable.testgif1))
-        sliderItemList.add(SliderItem(R.drawable.testgif2))
         sliderItemList.add(SliderItem(R.drawable.welcome_logo))
+        sliderItemList.add(SliderItem(R.drawable.money))
+        sliderItemList.add(SliderItem(R.drawable.ic_debt))
     }
 }
 
