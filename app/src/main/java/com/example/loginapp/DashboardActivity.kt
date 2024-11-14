@@ -147,7 +147,7 @@ fun replaceFragment(fragment: Fragment) {
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.nav_home -> replaceFragment(HomeFragment())
-            R.id.nav_about -> replaceFragment(ProfileFragment())
+            R.id.nav_about -> replaceFragment(AboutFragment())
             R.id.nav_settings -> replaceFragment(SettingsFragment())
             //R.id.nav_share -> replaceFragment()
 //            R.id.nav_logout -> dashboardViewModel.logout()

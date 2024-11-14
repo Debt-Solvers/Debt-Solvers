@@ -7,47 +7,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class GroupsFragment : Fragment() {
 
-    private lateinit var groupsAdapter: GroupsAdapter
-    private lateinit var recyclerViewGroups: RecyclerView
+class GroupDetailFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val view = inflater.inflate(R.layout.fragment_group_detail, container, false)
+        val tvGroupDetail: TextView = view.findViewById(R.id.tvGroupDetail)
 
-        val view = inflater.inflate(R.layout.fragment_groups, container, false)
-        recyclerViewGroups = view.findViewById(R.id.recyclerViewGroups)
+        val groupName = arguments?.getString("groupName")
+        val groupDescription = arguments?.getString("groupDescription")
 
-        // Sample data for groups
-        val groups = listOf(
-            Group("Group 1", "Description of Group 1"),
-            Group("Group 2", "Description of Group 2"),
-            Group("Group 3", "Description of Group 3")
-        )
-
-        groupsAdapter = GroupsAdapter(groups) { group ->
-            // Handle group item click
-            val bundle = Bundle()
-            bundle.putString("groupName", group.name)
-            bundle.putString("groupDescription", group.description)
-            //findNavController().navigate(R.id.action_groupsFragment_to_groupDetailFragment, bundle)
-            navigateToFragment(GroupDetailFragment())
-        }
-        recyclerViewGroups.layoutManager = LinearLayoutManager(context)
-        recyclerViewGroups.adapter = groupsAdapter
-
-       // return inflater.inflate(R.layout.fragment_groups, container, false)
+        tvGroupDetail.text = "$groupName\n\n$groupDescription"
         return view
-
+        //return inflater.inflate(R.layout.fragment_group_detail, container, false)
     }
     private fun navigateToFragment(fragment: Fragment){
         (activity as? DashboardActivity)?.replaceFragment(fragment)
@@ -71,9 +50,8 @@ class GroupsFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<Button>(R.id.home_button)?.setOnClickListener {
-            navigateToFragment(HomeFragment())
+        view.findViewById<Button>(R.id.back_button)?.setOnClickListener {
+            navigateToFragment(GroupsFragment())
         }
     }
-
 }
