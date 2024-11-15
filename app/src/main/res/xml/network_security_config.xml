@@ -4,6 +4,6 @@
         <domain includeSubdomains="true">10.0.2.2</domain>
     </domain-config>
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">172.173.146.127</domain>
+        <domain includeSubdomains="true">caa900debtsolverapp.eastus.cloudapp.azure.com</domain>
     </domain-config>
 </network-security-config>
