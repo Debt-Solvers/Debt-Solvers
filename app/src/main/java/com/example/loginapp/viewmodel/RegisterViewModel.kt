@@ -1,5 +1,6 @@
 package com.example.loginapp.viewmodel
 import RegisterRequest
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,6 +26,7 @@ private val _registrationStatus = MutableLiveData<RegistrationResult>()
 
     fun register(firstName: String, lastName: String, email: String, password: String) {
         val backEndURL = "http://10.0.2.2:8080/api/v1/signup"
+//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/signup"
         val requestData = RegisterRequest(firstName, lastName, email, password)
         val userRegisterData = Json.encodeToString(requestData)
         val requestBody = userRegisterData.toRequestBody(("application/json; charset=utf-8").toMediaType())
@@ -37,7 +39,7 @@ private val _registrationStatus = MutableLiveData<RegistrationResult>()
         // Does the async http request
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
-//                Log.e("RegisterActivity", "Network error: ${e.message}")
+                Log.e("RegisterActivity", "Network error: ${e.message}")
                 _registrationStatus.postValue(RegistrationResult.Error(e.message))
             }
 
