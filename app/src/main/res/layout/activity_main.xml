@@ -1,16 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp">
 
-    <EditText
-        android:id="@+id/editTextText"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPagerImgSlider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ems="10"
-        android:inputType="text"
-        android:text="Hello Testing 1234!" />
+        android:paddingStart = "80dp"
+        android:paddingEnd="80dp"
+        />
+
+
+
+    <TextView
+        android:id="@+id/tvWelcomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/appTitle"
+        android:fontFamily="@font/poppins_bold"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:paddingTop="16dp" />
+
+    <TextView
+        android:id="@+id/tvWelcomeSubtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/appDescription"
+        android:fontFamily="@font/poppins_regular"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:paddingTop="8dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingTop="32dp">
+
+
+        <Button
+            android:id="@+id/btnSignInMain"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/signIn"
+            android:textColor="@color/backgroundColor"
+            android:backgroundTint="@color/secondaryColor"
+            app:cornerRadius="16dp"
+            android:layout_margin="8dp"/>
+
+        <Button
+            android:id="@+id/btnRegisterMain"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/register"
+            android:textColor="@color/backgroundColor"
+            android:backgroundTint="@color/primaryColor"
+            app:cornerRadius="16dp"
+            android:layout_margin="8dp"/>    </LinearLayout>
 </LinearLayout>
-
-

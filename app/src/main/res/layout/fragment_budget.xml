@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/coordinator"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Wrap the entire layout inside a ScrollView -->
+    <android.widget.ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"> <!-- Ensures the scroll view takes the full screen height -->
+
+        <!-- Use LinearLayout as the child of the ScrollView to ensure it can scroll properly -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            tools:context=".MainActivity">
+
+            <!-- Existing Layout (Balance Layout, Dashboard, RecyclerView, etc.) -->
+            <Button
+                android:id="@+id/home_button"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_alignParentTop="true"
+                android:layout_margin="0dp"
+                android:text="Home"
+                android:textSize="8sp" />
+
+
+            <!-- RecyclerView Title -->
+            <TextView
+                android:id="@+id/recyclerview_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Categories"
+                android:textStyle="bold"
+                android:textSize="17sp"
+                android:textAllCaps="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="10dp" />
+
+            <!-- RecyclerView for displaying transactions -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"/>
+
+            <!-- Floating Action Button (FAB) -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/addBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="10dp"
+                android:contentDescription="TODO"
+                android:src="@drawable/baseline_add_24"
+                android:backgroundTint="@color/primaryColor"
+                app:tint="@color/white"
+                app:borderWidth="0dp" />
+
+        </LinearLayout>
+    </android.widget.ScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

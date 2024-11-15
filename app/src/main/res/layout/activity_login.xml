@@ -1,36 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="top"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:hint="Username"
-        android:inputType="text" />
-
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_below="@id/username"
-        android:hint="Password"
-        android:inputType="textPassword" />
-
-    <Button
-        android:id="@+id/login_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/password"
-        android:text="Login" />
-
     <TextView
-        android:id="@+id/login_status"
+        android:id="@+id/welcomeLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/login_button"
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="center"
+        android:textColor="@color/secondaryColor"
+        android:text="@string/signTitle"
+        android:textSize="36sp"
+        android:layout_marginTop="40dp"
+        />
+    <TextView
+        android:id="@+id/welcomeMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="center"
+        android:textColor="@color/secondaryColor"
+        android:text="@string/welcomeBack"
+        android:textSize="14sp"
+        />
+
+    <EditText
+        android:id="@+id/loginEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email, phone, or username"
+        android:fontFamily="@font/poppins_regular"
+        android:inputType="textEmailAddress"
+        android:paddingTop="30dp" />
+
+    <EditText
+        android:id="@+id/loginPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:fontFamily="@font/poppins_regular"
+        android:inputType="textPassword"
+        android:paddingTop="16dp" />
+
+    <Button
+        android:id="@+id/btnSignIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/signIn"
+        android:textColor="@color/backgroundColor"
+        android:backgroundTint="@color/primaryColor"
+        android:fontFamily="@font/poppins_regular"
+        android:paddingTop="24dp" />
+
+    <TextView
+        android:id="@+id/tvForgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_regular"
+        android:gravity="center"
+        android:paddingTop="8dp"
+        android:text="@string/forgotPassword" />
+
+    <TextView
+        android:id="@+id/signIn_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnSignIn"
         android:layout_marginTop="16dp"
         android:text="" />
-</RelativeLayout>
+
+    <TextView
+        android:id="@+id/registerAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/registerAccount"
+        android:fontFamily="@font/poppins_regular"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        style="@style/NoUnderlineEditText"/>
+
+    <TextView
+        android:id="@+id/tvloginErrMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_red_light"
+        android:visibility="gone"
+        android:paddingTop="8dp" />
+    <TextView
+        android:id="@+id/responseDataTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+    android:textSize="16sp" />
+
+</LinearLayout>
+
+
+

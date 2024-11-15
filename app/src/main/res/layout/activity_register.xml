@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="top"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/welcomeLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/secondaryColor"
+        android:text="@string/registerTitle"
+        android:textSize="36sp"
+        android:layout_marginTop="40dp"
+        />
+    <TextView
+        android:id="@+id/welcomeMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="center"
+        android:textColor="@color/secondaryColor"
+        android:text="@string/welcomeNew"
+        android:textSize="14sp"
+        />
+    <EditText
+        android:id="@+id/etFirstName"
+        android:fontFamily="@font/poppins_regular"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="First Name"
+        android:paddingTop="16dp" />
+
+    <EditText
+        android:id="@+id/etLastName"
+        android:fontFamily="@font/poppins_regular"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Last Name"
+        android:paddingTop="16dp" />
+
+<!--    <EditText-->
+<!--        android:id="@+id/etPhone"-->
+<!--        android:fontFamily="@font/poppins_regular"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:hint="Phone Number"-->
+<!--        android:inputType="phone"-->
+<!--        android:paddingTop="8dp" />-->
+
+
+    <EditText
+        android:id="@+id/etEmail"
+        android:fontFamily="@font/poppins_regular"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:paddingTop="8dp" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:fontFamily="@font/poppins_regular"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:paddingTop="8dp" />
+
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/signUp"
+        android:textColor="@color/backgroundColor"
+        android:backgroundTint="@color/primaryColor"
+        android:fontFamily="@font/poppins_regular"
+        android:paddingTop="24dp" />
+
+    <TextView
+        android:id="@+id/alreadyHaveAnAccount"
+        android:fontFamily="@font/poppins_regular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/haveAnAccount"
+        android:gravity="center"
+        android:paddingTop="16dp"
+        style="@style/NoUnderlineEditText"/>
+
+    <TextView
+        android:id="@+id/tvErrorMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_red_light"
+        android:visibility="gone"
+        android:paddingTop="8dp" />
+</LinearLayout>

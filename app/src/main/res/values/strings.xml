@@ -1,3 +1,40 @@
 <resources>
     <string name="app_name">Login App</string>
+    <string name="haveAnAccount">Already have an account? Login</string>
+    <string name="registerAccount">Don\'t have an account? Register</string>
+    <string name="forgotPassword">Forgot Password?</string>
+    <string name="signIn">Sign In</string>
+    <string name="signUp">Sign Up</string>
+    <string name="register">Register</string>
+    <string name="appDescription">Manage your finances and keep track of your spending.</string>
+    <string name="appTitle">Debt Solvers</string>
+    <string name="welcomeBack">Welcome back we missed you</string>
+    <string name="welcomeNew">Welcome, and hope you enjoy your stay</string>
+    <string name="signTitle">Lets sign you in</string>
+    <string name="registerTitle">Lets register your account</string>
+    <string name="dummy_text">Did you know that Debt Solvers is simply the best in the industry</string>
+    <string name="home">Home</string>
+    <string name="account">Account</string>
+    <string name="settings">Settings</string>
+    <string name="open_nav">Open Navigation Drawer</string>
+    <string name="close_nav">Close Navigation Drawer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="profile">Profile</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="debt_solvers_is_a_wonderful_application_that_will_help_manage_and_store_your_expenses_you_can_manage_your_expenses_individually_or_in_a_group_situation">Debt Solvers is a wonderful application that will help manage and store your expenses. You can manage your expenses individually or in a group situation.</string>
+
 </resources>
