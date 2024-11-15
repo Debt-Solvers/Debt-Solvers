@@ -60,7 +60,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     fun login(username: String, password: String) {
 
         val backEndURL = "http://10.0.2.2:8080/api/v1/login"
-
+//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/login"
         val requestData = LoginRequest(username, password)
         val userLoginData = Json.encodeToString(requestData)
         val requestBody = userLoginData.toRequestBody(("application/json; charset=utf-8").toMediaType())
@@ -118,6 +118,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     fun resetPasswordRequest(email: String) {
         val backEndURL = "http://10.0.2.2:8080/api/v1/password-reset"
+//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/password-reset"
         val requestData = EmailRequest(email)
         val emailResetData = Json.encodeToString(requestData)
         val requestBody = emailResetData.toRequestBody(("application/json; charset=utf-8").toMediaType())
@@ -172,6 +173,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     fun resetPassword(token: String, new_password: String) {
 
         val backEndURL = "http://10.0.2.2:8080/api/v1/password-reset/confirm"
+//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/password-reset/confirm"
         val requestData = ConfirmResetRequest(token, new_password)
         val emailResetData = Json.encodeToString(requestData)
         val requestBody = emailResetData.toRequestBody(("application/json; charset=utf-8").toMediaType())

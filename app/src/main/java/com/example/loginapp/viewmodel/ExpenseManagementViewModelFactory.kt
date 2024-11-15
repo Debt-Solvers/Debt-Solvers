@@ -11,7 +11,7 @@ class ExpenseManagementViewModelFactory(
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ExpenseManagementViewModel::class.java)) {
-            return ExpenseManagementViewModel(application,expenseManagementRepository) as T
+            return ExpenseManagementViewModel(application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

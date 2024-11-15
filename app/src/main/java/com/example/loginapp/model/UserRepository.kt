@@ -47,9 +47,11 @@ class UserRepository(private val tokenManager: TokenManager) {
     // Fetch user data from backend
     fun getUserData(callback: UserDataCallback) {
         val token = tokenManager.getToken()
+        val backEndURL= "http://10.0.2.2:8080/api/v1/user"
+//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/user"
         if (token != null) {
             val request = Request.Builder()
-                .url("http://10.0.2.2:8080/api/v1/user")
+                .url(backEndURL)
                 .addHeader("Authorization", "Bearer $token")
                 .build()
 
@@ -84,9 +86,11 @@ class UserRepository(private val tokenManager: TokenManager) {
     // Logout user
     fun logout(callback: LogoutCallback) {
         val token = tokenManager.getToken()
+        val backEndURL="http://10.0.2.2:8080/api/v1/logout"
+//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/logout"
         if (token != null) {
             val request = Request.Builder()
-                .url("http://10.0.2.2:8080/api/v1/logout")
+                .url(backEndURL)
                 .post(ByteArray(0).toRequestBody())
                 .addHeader("Authorization", "Bearer $token")
                 .build()
@@ -113,6 +117,7 @@ class UserRepository(private val tokenManager: TokenManager) {
     fun changeUserPassword(oldPassword: String, newPassword: String, callback: ChangeUserPasswordCallback){
         val token = tokenManager.getToken()
         val backEndURL = "http://10.0.2.2:8080/api/v1/change-password"
+//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/change-password"
         if (token != null) {
             val requestData = ChangeUserPasswordRequest(oldPassword, newPassword)
             val passwordResetData = Json.encodeToString(requestData)
@@ -153,6 +158,7 @@ class UserRepository(private val tokenManager: TokenManager) {
     fun updateUserInfo(firstName: String, lastName: String, email: String, callback: UpdateUserCallBack) {
         val token = tokenManager.getToken()
         val backEndURL = "http://10.0.2.2:8080/api/v1/user/update"
+//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/user/update"
         if (token != null) {
             val requestData = UpdateUserRequest(firstName, lastName, email)
             val updateUserData = Json.encodeToString(requestData)
