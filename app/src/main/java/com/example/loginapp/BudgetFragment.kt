@@ -10,9 +10,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.loginapp.viewmodel.ExpenseManagementViewModel
+import com.example.loginapp.viewmodel.SharedViewModel
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -27,13 +30,13 @@ class BudgetFragment : Fragment() {
 //    private lateinit var budget: TextView
 //    private lateinit var expense: TextView
 
-    private lateinit var expenseManagementViewModel: ExpenseManagementViewModel
-    private lateinit var categories: MutableList<Category>
+//    private lateinit var expenseManagementViewModel: ExpenseManagementViewModel
+    private lateinit var categories: MutableList<CategoryTest>
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var categoryRecyclerView: RecyclerView
-//    private lateinit var category: TextView
-//    private lateinit var amount: TextView
     private lateinit var addButton: FloatingActionButton
+
+    private val expenseManagementViewModel: ExpenseManagementViewModel by viewModels()
 
 
     override fun onCreateView(
@@ -41,23 +44,6 @@ class BudgetFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
-        // Initialize your transaction list
-        categories = mutableListOf(
-            Category("Groceries", 100.0),
-            Category("Rent", -500.0),
-            Category("Salary", 1200.0),
-            Category("Games", -200.0),
-            Category("Food", -500.0),
-            Category("Other", 1200.0)
-        )
-
-        // Initialize the adapter
-       categoryAdapter = CategoryAdapter(categories) { category ->
-           navigateToCategoryDetails(category)
-           Log.d("BudgetFragment", "Inside categoryAdapter")
-       }
-
         return inflater.inflate(R.layout.fragment_budget, container, false)
     }
 
@@ -67,8 +53,8 @@ class BudgetFragment : Fragment() {
 
         // Pass data as arguments
         val bundle = Bundle().apply {
-            putString("CATEGORY_NAME", category.category)
-            putDouble("CATEGORY_AMOUNT", category.amount)
+            putString("CATEGORY_NAME", category.name)
+//            putDouble("CATEGORY_AMOUNT", category.amount)
         }
 
         categoryDetailFragment.arguments = bundle
@@ -107,12 +93,28 @@ class BudgetFragment : Fragment() {
 
         linearLayoutManager = LinearLayoutManager(requireContext())
 
-        val recyclerView: RecyclerView = view.findViewById(R.id.recyclerview)
-        recyclerView.layoutManager = linearLayoutManager
-        recyclerView.adapter = categoryAdapter
+        // Initialize RecyclerView and Adapter
+        val categoryRecyclerView: RecyclerView = view.findViewById(R.id.recyclerview)
+        categoryRecyclerView.layoutManager = linearLayoutManager
 
-//        category = view.findViewById(R.id.categoryName)
-//        amount = view.findViewById(R.id.categoryAmount)
+
+        // Initialize CategoryAdapter with empty list and click handler
+        categoryAdapter = CategoryAdapter(mutableListOf()) { category ->
+            navigateToCategoryDetails(category)
+            Log.d("BudgetFragment", "CategoryAdapter category: $category")
+        }
+        categoryRecyclerView.adapter = categoryAdapter
+
+        expenseManagementViewModel.fetchDefaultCategories()
+
+        // Observe categories LiveData from ViewModel
+        expenseManagementViewModel.categories.observe(viewLifecycleOwner) { response ->
+                Log.d("BudgetFragment", "Categories response: $response")
+                val categories = response.data.categories
+
+                categoryAdapter.updateCategories(categories)
+        }
+
 
         addButton = view.findViewById(R.id.addBtn)
         addButton.setOnClickListener{

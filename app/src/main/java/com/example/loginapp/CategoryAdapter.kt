@@ -6,13 +6,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class CategoryAdapter(private val categories: List<Category>,
+class CategoryAdapter(private val categories: MutableList<Category>,
                       private val onCategoryClick: (Category) -> Unit // Callback for handling item clicks
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
    inner class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.categoryName)
-        val amount: TextView = view.findViewById(R.id.categoryAmount)
+//        val amount: TextView = view.findViewById(R.id.categoryAmount)
 
        init {
            view.setOnClickListener {
@@ -31,10 +31,16 @@ class CategoryAdapter(private val categories: List<Category>,
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val category = categories[position]
-        holder.name.text = category.category
+        holder.name.text = category.name
 //        holder.budgeted.text = "$%.2f".format(category.budgetedAmount)
-        holder.amount.text = "$%.2f".format(category.amount)
+//        holder.amount.text = "$%.2f".format(category.amount)
     }
 
+    // Method to update categories
+    fun updateCategories(newCategories: List<Category>) {
+        this.categories.clear()
+        this.categories.addAll(newCategories)
+        notifyDataSetChanged()  // Notify adapter that the data has changed
+    }
     override fun getItemCount(): Int = categories.size
 }

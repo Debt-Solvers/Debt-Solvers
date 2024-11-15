@@ -1,5 +1,6 @@
 package com.example.loginapp
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -110,9 +111,29 @@ data class Transaction(
     val label: String,
     val amount: Double,
 )
-data class Category(
+data class CategoryTest(
     val category: String,
     val amount: Double,
 )
-
+@Serializable
+data class CategoryDefaultDataResponse(
+    val status: Int,
+    val message: String,
+    val data: CategoryDefaultData
+)
+@Serializable
+data class CategoryDefaultData(
+    val categories: List<Category> // List of category objects
+)
+@Serializable
+data class Category(
+    @SerialName("category_id") val categoryId: String, // UUID for category
+    val name: String,
+    val description: String,
+    @SerialName("color_code") val colorCode: String,
+    @SerialName("is_default") val isDefault: Boolean,
+    @SerialName("created_at") val createdAt: String,
+    @SerialName("updated_at") val updatedAt: String,
+    @SerialName("deleted_at") val deletedAt: String? // It can be null
+)
 
