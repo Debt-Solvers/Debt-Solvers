@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -105,16 +106,18 @@ class BudgetFragment : Fragment() {
         }
         categoryRecyclerView.adapter = categoryAdapter
 
-        expenseManagementViewModel.fetchDefaultCategories()
+        expenseManagementViewModel.fetchAllCategories()
 
-        // Observe categories LiveData from ViewModel
-        expenseManagementViewModel.categories.observe(viewLifecycleOwner) { response ->
-                Log.d("BudgetFragment", "Categories response: $response")
-                val categories = response.data.categories
+        expenseManagementViewModel.allCategories.observe(viewLifecycleOwner) { response ->
 
-                categoryAdapter.updateCategories(categories)
+            val categories = response.data
+
+            categoryAdapter.updateCategories(categories)
         }
 
+        arguments?.getString("successMessage")?.let { message ->
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
 
         addButton = view.findViewById(R.id.addBtn)
         addButton.setOnClickListener{

@@ -24,28 +24,12 @@
         android:minHeight="48dp"/>
 
     <EditText
-        android:id="@+id/etAddCategoryAmount"
+        android:id="@+id/etAddCategoryDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Amount"
-        android:inputType="numberDecimal"
+        android:hint="Description"
+        android:inputType="text"
         android:minHeight="48dp"/>
-
-<!--    <EditText-->
-<!--        android:id="@+id/etUpdateLastName"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:hint="Last_Name"-->
-<!--        android:inputType="text"-->
-<!--        android:minHeight="48dp"/>-->
-
-<!--    <EditText-->
-<!--        android:id="@+id/etUpdateEmail"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:hint="Email"-->
-<!--        android:inputType="textEmailAddress"-->
-<!--        android:minHeight="48dp"/>-->
 
     <Button
         android:id="@+id/btnAddNewCategory"
