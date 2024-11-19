@@ -119,15 +119,23 @@ data class CategoryTest(
 data class CategoryDefaultDataResponse(
     val status: Int,
     val message: String,
-    val data: CategoryDefaultData
+    val data: CategoryData
+)
+
+@Serializable
+data class GetAllCategoriesResponse(
+    val status: Int,
+    val message: String,
+    val data: List<Category>
 )
 @Serializable
-data class CategoryDefaultData(
+data class CategoryData(
     val categories: List<Category> // List of category objects
 )
 @Serializable
 data class Category(
     @SerialName("category_id") val categoryId: String, // UUID for category
+    @SerialName("user_id") val userId: String? = null,
     val name: String,
     val description: String,
     @SerialName("color_code") val colorCode: String,
@@ -135,5 +143,16 @@ data class Category(
     @SerialName("created_at") val createdAt: String,
     @SerialName("updated_at") val updatedAt: String,
     @SerialName("deleted_at") val deletedAt: String? // It can be null
+)
+
+@Serializable
+data class AddCategoryResponse(
+    val status: Int,
+    val message: String,
+    val data: String
+)
+@Serializable
+data class AddCategoryErrResponse(
+    val error: String
 )
 

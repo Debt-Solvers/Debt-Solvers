@@ -37,3 +37,9 @@ data class UpdateUserRequest(
     val last_name: String,
     val email: String
 )
+
+@Serializable
+data class AddCategoryRequest(
+    val name: String,
+    val description: String
+)
