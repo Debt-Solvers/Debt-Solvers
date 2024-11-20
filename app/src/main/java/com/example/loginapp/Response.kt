@@ -161,3 +161,11 @@ data class DeleteCategoryResponse(
     val message: String
 )
 
+@Serializable
+data class UpdateCategoryResponse(
+    val status: Int,
+    val message: String,
+    val data: Category
+)
+
+

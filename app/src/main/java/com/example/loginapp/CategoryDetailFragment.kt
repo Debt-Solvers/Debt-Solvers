@@ -1,21 +1,27 @@
 package com.example.loginapp
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.loginapp.model.ExpenseManagementRepository
+import com.example.loginapp.viewmodel.ExpenseManagementViewModel
+import kotlinx.serialization.json.Json
 
 class CategoryDetailFragment : Fragment() {
 
     private lateinit var categoryName: TextView
     private lateinit var categoryAmount: TextView
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var transactionAdapter: TransactionAdapter
-    private lateinit var transactionList: List<Transaction>  // List of transactions
+    private lateinit var updateCategoryButton: Button
+    private var category: Category ? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,14 +31,43 @@ class CategoryDetailFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_category_details, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Retrieve the JSON string from arguments
+        arguments?.let {
+            val categoryJson = it.getString("CATEGORY") // Get the JSON string
+            if (categoryJson != null) {
+                // Deserialize the JSON string back into a Category object
+                category = Json.decodeFromString(categoryJson)
+            }
+        }
+        // Display success message from update category
+        arguments?.getString("successMessage")?.let { message ->
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
 
         // Initialize UI components
         categoryName = view.findViewById(R.id.categoryNameTextView)
         categoryAmount = view.findViewById(R.id.categoryAmountTextView)
-//        recyclerView = view.findViewById(R.id.recyclerview_category)
+        updateCategoryButton = view.findViewById(R.id.btnUpdateCategoryDetails)
 
+        updateCategoryButton.setOnClickListener{
+            // Create a Bundle to pass category data to the UpdateCategoryFragment
+            val bundle = Bundle().apply {
+                putString("CATEGORY_ID", category?.categoryId)
+            }
+            // Create an instance of the UpdateCategoryFragment
+            val updateCategoryFragment = UpdateCategoryFragment().apply {
+                arguments = bundle
+            }
+            // Navigate to UpdateCategoryFragment
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, updateCategoryFragment)  // Replace with the new fragment
+                .addToBackStack(null)  // Optional: Add to back stack to allow navigating back
+                .commit()
+        }
 
         // Get the category data from the arguments
         val category = arguments?.getString("CATEGORY_NAME")
@@ -41,6 +76,6 @@ class CategoryDetailFragment : Fragment() {
         categoryName.text = category
         categoryAmount.text = "$%.2f".format(amount)
 
-
     }
+
 }

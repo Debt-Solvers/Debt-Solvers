@@ -43,3 +43,9 @@ data class AddCategoryRequest(
     val name: String,
     val description: String
 )
+@Serializable
+data class UpdateCategoryRequest(
+    val name: String,
+    val description: String,
+    val color_code: String
+)

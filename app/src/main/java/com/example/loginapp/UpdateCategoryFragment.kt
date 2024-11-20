@@ -40,7 +40,6 @@ class UpdateCategoryFragment : Fragment() {
         // Get data from arguments
         arguments?.let {
             categoryId = it.getString("CATEGORY_ID")
-            Log.d("UpdateCategory", "inside arguments checking categoryId :$categoryId")
 
         }
 
@@ -51,7 +50,6 @@ class UpdateCategoryFragment : Fragment() {
             //Redefine here because of mutable / null check issues.
             val id = categoryId
 
-            Log.d("UpdateCategory", "inside updateButton onClick checking categoryId :$id")
             if (id !=null && categoryName.isNotEmpty() && categoryDescription.isNotEmpty() && categoryColor.isNotEmpty()) {
                 expenseManagementViewModel.updateCategory(id, categoryName, categoryDescription, categoryColor)
             } else {
@@ -61,7 +59,6 @@ class UpdateCategoryFragment : Fragment() {
         // Observe the addCategory success response
         expenseManagementViewModel.updateCategory.observe(viewLifecycleOwner) { response ->
             if (response != null && response.status == 200) { // Check if response is successful
-                Log.d("UpdateCategory", "inside viewMode.updateCategory observation :$response")
                 navigateToFragment(CategoryDetailFragment(), response.message)
             }
         }

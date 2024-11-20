@@ -10,8 +10,10 @@ import com.example.loginapp.AddCategoryResponse
 import com.example.loginapp.CategoryDefaultDataResponse
 import com.example.loginapp.DeleteCategoryResponse
 import com.example.loginapp.GetAllCategoriesResponse
+import com.example.loginapp.UpdateCategoryResponse
 import com.example.loginapp.manager.ExpenseManager
 import com.example.loginapp.model.ExpenseManagementRepository
+import com.example.loginapp.model.ExpenseManagementRepository.UpdateCategoryCallback
 import kotlinx.coroutines.launch
 
 class ExpenseManagementViewModel(application: Application) : AndroidViewModel(application) {
@@ -30,6 +32,9 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
 
     private val _deleteCategory = MutableLiveData<DeleteCategoryResponse>()
     val deleteCategory: LiveData<DeleteCategoryResponse> get() = _deleteCategory
+
+    private val _updateCategory = MutableLiveData<UpdateCategoryResponse>()
+    val updateCategory: LiveData<UpdateCategoryResponse> get() = _updateCategory
 
     // LiveData for error messages
     private val _error = MutableLiveData<String>()
@@ -91,6 +96,19 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
                 // refresh the categories list after deleting
                 fetchAllCategories()
             }
+            override fun onError(error: String) {
+                _error.postValue(error)
+            }
+        })
+    }
+
+    // Update category in a list
+    fun updateCategory(id: String, name: String, description: String, color_code: String) {
+        expenseRepository.updateCategory(id, name, description, color_code, object : ExpenseManagementRepository.UpdateCategoryCallback {
+            override fun onSuccess(response: UpdateCategoryResponse) {
+                _updateCategory.postValue(response)
+            }
+
             override fun onError(error: String) {
                 _error.postValue(error)
             }

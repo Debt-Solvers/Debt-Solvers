@@ -1,6 +1,7 @@
 package com.example.loginapp.model
 
 import AddCategoryRequest
+import UpdateCategoryRequest
 import android.content.Context
 import android.util.Log
 import com.example.loginapp.AddCategoryErrResponse
@@ -10,6 +11,7 @@ import com.example.loginapp.DeleteCategoryResponse
 import com.example.loginapp.GetAllCategoriesResponse
 import com.example.loginapp.GetUserPasswordResponse
 import com.example.loginapp.TokenManager
+import com.example.loginapp.UpdateCategoryResponse
 import com.example.loginapp.UpdateUserResponse
 import com.example.loginapp.manager.ExpenseManager
 import kotlinx.serialization.encodeToString
@@ -43,6 +45,10 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
     }
     interface DeleteCategoryCallback {
         fun onSuccess(response: DeleteCategoryResponse)
+        fun onError(error: String)
+    }
+    interface UpdateCategoryCallback {
+        fun onSuccess(response: UpdateCategoryResponse)
         fun onError(error: String)
     }
 
@@ -206,5 +212,50 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
             callback.onError("No token found")
             }
         }
+
+    fun updateCategory(id: String, name: String, description: String, color_code: String, callback: UpdateCategoryCallback){
+        val token = tokenManager.getToken()
+        val backEndURL= "http://10.0.2.2:8081/api/v1/categories/${id}"
+//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/categories/${id}"
+        if (token != null) {
+            val requestData = UpdateCategoryRequest(name, description, color_code)
+            val updateCategoryData = Json.encodeToString(requestData)
+            val requestBody = updateCategoryData.toRequestBody(("application/json; charset=utf-8").toMediaType())
+
+            val request = Request.Builder()
+                .url(backEndURL)
+                .put(requestBody)
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback.onError("Network Error: Failed to delete category")
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val responseBody = response.body?.string()
+                    if (response.isSuccessful) {
+                        try {
+                            // Handle the success response, such as the response body
+                            val responseData = Json.decodeFromString<UpdateCategoryResponse>(responseBody ?: "")
+                            Log.d("DeleteCategory", "Inside onResponse, $responseData")
+                            callback.onSuccess(responseData)
+                        } catch (e: Exception) {
+                            Log.d("DeleteCategory", "Inside e.exception, ${e.message}")
+                            callback.onError("Error parsing response: ${e.message}")
+                        }
+                    } else {
+                        // Handle failure (e.g., category not found or other errors)
+                        callback.onError("404, Category not found.")
+                    }
+                }
+            })
+
+        } else {
+            callback.onError("No token found")
+        }
+    }
+
 
 }
