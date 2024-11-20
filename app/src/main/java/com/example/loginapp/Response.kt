@@ -155,4 +155,9 @@ data class AddCategoryResponse(
 data class AddCategoryErrResponse(
     val error: String
 )
+@Serializable
+data class DeleteCategoryResponse(
+    val status: Int,
+    val message: String
+)
 

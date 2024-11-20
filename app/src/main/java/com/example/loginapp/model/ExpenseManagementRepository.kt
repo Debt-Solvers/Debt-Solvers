@@ -6,6 +6,7 @@ import android.util.Log
 import com.example.loginapp.AddCategoryErrResponse
 import com.example.loginapp.AddCategoryResponse
 import com.example.loginapp.CategoryDefaultDataResponse
+import com.example.loginapp.DeleteCategoryResponse
 import com.example.loginapp.GetAllCategoriesResponse
 import com.example.loginapp.GetUserPasswordResponse
 import com.example.loginapp.TokenManager
@@ -40,6 +41,11 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
         fun onSuccess(response: GetAllCategoriesResponse)
         fun onError(error: String)
     }
+    interface DeleteCategoryCallback {
+        fun onSuccess(response: DeleteCategoryResponse)
+        fun onError(error: String)
+    }
+
     // Get categories from SharedPreferences
     fun getDefaultCategories(callback: CategoryCallback) {
         val token = tokenManager.getToken()
@@ -161,4 +167,44 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
         }
 
     }
+    fun deleteCategory(id: String, callback: DeleteCategoryCallback){
+        val token = tokenManager.getToken()
+        val backEndURL= "http://10.0.2.2:8081/api/v1/categories/${id}"
+//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/categories/${id}"
+        if (token != null) {
+
+            val request = Request.Builder()
+                .url(backEndURL)
+                .delete()
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback.onError("Network Error: Failed to delete category")
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val responseBody = response.body?.string()
+                    if (response.isSuccessful) {
+                        try {
+                            // Handle the success response, such as the response body
+                            val responseData = Json.decodeFromString<DeleteCategoryResponse>(responseBody ?: "")
+                            Log.d("DeleteCategory", "Inside onResponse, $responseData")
+                            callback.onSuccess(responseData)
+                        } catch (e: Exception) {
+                            callback.onError("Error parsing response: ${e.message}")
+                        }
+                    } else {
+                        // Handle failure (e.g., category not found or other errors)
+                        callback.onError("404, Category not found.")
+                    }
+                }
+            })
+
+        } else {
+            callback.onError("No token found")
+            }
+        }
+
 }

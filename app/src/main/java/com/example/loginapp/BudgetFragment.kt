@@ -24,21 +24,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class BudgetFragment : Fragment() {
 
-//    private lateinit var transactions: MutableList<Transaction>
-//    private lateinit var transactionAdapter: TransactionAdapter
-    private lateinit var linearLayoutManager: LinearLayoutManager
-//    private lateinit var balance: TextView
-//    private lateinit var budget: TextView
-//    private lateinit var expense: TextView
 
-//    private lateinit var expenseManagementViewModel: ExpenseManagementViewModel
-    private lateinit var categories: MutableList<CategoryTest>
+    private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var categoryAdapter: CategoryAdapter
     private lateinit var categoryRecyclerView: RecyclerView
     private lateinit var addButton: FloatingActionButton
 
     private val expenseManagementViewModel: ExpenseManagementViewModel by viewModels()
-
+    private var categories: MutableList<Category> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,20 +92,21 @@ class BudgetFragment : Fragment() {
         categoryRecyclerView.layoutManager = linearLayoutManager
 
 
-        // Initialize CategoryAdapter with empty list and click handler
-        categoryAdapter = CategoryAdapter(mutableListOf()) { category ->
+        categoryAdapter = CategoryAdapter(categories, { category ->
             navigateToCategoryDetails(category)
-            Log.d("BudgetFragment", "CategoryAdapter category: $category")
-        }
+        }, { categoryId ->
+            deleteCategory(categoryId)
+        })
+
         categoryRecyclerView.adapter = categoryAdapter
 
         expenseManagementViewModel.fetchAllCategories()
 
         expenseManagementViewModel.allCategories.observe(viewLifecycleOwner) { response ->
 
-            val categories = response.data
-
-            categoryAdapter.updateCategories(categories)
+            val allCategories = response.data
+            Log.d("CategoryData", "this is category data $allCategories")
+            categoryAdapter.updateCategories(allCategories)
         }
 
         arguments?.getString("successMessage")?.let { message ->
@@ -129,5 +123,39 @@ class BudgetFragment : Fragment() {
         }
 
     }
+
+    // Method to handle category deletion
+    private fun deleteCategory(categoryId: String) {
+        // Find the category that the user wants to delete
+        val categoryToDelete = categories.find {it.categoryId == categoryId}
+
+        if (categoryToDelete != null && categoryToDelete.isDefault) {
+            // If the category is a default category, prevent deletion
+            Toast.makeText(requireContext(), "Cannot delete default category", Toast.LENGTH_SHORT).show()
+            return
+        }
+        // Continue with delete if its not the default category.
+        expenseManagementViewModel.deleteCategory(categoryId)
+        // Observe the result of the delete action (onSuccess or onError)
+        expenseManagementViewModel.deleteCategory.observe(viewLifecycleOwner) { response ->
+            // After the category is deleted successfully, remove it from the list
+            if (response.status == 200) {
+
+                // Remove category from the adapter's list
+                categories.removeAll { it.categoryId == categoryId }
+                categoryAdapter.updateCategories(categories)
+
+                Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(requireContext(), "Failed to delete category", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        // Handle error (optional)
+        expenseManagementViewModel.error.observe(viewLifecycleOwner) { error ->
+            Toast.makeText(requireContext(), "Error: $error", Toast.LENGTH_SHORT).show()
+        }
+    }
+
 
 }

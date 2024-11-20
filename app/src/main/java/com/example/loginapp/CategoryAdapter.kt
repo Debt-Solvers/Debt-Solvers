@@ -1,24 +1,33 @@
 package com.example.loginapp
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class CategoryAdapter(private val categories: MutableList<Category>,
-                      private val onCategoryClick: (Category) -> Unit // Callback for handling item clicks
+class CategoryAdapter(private var categories: MutableList<Category>,
+                      private val onCategoryClick: (Category) -> Unit, // Callback for handling item clicks
+                      private val onCategoryDeleteClick: (String) -> Unit
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
    inner class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.categoryName)
-//        val amount: TextView = view.findViewById(R.id.categoryAmount)
+       val deleteButton: ImageView = view.findViewById(R.id.categoryDeleteButton)
 
        init {
            view.setOnClickListener {
                // Trigger the callback when an item is clicked
                val category = categories[adapterPosition]
                onCategoryClick(category)
+           }
+
+           // When the delete button is clicked
+           deleteButton.setOnClickListener {
+               val categoryId = categories[adapterPosition].categoryId  // Assuming category has an 'id' field
+               onCategoryDeleteClick(categoryId)
            }
        }
     }
@@ -32,8 +41,13 @@ class CategoryAdapter(private val categories: MutableList<Category>,
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
         val category = categories[position]
         holder.name.text = category.name
-//        holder.budgeted.text = "$%.2f".format(category.budgetedAmount)
-//        holder.amount.text = "$%.2f".format(category.amount)
+
+        // Make default category delete buttons no longer interactive and non-default interactive
+        if (category.isDefault) {
+            holder.deleteButton.visibility = View.GONE
+        } else {
+            holder.deleteButton.visibility = View.VISIBLE
+        }
     }
 
     // Method to update categories

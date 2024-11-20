@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.loginapp.AddCategoryResponse
 import com.example.loginapp.CategoryDefaultDataResponse
+import com.example.loginapp.DeleteCategoryResponse
 import com.example.loginapp.GetAllCategoriesResponse
 import com.example.loginapp.manager.ExpenseManager
 import com.example.loginapp.model.ExpenseManagementRepository
@@ -26,6 +27,9 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
 
     private val _addCategories = MutableLiveData<AddCategoryResponse>()
     val addCategories: LiveData<AddCategoryResponse> get() = _addCategories
+
+    private val _deleteCategory = MutableLiveData<DeleteCategoryResponse>()
+    val deleteCategory: LiveData<DeleteCategoryResponse> get() = _deleteCategory
 
     // LiveData for error messages
     private val _error = MutableLiveData<String>()
@@ -72,6 +76,21 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
                 _addCategories.postValue(response)
             }
 
+            override fun onError(error: String) {
+                _error.postValue(error)
+            }
+        })
+    }
+
+    //Delete Category from a list
+    fun deleteCategory(id: String) {
+        expenseRepository.deleteCategory(id, object : ExpenseManagementRepository.DeleteCategoryCallback {
+            override fun onSuccess(response: DeleteCategoryResponse) {
+                _deleteCategory.postValue(response)
+
+                // refresh the categories list after deleting
+                fetchAllCategories()
+            }
             override fun onError(error: String) {
                 _error.postValue(error)
             }
