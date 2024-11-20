@@ -54,11 +54,11 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
         // Restore theme preference
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val isDarkMode = sharedPreferences.getBoolean("switch_dark_mode", false)
+        val isDarkMode = sharedPreferences.getBoolean("dark_mode", false)
         if (isDarkMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
 
         binding = ActivityDashboardBinding.inflate(layoutInflater)
