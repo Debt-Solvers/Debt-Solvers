@@ -20,6 +20,8 @@ import com.example.loginapp.viewmodel.SharedViewModel
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 
 class BudgetFragment : Fragment() {
@@ -45,22 +47,23 @@ class BudgetFragment : Fragment() {
         // Create the CategoryDetailFragment
         val categoryDetailFragment = CategoryDetailFragment()
 
+        // Serialize the category object to a JSON string
+        val categoryJson = Json.encodeToString(category)
         // Pass data as arguments
         val bundle = Bundle().apply {
             putString("CATEGORY_NAME", category.name)
+            putString("CATEGORY", categoryJson)
 //            putDouble("CATEGORY_AMOUNT", category.amount)
         }
 
         categoryDetailFragment.arguments = bundle
 
         // Navigate to CategoryDetailFragment
-        Log.d("BudgetFragment", "Inside navigate to CategoryDetails")
         parentFragmentManager.beginTransaction()
 //            .replace(R.id.fragment_container, categoryDetailFragment)
             .replace(R.id.frame_layout, categoryDetailFragment) // Does this make sense ? I'm confused
             .addToBackStack(null) // Optional: Allows back navigation
             .commit()
-        Log.d("BudgetFragment", "Inside navigate to CategoryDetails transaction")
     }
     private fun navigateToFragment(fragment: Fragment){
         (activity as? DashboardActivity)?.replaceFragment(fragment)
