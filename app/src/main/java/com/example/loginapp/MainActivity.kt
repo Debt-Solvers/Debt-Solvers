@@ -11,6 +11,8 @@ import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import kotlin.math.abs
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.preference.PreferenceManager
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +26,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Restore theme preference
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val isDarkMode = sharedPreferences.getBoolean("switch_dark_mode", false)
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+
         setContentView(R.layout.activity_main)
 
         // Bind the ViewPager2 component

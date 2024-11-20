@@ -3,11 +3,13 @@ package com.example.loginapp
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreferenceCompat
 import com.example.loginapp.viewmodel.SharedViewModel
 import com.example.loginapp.viewmodel.UpdateUserFragment
 
@@ -31,6 +33,16 @@ class SettingsFragment : PreferenceFragmentCompat() {
             // Replace SettingsFragment with ChangeUserPasswordFragment
             replaceFragment(UpdateUserFragment())
             true
+        }
+        // Handle Dark Mode SwitchPreferenceCompat
+        val darkModeSwitch: SwitchPreferenceCompat? = findPreference("switch_dark_mode")
+        darkModeSwitch?.setOnPreferenceChangeListener { _, newValue ->
+            if (newValue as Boolean) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+            true // Return true to save the new value
         }
 
     }
