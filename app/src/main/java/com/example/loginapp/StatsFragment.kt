@@ -1,33 +1,20 @@
 package com.example.loginapp
 
+import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
+import com.example.loginapp.R // Import your R file
+import com.github.mikephil.charting.components.Legend
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [StatsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class StatsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,23 +24,50 @@ class StatsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_stats, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment StatsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            StatsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Reference the PieChart from the layout
+        val pieChart = view.findViewById<PieChart>(R.id.pieChart)
+
+        // Create data entries for the pie chart
+        val pieEntries = listOf(
+            PieEntry(40f, "Groceries"),
+            PieEntry(30f, "Dining   "),
+            PieEntry(20f, "Entertainment"),
+            PieEntry(10f, "Transportation"),
+            PieEntry(10f, "Gifts")
+        )
+
+        // Create a PieDataSet and set its properties
+        val pieDataSet = PieDataSet(pieEntries, "Example Pie Chart")
+        pieDataSet.colors = listOf(Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA)
+        pieDataSet.sliceSpace = 2f
+        pieDataSet.valueTextSize = 24f
+        pieDataSet.valueTextColor = R.color.secondaryColor
+
+        // Create PieData and assign it to the PieChart
+        val pieData = PieData(pieDataSet)
+        pieChart.data = pieData
+
+        // Customize the PieChart
+        pieChart.description.isEnabled = false
+        pieChart.isDrawHoleEnabled = true
+        pieChart.setHoleColor(Color.TRANSPARENT)
+        pieChart.transparentCircleRadius = 50f
+        pieChart.holeRadius = 20f
+        pieChart.animateY(1400)
+
+        val legend = pieChart.legend
+        legend.textColor = ContextCompat.getColor(requireContext(), R.color.secondaryColor)
+        legend.textSize = 16f
+        legend.isWordWrapEnabled = true // Enable word wrapping
+        legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+        legend.orientation = Legend.LegendOrientation.HORIZONTAL
+        legend.setDrawInside(false) // Ensure the legend is outside the chart
+
+        // Refresh the chart
+        pieChart.invalidate()
     }
 }
