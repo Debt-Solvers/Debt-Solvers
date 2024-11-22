@@ -1,5 +1,6 @@
 [versions]
 agp = "8.7.1"
+androidplotCore = "1.5.7"
 kotlin = "2.0.0"
 coreKtx = "1.10.1"
 junit = "4.13.2"
@@ -20,8 +21,12 @@ securityCryptoKtx = "1.0.0"
 securityCryptoKtxVersion = "1.1.0-alpha03"
 navigationDynamicFeaturesFragment = "2.8.3"
 navigationCompose = "2.8.3"
+activity = "1.9.3"
+constraintlayout = "2.1.4"
 
 [libraries]
+androidplot-core = { module = "com.androidplot:androidplot-core", version.ref = "androidplotCore" }
+androidx-appcompat-appcompat = { module = "androidx.appcompat:appcompat" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationFragmentKtx" }
@@ -52,6 +57,8 @@ protobuf-kotlin-lite = { module = "com.google.protobuf:protobuf-kotlin-lite", ve
 androidx-security-crypto-ktx = { group = "androidx.security", name = "security-crypto-ktx", version.ref = "securityCryptoKtx" }
 androidx-navigation-dynamic-features-fragment = { group = "androidx.navigation", name = "navigation-dynamic-features-fragment", version.ref = "navigationDynamicFeaturesFragment" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

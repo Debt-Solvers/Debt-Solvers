@@ -46,7 +46,8 @@ android {
 }
 
 dependencies {
-    implementation("androidx.appcompat:appcompat")
+    implementation(libs.androidx.appcompat.appcompat)
+    implementation (libs.mpandroidchart)
     implementation(libs.google.material)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -69,6 +70,8 @@ dependencies {
     implementation (libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.navigation.dynamic.features.fragment)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
