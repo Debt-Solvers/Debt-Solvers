@@ -9,7 +9,7 @@
     <Button
         android:id="@+id/back_button"
         android:backgroundTint="@color/primaryColor"
-        android:textColor="@color/white"
+        android:textColor="@color/secondaryColor"
         android:layout_width="wrap_content"
         android:orientation="vertical"
         android:fontFamily="@font/roboto_bold"
