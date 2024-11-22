@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.loginapp.model.ExpenseManagementRepository
@@ -23,6 +24,7 @@ class CategoryDetailFragment : Fragment() {
     private lateinit var updateCategoryButton: Button
     private lateinit var addBudgetButton: Button
     private var category: Category ? = null
+    private val expenseManagementViewModel: ExpenseManagementViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -87,7 +89,14 @@ class CategoryDetailFragment : Fragment() {
                 .commit()
         }
 
+        expenseManagementViewModel.fetchAllBudgets()
 
+        expenseManagementViewModel.allBudgets.observe(viewLifecycleOwner) { response ->
+
+            val allBudgets = response.data
+            Log.d("FetchAllBudgets", "this is budget data ${allBudgets}")
+
+        }
 
         // Get the category data from the arguments
         val category = arguments?.getString("CATEGORY_NAME")
