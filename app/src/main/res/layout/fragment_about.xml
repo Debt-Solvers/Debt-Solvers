@@ -28,6 +28,7 @@
             android:id="@+id/whoAreWe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_regular"
             android:text="We are a group of college students at Seneca Polytechnic who want to make expenses easier to manage."
             android:textColor="@color/secondaryColor"
             android:textSize="16sp"
@@ -136,6 +137,7 @@
             android:text="Debt Solvers is a wonderful application that will help manage and store your expenses. You can manage your expenses individually or in a group situation."
             android:textSize="16sp"
             android:lineSpacingExtra="4dp"
+            android:fontFamily="@font/roboto_regular"
             android:textColor="@color/secondaryColor"
             android:layout_marginBottom="24dp" />
 
