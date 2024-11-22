@@ -187,6 +187,11 @@ data class Budget(
     @SerialName("updated_at") val updated_at: String,
     @SerialName("deleted_at") val deleted_at: String?
 )
-
+@Serializable
+data class GetAllBudgetsResponse(
+    val status: Int,
+    val message: String,
+    val data: List<Budget>
+)
 
 

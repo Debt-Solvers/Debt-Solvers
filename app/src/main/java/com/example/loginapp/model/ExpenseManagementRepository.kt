@@ -10,6 +10,7 @@ import com.example.loginapp.AddCategoryErrResponse
 import com.example.loginapp.AddCategoryResponse
 import com.example.loginapp.CategoryDefaultDataResponse
 import com.example.loginapp.DeleteCategoryResponse
+import com.example.loginapp.GetAllBudgetsResponse
 import com.example.loginapp.GetAllCategoriesResponse
 import com.example.loginapp.GetUserPasswordResponse
 import com.example.loginapp.TokenManager
@@ -56,6 +57,10 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
 
     interface AddBudgetCallback {
         fun onSuccess(response: AddBudgetResponse)
+        fun onError(error: String)
+    }
+    interface AllBudgetsCallback {
+        fun onSuccess(response: GetAllBudgetsResponse)
         fun onError(error: String)
     }
 
@@ -270,6 +275,7 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
         Budget
      */
 
+    // Add a budget to a category
     fun addBudget(categoryId: String, amount: Float, start_date: String, end_date: String, callback: AddBudgetCallback){
         val token = tokenManager.getToken()
         val backEndURL= "http://10.0.2.2:8081/api/v1/budgets"
@@ -311,6 +317,46 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
             callback.onError("No token found")
         }
 
+    }
+
+    // Get All the budgets
+    fun getAllBudgets(callback: AllBudgetsCallback) {
+        val token = tokenManager.getToken()
+        val backEndURL= "http://10.0.2.2:8081/api/v1/budgets"
+//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/categories"
+        if (token != null) {
+            val request = Request.Builder()
+                .url(backEndURL)
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback.onError("Network Error, ${e.message}")
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val responseBody = response.body?.string()
+                    if (response.isSuccessful) {
+
+                        if (responseBody != null) {
+                            try {
+                                val responseData = Json.decodeFromString<GetAllBudgetsResponse>(responseBody)
+                                callback.onSuccess(responseData)
+                            } catch (e: Exception) {
+                                callback.onError("Error parsing response: ${e.message}")
+                            }
+                        } else {
+                            callback.onError("Budgets Data is null")
+                        }
+                    } else {
+                        callback.onError("Error fetching Budget data")
+                    }
+                }
+            })
+        } else {
+            callback.onError("No token found")
+        }
     }
 
 }

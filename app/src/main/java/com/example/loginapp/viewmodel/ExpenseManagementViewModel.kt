@@ -10,6 +10,7 @@ import com.example.loginapp.AddBudgetResponse
 import com.example.loginapp.AddCategoryResponse
 import com.example.loginapp.CategoryDefaultDataResponse
 import com.example.loginapp.DeleteCategoryResponse
+import com.example.loginapp.GetAllBudgetsResponse
 import com.example.loginapp.GetAllCategoriesResponse
 import com.example.loginapp.UpdateCategoryResponse
 import com.example.loginapp.manager.ExpenseManager
@@ -21,7 +22,7 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
 
     private val expenseRepository = ExpenseManagementRepository(ExpenseManager(application),application)
 
-    // LiveData to hold the categories list
+    // LiveData to hold the default categories list
     private val _categories = MutableLiveData<CategoryDefaultDataResponse>()
     val categories: LiveData<CategoryDefaultDataResponse> get() = _categories
 
@@ -39,6 +40,9 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
 
     private val _addBudget = MutableLiveData<AddBudgetResponse>()
     val addBudget: LiveData<AddBudgetResponse> get() = _addBudget
+
+    private val _allBudgets = MutableLiveData<GetAllBudgetsResponse>()
+    val allBudgets: LiveData<GetAllBudgetsResponse> get() = _allBudgets
 
     // LiveData for error messages
     private val _error = MutableLiveData<String>()
@@ -63,10 +67,10 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
             })
         }
     }
-    // Load all categories from the repository
+    // Load all categories from the ExpenseManagementRepository
     fun fetchAllCategories() {
         viewModelScope.launch {
-            expenseRepository.getAllCategories(object : ExpenseManagementRepository.AllCategoriesCallback {
+            expenseRepository. getAllCategories(object : ExpenseManagementRepository.AllCategoriesCallback {
                 override fun onSuccess(response: GetAllCategoriesResponse) {
                     _allCategories.postValue(response)
                 }
@@ -134,5 +138,20 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
                 _error.postValue(error)
             }
         })
+    }
+
+    // Load all budgets from the ExpenseManagementRepository
+    fun fetchAllBudgets() {
+        viewModelScope.launch {
+            expenseRepository.getAllBudgets(object : ExpenseManagementRepository.AllBudgetsCallback {
+                override fun onSuccess(response: GetAllBudgetsResponse) {
+                    _allBudgets.postValue(response)
+                }
+
+                override fun onError(error: String) {
+                    _error.postValue(error)
+                }
+            })
+        }
     }
 }
