@@ -49,3 +49,10 @@ data class UpdateCategoryRequest(
     val description: String,
     val color_code: String
 )
+@Serializable
+data class AddBudgetRequest(
+    val category_id: String,
+    val amount: Float,
+    val start_date: String,
+    val end_date: String
+)

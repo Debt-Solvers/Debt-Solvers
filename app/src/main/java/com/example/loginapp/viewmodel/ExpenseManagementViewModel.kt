@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.loginapp.AddBudgetResponse
 import com.example.loginapp.AddCategoryResponse
 import com.example.loginapp.CategoryDefaultDataResponse
 import com.example.loginapp.DeleteCategoryResponse
@@ -35,6 +36,9 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
 
     private val _updateCategory = MutableLiveData<UpdateCategoryResponse>()
     val updateCategory: LiveData<UpdateCategoryResponse> get() = _updateCategory
+
+    private val _addBudget = MutableLiveData<AddBudgetResponse>()
+    val addBudget: LiveData<AddBudgetResponse> get() = _addBudget
 
     // LiveData for error messages
     private val _error = MutableLiveData<String>()
@@ -107,6 +111,23 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
         expenseRepository.updateCategory(id, name, description, color_code, object : ExpenseManagementRepository.UpdateCategoryCallback {
             override fun onSuccess(response: UpdateCategoryResponse) {
                 _updateCategory.postValue(response)
+            }
+
+            override fun onError(error: String) {
+                _error.postValue(error)
+            }
+        })
+    }
+
+    /*
+        Budgets
+     */
+
+    //Add a budget to the list
+    fun addBudget(categoryId: String, amount: Float, start_date: String, end_date: String) {
+        expenseRepository.addBudget(categoryId, amount, start_date, end_date, object : ExpenseManagementRepository.AddBudgetCallback {
+            override fun onSuccess(response: AddBudgetResponse) {
+                _addBudget.postValue(response)
             }
 
             override fun onError(error: String) {

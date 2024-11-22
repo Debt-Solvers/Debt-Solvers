@@ -168,4 +168,25 @@ data class UpdateCategoryResponse(
     val data: Category
 )
 
+@Serializable
+data class AddBudgetResponse(
+    val status: Int,
+    val message: String,
+    val data: Budget
+)
+
+@Serializable
+data class Budget(
+    @SerialName("budget_id") val budget_id: String,
+    @SerialName("user_id") val user_id: String,
+    @SerialName("category_id") val category_id: String,
+    val amount: Float,
+    @SerialName("start_date") val start_date: String,
+    @SerialName("end_date") val end_date: String,
+    @SerialName("created_at") val created_at: String,
+    @SerialName("updated_at") val updated_at: String,
+    @SerialName("deleted_at") val deleted_at: String?
+)
+
+
 

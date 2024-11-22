@@ -21,6 +21,7 @@ class CategoryDetailFragment : Fragment() {
     private lateinit var categoryName: TextView
     private lateinit var categoryAmount: TextView
     private lateinit var updateCategoryButton: Button
+    private lateinit var addBudgetButton: Button
     private var category: Category ? = null
 
     override fun onCreateView(
@@ -52,6 +53,7 @@ class CategoryDetailFragment : Fragment() {
         categoryName = view.findViewById(R.id.categoryNameTextView)
         categoryAmount = view.findViewById(R.id.categoryAmountTextView)
         updateCategoryButton = view.findViewById(R.id.btnUpdateCategoryDetails)
+        addBudgetButton = view.findViewById(R.id.btnAddBudgetDetails)
 
         updateCategoryButton.setOnClickListener{
             // Create a Bundle to pass category data to the UpdateCategoryFragment
@@ -69,9 +71,28 @@ class CategoryDetailFragment : Fragment() {
                 .commit()
         }
 
+        addBudgetButton.setOnClickListener{
+            // Create a Bundle to pass category data to the UpdateCategoryFragment
+            val bundle = Bundle().apply {
+                putString("CATEGORY_ID", category?.categoryId)
+            }
+            // Create an instance of the UpdateCategoryFragment
+            val addBudgetFragment = AddBudgetFragment().apply {
+                arguments = bundle
+            }
+            // Navigate to UpdateCategoryFragment
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, addBudgetFragment)  // Replace with the new fragment
+                .addToBackStack(null)  // Optional: Add to back stack to allow navigating back
+                .commit()
+        }
+
+
+
         // Get the category data from the arguments
         val category = arguments?.getString("CATEGORY_NAME")
         val amount = arguments?.getDouble("CATEGORY_AMOUNT", 0.0)
+
 
         categoryName.text = category
         categoryAmount.text = "$%.2f".format(amount)

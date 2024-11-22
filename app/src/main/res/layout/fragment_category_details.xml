@@ -115,4 +115,10 @@
         android:layout_height="wrap_content"
         android:text="Update Category" />
 
+    <Button
+        android:id="@+id/btnAddBudgetDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Budget" />
+
 </LinearLayout>

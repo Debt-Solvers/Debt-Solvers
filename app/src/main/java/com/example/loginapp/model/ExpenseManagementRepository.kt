@@ -1,9 +1,11 @@
 package com.example.loginapp.model
 
+import AddBudgetRequest
 import AddCategoryRequest
 import UpdateCategoryRequest
 import android.content.Context
 import android.util.Log
+import com.example.loginapp.AddBudgetResponse
 import com.example.loginapp.AddCategoryErrResponse
 import com.example.loginapp.AddCategoryResponse
 import com.example.loginapp.CategoryDefaultDataResponse
@@ -51,6 +53,12 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
         fun onSuccess(response: UpdateCategoryResponse)
         fun onError(error: String)
     }
+
+    interface AddBudgetCallback {
+        fun onSuccess(response: AddBudgetResponse)
+        fun onError(error: String)
+    }
+
 
     // Get categories from SharedPreferences
     fun getDefaultCategories(callback: CategoryCallback) {
@@ -257,5 +265,52 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
         }
     }
 
+
+    /*
+        Budget
+     */
+
+    fun addBudget(categoryId: String, amount: Float, start_date: String, end_date: String, callback: AddBudgetCallback){
+        val token = tokenManager.getToken()
+        val backEndURL= "http://10.0.2.2:8081/api/v1/budgets"
+//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/categories"
+        if (token != null) {
+
+            val requestData = AddBudgetRequest(categoryId,amount, start_date, end_date)
+            val addBudgetData = Json.encodeToString(requestData)
+            val requestBody = addBudgetData.toRequestBody(("application/json; charset=utf-8").toMediaType())
+
+            val request = Request.Builder()
+                .url(backEndURL)
+                .post(requestBody)
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback.onError("Network Error, ${e.message}")
+                }
+                override fun onResponse(call: Call, response: Response) {
+                    val responseBody = response.body?.string()
+                    if (responseBody.isNullOrEmpty()) {
+                        return
+                    }
+                    if (response.isSuccessful){
+                        val responseData = Json.decodeFromString<AddBudgetResponse>(responseBody)
+                        if (responseData !=null) {
+                            callback.onSuccess(responseData)
+                        } else {
+                            callback.onError("No data, data is null")
+                        }
+                    } else {
+                        callback.onError("Invalid input data")
+                    }
+                }
+            })
+        }else {
+            callback.onError("No token found")
+        }
+
+    }
 
 }
