@@ -199,5 +199,11 @@ data class DeleteBudgetResponse(
     val message: String
 
 )
+@Serializable
+data class UpdateBudgetResponse(
+    val status: Int,
+    val message: String,
+    val data: Budget
+)
 
 

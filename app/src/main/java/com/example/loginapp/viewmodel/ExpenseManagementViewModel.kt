@@ -13,6 +13,7 @@ import com.example.loginapp.DeleteBudgetResponse
 import com.example.loginapp.DeleteCategoryResponse
 import com.example.loginapp.GetAllBudgetsResponse
 import com.example.loginapp.GetAllCategoriesResponse
+import com.example.loginapp.UpdateBudgetResponse
 import com.example.loginapp.UpdateCategoryResponse
 import com.example.loginapp.manager.ExpenseManager
 import com.example.loginapp.model.ExpenseManagementRepository
@@ -48,7 +49,8 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
     private val _deleteBudget = MutableLiveData<DeleteBudgetResponse>()
     val deleteBudget: LiveData<DeleteBudgetResponse> get() = _deleteBudget
 
-
+    private val _updateBudget = MutableLiveData<UpdateBudgetResponse>()
+    val updateBudget: LiveData<UpdateBudgetResponse> get() = _updateBudget
 
     // LiveData for error messages
     private val _error = MutableLiveData<String>()
@@ -160,7 +162,7 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
             })
         }
     }
-    //Delete Budget from a list
+    //Delete Budget from a category
     fun deleteBudget(id: String) {
         expenseRepository.deleteBudget(id, object : ExpenseManagementRepository.DeleteBudgetCallback {
             override fun onSuccess(response: DeleteBudgetResponse) {
@@ -169,6 +171,18 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
                 // Fetch the budget list data after deleting (refresh)
                 fetchAllBudgets()
             }
+            override fun onError(error: String) {
+                _error.postValue(error)
+            }
+        })
+    }
+    // Update budget in category
+    fun updateBudget(budgetId: String, categoryId: String, amount: Float, start_date: String, end_date: String) {
+        expenseRepository.updateBudget( budgetId, categoryId, amount, start_date, end_date, object : ExpenseManagementRepository.UpdateBudgetCallback {
+            override fun onSuccess(response: UpdateBudgetResponse) {
+                _updateBudget.postValue(response)
+            }
+
             override fun onError(error: String) {
                 _error.postValue(error)
             }

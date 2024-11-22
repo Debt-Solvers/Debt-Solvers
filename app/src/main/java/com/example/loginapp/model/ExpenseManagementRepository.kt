@@ -2,6 +2,7 @@ package com.example.loginapp.model
 
 import AddBudgetRequest
 import AddCategoryRequest
+import UpdateBudgetRequest
 import UpdateCategoryRequest
 import android.content.Context
 import android.util.Log
@@ -15,6 +16,7 @@ import com.example.loginapp.GetAllBudgetsResponse
 import com.example.loginapp.GetAllCategoriesResponse
 import com.example.loginapp.GetUserPasswordResponse
 import com.example.loginapp.TokenManager
+import com.example.loginapp.UpdateBudgetResponse
 import com.example.loginapp.UpdateCategoryResponse
 import com.example.loginapp.UpdateUserResponse
 import com.example.loginapp.manager.ExpenseManager
@@ -66,6 +68,10 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
     }
     interface DeleteBudgetCallback {
         fun onSuccess(response: DeleteBudgetResponse)
+        fun onError(error: String)
+    }
+    interface UpdateBudgetCallback {
+        fun onSuccess(response: UpdateBudgetResponse)
         fun onError(error: String)
     }
 
@@ -394,6 +400,47 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
                         }
                     } else {
                         callback.onError("Failed to delete budget.")
+                    }
+                }
+            })
+
+        } else {
+            callback.onError("No token found")
+        }
+    }
+
+    fun updateBudget(budgetId: String, categoryId: String, amount: Float, start_date: String, end_date: String, callback: UpdateBudgetCallback){
+        val token = tokenManager.getToken()
+        val backEndURL= "http://10.0.2.2:8081/api/v1/budgets/${budgetId}"
+//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/budgets/${budgetId}"
+        if (token != null) {
+            val requestData = UpdateBudgetRequest(categoryId, amount, start_date, end_date)
+            val updateCategoryData = Json.encodeToString(requestData)
+            val requestBody = updateCategoryData.toRequestBody(("application/json; charset=utf-8").toMediaType())
+
+            val request = Request.Builder()
+                .url(backEndURL)
+                .put(requestBody)
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback.onError("Network Error: Failed to delete category")
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val responseBody = response.body?.string()
+                    if (response.isSuccessful) {
+                        try {
+                            val responseData = Json.decodeFromString<UpdateBudgetResponse>(responseBody ?: "")
+                            callback.onSuccess(responseData)
+                        } catch (e: Exception) {
+                            Log.d("UpdateBudget", "Inside e.exception, ${e.message}")
+                            callback.onError("Error parsing response: ${e.message}")
+                        }
+                        Log.d("UpdateBudget", "response in not successful")
+                        callback.onError("Failed to update Budget")
                     }
                 }
             })
