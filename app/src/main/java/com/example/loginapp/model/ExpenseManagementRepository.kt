@@ -9,6 +9,7 @@ import com.example.loginapp.AddBudgetResponse
 import com.example.loginapp.AddCategoryErrResponse
 import com.example.loginapp.AddCategoryResponse
 import com.example.loginapp.CategoryDefaultDataResponse
+import com.example.loginapp.DeleteBudgetResponse
 import com.example.loginapp.DeleteCategoryResponse
 import com.example.loginapp.GetAllBudgetsResponse
 import com.example.loginapp.GetAllCategoriesResponse
@@ -61,6 +62,10 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
     }
     interface AllBudgetsCallback {
         fun onSuccess(response: GetAllBudgetsResponse)
+        fun onError(error: String)
+    }
+    interface DeleteBudgetCallback {
+        fun onSuccess(response: DeleteBudgetResponse)
         fun onError(error: String)
     }
 
@@ -354,6 +359,45 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
                     }
                 }
             })
+        } else {
+            callback.onError("No token found")
+        }
+    }
+
+    fun deleteBudget(id: String, callback: DeleteBudgetCallback){
+        val token = tokenManager.getToken()
+        val backEndURL= "http://10.0.2.2:8081/api/v1/budgets/${id}"
+//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/budgets/${id}"
+        if (token != null) {
+
+            val request = Request.Builder()
+                .url(backEndURL)
+                .delete()
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback.onError("Network Error: ${e.message}")
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val responseBody = response.body?.string()
+                    if (response.isSuccessful) {
+                        try {
+
+                            val responseData = Json.decodeFromString<DeleteBudgetResponse>(responseBody ?: "")
+                            Log.d("DeleteBudget", "Inside onResponse, $responseData")
+                            callback.onSuccess(responseData)
+                        } catch (e: Exception) {
+                            callback.onError("Error parsing response: ${e.message}")
+                        }
+                    } else {
+                        callback.onError("Failed to delete budget.")
+                    }
+                }
+            })
+
         } else {
             callback.onError("No token found")
         }

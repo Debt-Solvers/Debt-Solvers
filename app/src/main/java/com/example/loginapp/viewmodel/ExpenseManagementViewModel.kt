@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.loginapp.AddBudgetResponse
 import com.example.loginapp.AddCategoryResponse
 import com.example.loginapp.CategoryDefaultDataResponse
+import com.example.loginapp.DeleteBudgetResponse
 import com.example.loginapp.DeleteCategoryResponse
 import com.example.loginapp.GetAllBudgetsResponse
 import com.example.loginapp.GetAllCategoriesResponse
@@ -38,11 +39,16 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
     private val _updateCategory = MutableLiveData<UpdateCategoryResponse>()
     val updateCategory: LiveData<UpdateCategoryResponse> get() = _updateCategory
 
+    private val _allBudgets = MutableLiveData<GetAllBudgetsResponse>()
+    val allBudgets: LiveData<GetAllBudgetsResponse> get() = _allBudgets
+
     private val _addBudget = MutableLiveData<AddBudgetResponse>()
     val addBudget: LiveData<AddBudgetResponse> get() = _addBudget
 
-    private val _allBudgets = MutableLiveData<GetAllBudgetsResponse>()
-    val allBudgets: LiveData<GetAllBudgetsResponse> get() = _allBudgets
+    private val _deleteBudget = MutableLiveData<DeleteBudgetResponse>()
+    val deleteBudget: LiveData<DeleteBudgetResponse> get() = _deleteBudget
+
+
 
     // LiveData for error messages
     private val _error = MutableLiveData<String>()
@@ -153,5 +159,19 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
                 }
             })
         }
+    }
+    //Delete Budget from a list
+    fun deleteBudget(id: String) {
+        expenseRepository.deleteBudget(id, object : ExpenseManagementRepository.DeleteBudgetCallback {
+            override fun onSuccess(response: DeleteBudgetResponse) {
+                _deleteBudget.postValue(response)
+
+                // Fetch the budget list data after deleting (refresh)
+                fetchAllBudgets()
+            }
+            override fun onError(error: String) {
+                _error.postValue(error)
+            }
+        })
     }
 }

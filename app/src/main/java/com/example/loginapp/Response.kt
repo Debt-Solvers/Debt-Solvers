@@ -193,5 +193,11 @@ data class GetAllBudgetsResponse(
     val message: String,
     val data: List<Budget>
 )
+@Serializable
+data class DeleteBudgetResponse(
+    val status: Int,
+    val message: String
+
+)
 
 
