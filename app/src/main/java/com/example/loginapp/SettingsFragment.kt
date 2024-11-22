@@ -39,14 +39,22 @@ class SettingsFragment : PreferenceFragmentCompat() {
         val darkModeSwitch: SwitchPreferenceCompat? = findPreference("dark_mode")
         darkModeSwitch?.setOnPreferenceChangeListener { _, newValue ->
             val isDarkMode = newValue as Boolean
-            if (isDarkMode) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            val currentMode = AppCompatDelegate.getDefaultNightMode()
+
+            val newMode = if (isDarkMode) {
+                AppCompatDelegate.MODE_NIGHT_YES
             } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                AppCompatDelegate.MODE_NIGHT_NO
             }
-            requireActivity().recreate() // Recreate activity to apply the theme instantly
+
+            // Only recreate the activity if the mode is actually changing
+            if (currentMode != newMode) {
+                AppCompatDelegate.setDefaultNightMode(newMode)
+                requireActivity().recreate() // Recreate activity to apply the theme instantly
+            }
             true // Save the new preference value
         }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
