@@ -64,6 +64,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 // e.g., show it in an ImageView
                 //findViewById<ImageView>(R.id.captured_image_view).setImageBitmap(imageBitmap)
                 savedImageUri = saveImageToInternalStorage(imageBitmap)
+                Log.d("Image", "taken: $savedImageUri")
                 showImagePopup(savedImageUri)
             }
         }
