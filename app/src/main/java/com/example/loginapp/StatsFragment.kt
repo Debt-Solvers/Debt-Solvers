@@ -2,6 +2,7 @@ package com.example.loginapp
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -45,14 +46,17 @@ class StatsFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     val data = response.body()?.data?.categoryBreakdown ?: emptyList()
+                    Log.d("ExpenseAnalysis", "checking expense $data")
                     setupPieChart(data)
                 } else {
                     // Handle error response
+                    Log.d("ExpenseAnalysis", "failed")
                 }
             }
 
             override fun onFailure(call: Call<ExpenseAnalysisResponse>, t: Throwable) {
                 // Handle network failure
+                Log.d("ExpenseAnalysis", "network failure")
             }
         })
     }
