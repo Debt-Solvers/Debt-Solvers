@@ -13,8 +13,13 @@ import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.example.loginapp.R // Import your R file
 import com.github.mikephil.charting.components.Legend
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class StatsFragment : Fragment() {
+
+    private lateinit var pieChart: PieChart
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,30 +32,42 @@ class StatsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Reference the PieChart from the layout
-        val pieChart = view.findViewById<PieChart>(R.id.pieChart)
 
-        // Create data entries for the pie chart
-        val pieEntries = listOf(
-            PieEntry(40f, "Groceries"),
-            PieEntry(30f, "Dining   "),
-            PieEntry(20f, "Entertainment"),
-            PieEntry(10f, "Transportation"),
-            PieEntry(10f, "Gifts")
-        )
+        pieChart = view.findViewById(R.id.pieChart)
+        fetchExpenseAnalysis()
+    }
+    private fun fetchExpenseAnalysis() {
+        RetrofitClient.instance.getExpenseAnalysis("2024-01-01", "2024-12-31").enqueue(object :
+            Callback<ExpenseAnalysisResponse> {
+            override fun onResponse(
+                call: Call<ExpenseAnalysisResponse>,
+                response: Response<ExpenseAnalysisResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val data = response.body()?.data?.categoryBreakdown ?: emptyList()
+                    setupPieChart(data)
+                } else {
+                    // Handle error response
+                }
+            }
 
-        // Create a PieDataSet and set its properties
-        val pieDataSet = PieDataSet(pieEntries, "Example Pie Chart")
+            override fun onFailure(call: Call<ExpenseAnalysisResponse>, t: Throwable) {
+                // Handle network failure
+            }
+        })
+    }
+
+    private fun setupPieChart(categories: List<CategoryBreakdown>) {
+        val pieEntries = categories.map { PieEntry(it.percentage, "Category ${it.categoryId}") }
+
+        val pieDataSet = PieDataSet(pieEntries, "Expenses")
         pieDataSet.colors = listOf(Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW, Color.MAGENTA)
         pieDataSet.sliceSpace = 2f
         pieDataSet.valueTextSize = 24f
-        pieDataSet.valueTextColor = R.color.secondaryColor
+        pieDataSet.valueTextColor = ContextCompat.getColor(requireContext(), R.color.secondaryColor)
 
-        // Create PieData and assign it to the PieChart
         val pieData = PieData(pieDataSet)
         pieChart.data = pieData
-
-        // Customize the PieChart
         pieChart.description.isEnabled = false
         pieChart.isDrawHoleEnabled = true
         pieChart.setHoleColor(Color.TRANSPARENT)
@@ -58,16 +75,7 @@ class StatsFragment : Fragment() {
         pieChart.holeRadius = 20f
         pieChart.animateY(1400)
 
-        val legend = pieChart.legend
-        legend.textColor = ContextCompat.getColor(requireContext(), R.color.secondaryColor)
-        legend.textSize = 16f
-        legend.isWordWrapEnabled = true // Enable word wrapping
-        legend.verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
-        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
-        legend.orientation = Legend.LegendOrientation.HORIZONTAL
-        legend.setDrawInside(false) // Ensure the legend is outside the chart
-
-        // Refresh the chart
         pieChart.invalidate()
     }
+
 }

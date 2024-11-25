@@ -160,4 +160,19 @@ data class DeleteCategoryResponse(
     val status: Int,
     val message: String
 )
-
+@Serializable
+data class ExpenseAnalysisResponse(
+    val status: String,
+    val message: String,
+    val data: ExpenseData
+)
+@Serializable
+data class ExpenseData(
+    val categoryBreakdown: List<CategoryBreakdown>
+)
+@Serializable
+data class CategoryBreakdown(
+    val categoryId: String,
+    val total: Float,
+    val percentage: Float
+)
