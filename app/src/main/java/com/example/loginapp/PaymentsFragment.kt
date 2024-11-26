@@ -1,59 +1,154 @@
 package com.example.loginapp
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.loginapp.R
+import com.example.loginapp.TokenManager
+import kotlinx.coroutines.launch
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
+import java.util.concurrent.TimeUnit
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+// Data classes for Expenses API response
+data class ExpensesResponse(
+    val status: Int,
+    val message: String,
+    val data: ExpensesData,
+    val errors: List<String>?
+)
 
-/**
- * A simple [Fragment] subclass.
- * Use the [PaymentsFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+data class ExpensesData(
+    val expenses: List<ExpenseItem>,
+    val pagination: PaginationInfo
+)
+
+data class ExpenseItem(
+    val expense_id: String,
+    val user_id: String,
+    val category_id: String,
+    val amount: Double,
+    val date: String,
+    val description: String,
+    val receipt_id: String?,
+    val created_at: String,
+    val updated_at: String
+)
+
+data class PaginationInfo(
+    val total_count: Int,
+    val page: Int,
+    val per_page: Int,
+    val total_pages: Int
+)
+
+// Retrofit interface for fetching expenses
+interface ExpensesService {
+    @GET("/api/v1/expenses/")
+    suspend fun getExpenses(): ExpensesResponse
+}
 class PaymentsFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private lateinit var tokenManager: TokenManager
+    private lateinit var expenseRecyclerView: RecyclerView
+    private lateinit var incomeRecyclerView: RecyclerView
+    private lateinit var balanceTextView: TextView
+    private lateinit var incomeTextView: TextView
+    private lateinit var expenseTextView: TextView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    // Authentication Interceptor (same as in StatsFragment)
+    private inner class AuthInterceptor(private val tokenManager: TokenManager) : Interceptor {
+        override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
+            val originalRequest = chain.request()
+
+            // Get the token from TokenManager
+            val token = tokenManager.getToken()
+
+            // If token exists, add it to the request
+            val authenticatedRequest = token?.let {
+                originalRequest.newBuilder()
+                    .addHeader("Authorization", "Bearer $it")
+                    .build()
+            } ?: originalRequest
+
+            return chain.proceed(authenticatedRequest)
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_payments, container, false)
+    // Create Retrofit instance
+    private val retrofit by lazy {
+        // Initialize TokenManager
+        tokenManager = TokenManager.getInstance(requireContext())
+
+        Retrofit.Builder()
+            .baseUrl("http://10.0.2.2:8081/") // Replace with your actual base URL
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor(AuthInterceptor(tokenManager))
+                    .connectTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .writeTimeout(30, TimeUnit.SECONDS)
+                    .build()
+            )
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PaymentsFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PaymentsFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    private val expensesService by lazy {
+        retrofit.create(ExpensesService::class.java)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_payments, container, false)
+
+        // Initialize views
+        expenseRecyclerView = view.findViewById(R.id.recycler_expense)
+        incomeRecyclerView = view.findViewById(R.id.recycler_income)
+        balanceTextView = view.findViewById(R.id.balance_set_result)
+        incomeTextView = view.findViewById(R.id.income_set_result)
+        expenseTextView = view.findViewById(R.id.expense_set_result)
+
+        // Setup RecyclerViews
+        expenseRecyclerView.layoutManager = LinearLayoutManager(context)
+        incomeRecyclerView.layoutManager = LinearLayoutManager(context)
+
+        // Fetch expenses
+        fetchExpenses()
+
+        return view
+    }
+
+    private fun fetchExpenses() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val response = expensesService.getExpenses()
+                Log.d("PaymentsFragment", "Full Response: $response")
+
+                // Update Expense RecyclerView
+                val expenseAdapter = ExpenseAdapter(response.data.expenses)
+                expenseRecyclerView.adapter = expenseAdapter
+
+                // Update summary information (you might want to create additional API endpoints for these)
+                val totalExpenses = response.data.expenses.sumByDouble { it.amount }
+                expenseTextView.text = String.format("$%.2f", totalExpenses)
+
+            } catch (e: Exception) {
+                Log.e("PaymentsFragment", "Error details: ${e.message}")
+                Log.e("PaymentsFragment", "Error stacktrace: ", e)
             }
+        }
     }
 }
