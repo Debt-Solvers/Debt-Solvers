@@ -168,11 +168,30 @@ data class ExpenseAnalysisResponse(
 )
 @Serializable
 data class ExpenseData(
-    val categoryBreakdown: List<CategoryBreakdown>
+    val period: String,
+    val totalSpending: Double,
+    val averageSpending: Double,
+    val highestExpense: Double,
+    val categoryBreakdown: List<CategoryBreakdown>,
+    val mostFrequentCategory: MostFrequentCategory,
+    val dailyAverage: Double,
+//    val pagination: Pagination
 )
 @Serializable
 data class CategoryBreakdown(
     val categoryId: String,
     val total: Float,
     val percentage: Float
+)
+@Serializable
+data class MostFrequentCategory(
+    val categoryId: String,
+    val count: Int
+)
+@Serializable
+data class Pagination(
+    val totalCount: Int,
+    val page: Int,
+    val perPage: Int,
+    val totalPages: Int
 )

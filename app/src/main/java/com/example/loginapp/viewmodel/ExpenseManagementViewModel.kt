@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.loginapp.AddCategoryResponse
 import com.example.loginapp.CategoryDefaultDataResponse
 import com.example.loginapp.DeleteCategoryResponse
+import com.example.loginapp.ExpenseData
 import com.example.loginapp.GetAllCategoriesResponse
 import com.example.loginapp.manager.ExpenseManager
 import com.example.loginapp.model.ExpenseManagementRepository
@@ -31,9 +32,12 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
     private val _deleteCategory = MutableLiveData<DeleteCategoryResponse>()
     val deleteCategory: LiveData<DeleteCategoryResponse> get() = _deleteCategory
 
+    private val _expenseAnalysis = MutableLiveData<ExpenseData?>()
+    val expenseAnalysis: LiveData<ExpenseData?> get() = _expenseAnalysis
+
     // LiveData for error messages
-    private val _error = MutableLiveData<String>()
-    val error: LiveData<String> get() = _error
+    private val _error = MutableLiveData<String?>()
+    val error: LiveData<String?> get() = _error
 
     init {
         // Optionally, load categories when the ViewModel is created
@@ -95,5 +99,14 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
                 _error.postValue(error)
             }
         })
+    }
+    fun fetchExpenseAnalysis() {
+        expenseRepository.getExpenseAnalysis { response, error ->
+            if (error != null) {
+                _error.postValue(error)
+            } else {
+                _expenseAnalysis.postValue(response?.data)
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ import com.example.loginapp.AddCategoryErrResponse
 import com.example.loginapp.AddCategoryResponse
 import com.example.loginapp.CategoryDefaultDataResponse
 import com.example.loginapp.DeleteCategoryResponse
+import com.example.loginapp.ExpenseAnalysisResponse
 import com.example.loginapp.GetAllCategoriesResponse
 import com.example.loginapp.GetUserPasswordResponse
 import com.example.loginapp.TokenManager
@@ -206,5 +207,43 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
             callback.onError("No token found")
             }
         }
+    //getExpenseAnalysis function
+    fun getExpenseAnalysis(callback: (ExpenseAnalysisResponse?, String?) -> Unit) {
+        val token = tokenManager.getToken()
+        val backEndURL = "http://10.0.2.2:8081/api/v1/expenses/analysis"
 
+        if (token != null) {
+            val request = Request.Builder()
+                .url(backEndURL)
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback(null, "Network Error: Failed to fetch expense analysis")
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val responseBody = response.body?.string()
+                    if (responseBody.isNullOrEmpty()) {
+                        callback(null, "Empty response from server")
+                        return
+                    }
+
+                    if (response.isSuccessful) {
+                        try {
+                            val responseData = Json.decodeFromString<ExpenseAnalysisResponse>(responseBody)
+                            callback(responseData, null)
+                        } catch (e: Exception) {
+                            callback(null, "Error parsing response: ${e.message}")
+                        }
+                    } else {
+                        callback(null, "Failed to fetch expense analysis. Server returned ${response.code}")
+                    }
+                }
+            })
+        } else {
+            callback(null, "No token found")
+        }
+    }
 }
