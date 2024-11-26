@@ -7,19 +7,15 @@ import android.Manifest
 import android.app.Dialog
 import androidx.appcompat.app.ActionBarDrawerToggle
 import android.util.Log
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import android.provider.MediaStore
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.ViewModelProvider
 import com.example.loginapp.databinding.ActivityDashboardBinding
 import com.google.android.material.navigation.NavigationView
 import com.example.loginapp.viewmodel.DashboardViewModel
-import com.example.loginapp.viewmodel.DashboardViewModelFactory
 
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -28,12 +24,9 @@ import android.net.Uri
 import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
-import androidx.preference.PreferenceManager
-import androidx.preference.SwitchPreferenceCompat
 import com.example.loginapp.viewmodel.SharedViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.File

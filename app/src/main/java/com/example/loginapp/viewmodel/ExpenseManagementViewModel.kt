@@ -8,11 +8,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.loginapp.AddBudgetResponse
 import com.example.loginapp.AddCategoryResponse
+import com.example.loginapp.Category
 import com.example.loginapp.CategoryDefaultDataResponse
 import com.example.loginapp.DeleteBudgetResponse
 import com.example.loginapp.DeleteCategoryResponse
 import com.example.loginapp.GetAllBudgetsResponse
 import com.example.loginapp.GetAllCategoriesResponse
+import com.example.loginapp.GetCategoryResponse
 import com.example.loginapp.UpdateBudgetResponse
 import com.example.loginapp.UpdateCategoryResponse
 import com.example.loginapp.manager.ExpenseManager
@@ -34,6 +36,9 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
     private val _addCategories = MutableLiveData<AddCategoryResponse>()
     val addCategories: LiveData<AddCategoryResponse> get() = _addCategories
 
+    private val _getCategory = MutableLiveData<GetCategoryResponse>()
+    val getCategory: LiveData<GetCategoryResponse> get() = _getCategory
+
     private val _deleteCategory = MutableLiveData<DeleteCategoryResponse>()
     val deleteCategory: LiveData<DeleteCategoryResponse> get() = _deleteCategory
 
@@ -52,6 +57,9 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
     private val _updateBudget = MutableLiveData<UpdateBudgetResponse>()
     val updateBudget: LiveData<UpdateBudgetResponse> get() = _updateBudget
 
+    private val _selectedCategory = MutableLiveData<Category?>()
+    val selectedCategory: LiveData<Category?> get() = _selectedCategory
+
     // LiveData for error messages
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
@@ -61,6 +69,19 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
         fetchDefaultCategories()
     }
 
+    fun setSelectedCategory(category: Category) {
+        Log.d("CategoryDetailFragment", "Category selected View: $category")
+        _selectedCategory.value = category
+    }
+
+    fun getSelectedCategory(): Category? {
+        return _selectedCategory.value
+    }
+
+
+    //    fun getSelectedCategory(): LiveData<Category> {
+//        return selectedCategory
+//    }
     // Load categories from the repository
     fun fetchDefaultCategories() {
         viewModelScope.launch {
@@ -95,6 +116,19 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
         expenseRepository.addCategory(name, description, object : ExpenseManagementRepository.AddCategoryCallback {
             override fun onSuccess(response: AddCategoryResponse) {
                 _addCategories.postValue(response)
+            }
+
+            override fun onError(error: String) {
+                _error.postValue(error)
+            }
+        })
+    }
+    //Add a category to the list
+    fun getCategory(category_id:String) {
+        expenseRepository.getCategory(category_id, object : ExpenseManagementRepository.SingleCategoryCallback {
+            override fun onSuccess(response: GetCategoryResponse) {
+                Log.d("SingleCategory", "OnSuccess: $response")
+                _getCategory.postValue(response)
             }
 
             override fun onError(error: String) {

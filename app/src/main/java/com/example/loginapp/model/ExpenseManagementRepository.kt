@@ -14,6 +14,7 @@ import com.example.loginapp.DeleteBudgetResponse
 import com.example.loginapp.DeleteCategoryResponse
 import com.example.loginapp.GetAllBudgetsResponse
 import com.example.loginapp.GetAllCategoriesResponse
+import com.example.loginapp.GetCategoryResponse
 import com.example.loginapp.GetUserPasswordResponse
 import com.example.loginapp.TokenManager
 import com.example.loginapp.UpdateBudgetResponse
@@ -40,7 +41,10 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
         fun onSuccess(response: CategoryDefaultDataResponse)
         fun onError(error: String)
     }
-
+    interface SingleCategoryCallback{
+        fun onSuccess(response: GetCategoryResponse)
+        fun onError(error: String)
+    }
     interface AddCategoryCallback {
         fun onSuccess(response: AddCategoryResponse)
         fun onError(error: String)
@@ -79,8 +83,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
     // Get categories from SharedPreferences
     fun getDefaultCategories(callback: CategoryCallback) {
         val token = tokenManager.getToken()
-//        val backEndURL= "http://10.0.2.2:8081/api/v1/categories/defaults"
-        val backEndURL="http://4.236.128.116:30001/api/v1/categories/defaults"
+        val backEndURL= "http://10.0.2.2:8081/api/v1/categories/defaults"
+//        val backEndURL="http://4.236.128.116:30001/api/v1/categories/defaults"
         if (token != null) {
             val request = Request.Builder()
                 .url(backEndURL)
@@ -118,8 +122,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
     // Get categories from SharedPreferences
     fun getAllCategories(callback: AllCategoriesCallback) {
         val token = tokenManager.getToken()
-//        val backEndURL= "http://10.0.2.2:8081/api/v1/categories"
-        val backEndURL="http://4.236.128.116:30001/api/v1/categories"
+        val backEndURL= "http://10.0.2.2:8081/api/v1/categories"
+//        val backEndURL="http://4.236.128.116:30001/api/v1/categories"
         if (token != null) {
             val request = Request.Builder()
                 .url(backEndURL)
@@ -157,8 +161,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
 
     fun addCategory(name: String, description: String, callback: AddCategoryCallback){
         val token = tokenManager.getToken()
-//        val backEndURL= "http://10.0.2.2:8081/api/v1/categories"
-        val backEndURL="http://4.236.128.116:30001/api/v1/categories"
+        val backEndURL= "http://10.0.2.2:8081/api/v1/categories"
+//        val backEndURL="http://4.236.128.116:30001/api/v1/categories"
         if (token != null) {
 
             val requestData = AddCategoryRequest(name, description)
@@ -197,10 +201,47 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
         }
 
     }
+    fun getCategory(category_id: String, callback: SingleCategoryCallback){
+        val token = tokenManager.getToken()
+        val backEndURL= "http://10.0.2.2:8081/api/v1/categories/${category_id}"
+//        val backEndURL="http://4.236.128.116:30001/api/v1/categories"
+        if (token != null) {
+            val request = Request.Builder()
+                .url(backEndURL)
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback.onError("Network Error")
+                }
+                override fun onResponse(call: Call, response: Response) {
+                    val responseBody = response.body?.string()
+                    if (responseBody.isNullOrEmpty()) {
+                        return
+                    }
+                    if (response.isSuccessful){
+                        val responseData = Json.decodeFromString<GetCategoryResponse>(responseBody)
+                        Log.d("GetCategory", "responseData inside is Successful ${responseData}")
+                        if (responseData !=null) {
+                            callback.onSuccess(responseData)
+                        } else {
+                            callback.onError("Failed, Category is null")
+                        }
+                    } else {
+                        callback.onError("response is not successful.")
+                    }
+                }
+            })
+        }else {
+            callback.onError("No token found")
+        }
+
+    }
     fun deleteCategory(id: String, callback: DeleteCategoryCallback){
         val token = tokenManager.getToken()
-//        val backEndURL= "http://10.0.2.2:8081/api/v1/categories/${id}"
-        val backEndURL="http://4.236.128.116:30001/api/v1/categories/${id}"
+        val backEndURL= "http://10.0.2.2:8081/api/v1/categories/${id}"
+//        val backEndURL="http://4.236.128.116:30001/api/v1/categories/${id}"
         if (token != null) {
 
             val request = Request.Builder()
@@ -239,8 +280,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
 
     fun updateCategory(id: String, name: String, description: String, color_code: String, callback: UpdateCategoryCallback){
         val token = tokenManager.getToken()
-//        val backEndURL= "http://10.0.2.2:8081/api/v1/categories/${id}"
-        val backEndURL="http://4.236.128.116:30001/api/v1/categories/${id}"
+        val backEndURL= "http://10.0.2.2:8081/api/v1/categories/${id}"
+//        val backEndURL="http://4.236.128.116:30001/api/v1/categories/${id}"
         if (token != null) {
             val requestData = UpdateCategoryRequest(name, description, color_code)
             val updateCategoryData = Json.encodeToString(requestData)
@@ -287,13 +328,12 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
      */
 
     // Add a budget to a category
-    fun addBudget(categoryId: String, amount: Float, start_date: String, end_date: String, callback: AddBudgetCallback){
+    fun addBudget(categoryId: String, amount: Float, start_date: String, end_date: String, callback: AddBudgetCallback) {
         val token = tokenManager.getToken()
-//        val backEndURL= "http://10.0.2.2:8081/api/v1/budgets"
-        val backEndURL="http://4.236.128.116:30001/api/v1/budgets"
-        if (token != null) {
+        val backEndURL = "http://10.0.2.2:8081/api/v1/budgets"
 
-            val requestData = AddBudgetRequest(categoryId,amount, start_date, end_date)
+        if (token != null) {
+            val requestData = AddBudgetRequest(categoryId, amount, start_date, end_date)
             val addBudgetData = Json.encodeToString(requestData)
             val requestBody = addBudgetData.toRequestBody(("application/json; charset=utf-8").toMediaType())
 
@@ -307,34 +347,54 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
                 override fun onFailure(call: Call, e: IOException) {
                     callback.onError("Network Error, ${e.message}")
                 }
+
                 override fun onResponse(call: Call, response: Response) {
                     val responseBody = response.body?.string()
+                    Log.d("AddBudget", "addBudget onResponse $responseBody")
+
                     if (responseBody.isNullOrEmpty()) {
+                        Log.d("AddBudget", "Response body is null or empty.")
+                        callback.onError("No response from server.")
                         return
                     }
-                    if (response.isSuccessful){
-                        val responseData = Json.decodeFromString<AddBudgetResponse>(responseBody)
-                        if (responseData !=null) {
-                            callback.onSuccess(responseData)
+
+                    try {
+                        if (response.isSuccessful) {
+                            val responseData = Json.decodeFromString<AddBudgetResponse>(responseBody)
+                            if (responseData != null) {
+                                callback.onSuccess(responseData)
+                            } else {
+                                callback.onError("No data, data is null")
+                            }
                         } else {
-                            callback.onError("No data, data is null")
+                            // Handle error response (e.g., 409 Conflict)
+                            val responseData = Json.decodeFromString<AddBudgetResponse>(responseBody)
+                            if (responseData.status == 409) {
+                                // Handle specific error (e.g., budget period overlaps)
+                                Log.d("AddBudget", "Error response: ${responseData.message}")
+                                Log.d("AddBudget", "Error response: ${responseData}")
+                                callback.onError("Budget period overlaps with an existing budget for the same category")
+                            } else {
+                                callback.onError("Invalid input data")
+                            }
                         }
-                    } else {
-                        callback.onError("Invalid input data")
+                    } catch (e: Exception) {
+                        Log.e("AddBudget", "Error parsing response: ${e.message}")
+                        callback.onError("Failed to parse response. ${e.message}")
                     }
                 }
             })
-        }else {
+        } else {
             callback.onError("No token found")
         }
-
     }
+
 
     // Get All the budgets
     fun getAllBudgets(callback: AllBudgetsCallback) {
         val token = tokenManager.getToken()
-//        val backEndURL= "http://10.0.2.2:8081/api/v1/budgets"
-        val backEndURL="http://4.236.128.116:30001/api/v1/budgets"
+        val backEndURL= "http://10.0.2.2:8081/api/v1/budgets"
+//        val backEndURL="http://4.236.128.116:30001/api/v1/budgets"
         if (token != null) {
             val request = Request.Builder()
                 .url(backEndURL)
