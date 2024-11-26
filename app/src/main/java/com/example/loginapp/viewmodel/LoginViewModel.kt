@@ -59,8 +59,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     //Login Function
     fun login(username: String, password: String) {
 
-//        val backEndURL = "http://10.0.2.2:8080/api/v1/login"
-        val backEndURL="http://4.236.128.116:30000/api/v1/login"
+        val backEndURL = "http://10.0.2.2:8080/api/v1/login"
+//        val backEndURL="http://4.236.128.116:30000/api/v1/login"
         val requestData = LoginRequest(username, password)
         val userLoginData = Json.encodeToString(requestData)
         val requestBody = userLoginData.toRequestBody(("application/json; charset=utf-8").toMediaType())
