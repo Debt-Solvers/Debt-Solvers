@@ -14,8 +14,10 @@ class CategoryAdapter(private var categories: MutableList<Category>,
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
    inner class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
         val name: TextView = view.findViewById(R.id.categoryName)
        val deleteButton: ImageView = view.findViewById(R.id.categoryDeleteButton)
+
 
        init {
            view.setOnClickListener {

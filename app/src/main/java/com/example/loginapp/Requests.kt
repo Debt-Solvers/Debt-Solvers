@@ -44,6 +44,11 @@ data class AddCategoryRequest(
     val description: String
 )
 @Serializable
+data class GetCategoryRequest(
+    val category_id: String
+)
+
+@Serializable
 data class UpdateCategoryRequest(
     val name: String,
     val description: String,

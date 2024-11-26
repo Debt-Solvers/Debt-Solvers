@@ -37,4 +37,14 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="debt_solvers_is_a_wonderful_application_that_will_help_manage_and_store_your_expenses_you_can_manage_your_expenses_individually_or_in_a_group_situation">Debt Solvers is a wonderful application that will help manage and store your expenses. You can manage your expenses individually or in a group situation.</string>
 
+    <!--Category Detail Fragment-->
+    <string name="category_id_label">Category ID: %s</string>
+    <string name="category_create_date_label">Created: %s</string>
+    <string name="category_update_date_label">Updated: %s</string>
+
+    <!-- Category Adapter-->
+    <string name="category_adapter_delete_category">Delete category</string>
+
+
+
 </resources>

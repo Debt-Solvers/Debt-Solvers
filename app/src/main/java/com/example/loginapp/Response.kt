@@ -123,6 +123,13 @@ data class CategoryDefaultDataResponse(
 )
 
 @Serializable
+data class GetCategoryResponse(
+    val status: Int,
+    val message: String,
+    val data: Category
+)
+
+@Serializable
 data class GetAllCategoriesResponse(
     val status: Int,
     val message: String,
@@ -172,7 +179,7 @@ data class UpdateCategoryResponse(
 data class AddBudgetResponse(
     val status: Int,
     val message: String,
-    val data: Budget
+    val data: Budget?
 )
 
 @Serializable

@@ -45,6 +45,9 @@ class BudgetFragment : Fragment() {
 
     private fun navigateToCategoryDetails(category: Category) {
         // Create the CategoryDetailFragment
+
+        expenseManagementViewModel.setSelectedCategory(category)
+
         val categoryDetailFragment = CategoryDetailFragment()
 
         // Serialize the category object to a JSON string
@@ -52,7 +55,7 @@ class BudgetFragment : Fragment() {
         // Pass data as arguments
         val bundle = Bundle().apply {
             putString("CATEGORY_NAME", category.name)
-            putString("CATEGORY", categoryJson)
+            putString("CATEGORY_DATA", categoryJson)
 //            putDouble("CATEGORY_AMOUNT", category.amount)
         }
 
