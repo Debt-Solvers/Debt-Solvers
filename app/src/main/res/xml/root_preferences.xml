@@ -33,7 +33,7 @@
         <SwitchPreferenceCompat
             android:key="dark_mode"
             android:title="Dark Mode"
-            android:summary="Enable dark mode"
+            android:summary="Enable or disable dark mode"
             android:defaultValue="false"/>
     </PreferenceCategory>
 
