@@ -50,7 +50,7 @@ class CategoryFragment : Fragment() {
         val categoryJson = Json.encodeToString(category)
         // Pass data as arguments
         val bundle = Bundle().apply {
-            putString("CATEGORY_NAME", category.name)
+//            putString("CATEGORY_NAME", category.name)
             putString("CATEGORY_DATA", categoryJson)
 //            putDouble("CATEGORY_AMOUNT", category.amount)
         }

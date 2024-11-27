@@ -1,5 +1,6 @@
 package com.example.loginapp
 
+import BudgetAdapter
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -14,11 +15,14 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.loginapp.databinding.FragmentCategoryDetailsBinding
 import com.example.loginapp.model.ExpenseManagementRepository
 import com.example.loginapp.viewmodel.ExpenseManagementViewModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.w3c.dom.Text
 import java.time.LocalDate
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class CategoryDetailFragment : Fragment() {
@@ -32,18 +36,50 @@ class CategoryDetailFragment : Fragment() {
     private lateinit var categoryDefault: TextView
     private lateinit var updateCategoryButton: Button
     private lateinit var addBudgetButton: Button
-    private var category: Category ? = null
+    private lateinit var totalBudget: TextView
+    private lateinit var totalExpenses: TextView
+    private lateinit var totalBalance: TextView
+
+    private lateinit var budgetAdapter: BudgetAdapter
+    private lateinit var budgetsRecyclerView: RecyclerView
+    private lateinit var binding: FragmentCategoryDetailsBinding
+//    private var category: Category ? = null
+    private lateinit var category: Category
     private val expenseManagementViewModel: ExpenseManagementViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         return inflater.inflate(R.layout.fragment_category_details, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        // Initialize UI components
+        categoryName = view.findViewById(R.id.categoryNameTextView)
+        categoryDescription = view.findViewById(R.id.categoryDescriptionTextView)
+        categoryCreateDate = view.findViewById(R.id.categoryCreateDateTextView)
+        categoryUpdateDate = view.findViewById(R.id.categoryUpdateDateTextView)
+        categoryId = view.findViewById(R.id.categoryIdTextView)
+        categoryColor = view.findViewById(R.id.categoryColorView)
+
+        //Financial UI Componenets
+        totalBudget = view.findViewById(R.id.totalBudgetTextView)
+        totalExpenses = view.findViewById(R.id.totalExpensesTextView)
+        totalBalance = view.findViewById(R.id.remainingBalanceTextView)
+
+        updateCategoryButton = view.findViewById(R.id.btnUpdateCategoryDetails)
+        addBudgetButton = view.findViewById(R.id.btnAddBudgetDetails)
+        budgetsRecyclerView = view.findViewById(R.id.budgetsRecyclerView)
+
+        // Initialize RecyclerView and adapter
+        budgetAdapter = BudgetAdapter(emptyList())  // Initialize with empty list, update later
+        budgetsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        budgetsRecyclerView.adapter = budgetAdapter
 
         arguments?.getString("CATEGORY_DATA")?.let { categoryJson ->
             val decodedCategory: Category = Json.decodeFromString(categoryJson)
@@ -53,7 +89,11 @@ class CategoryDetailFragment : Fragment() {
             Log.d("CategoryDetailFragment", "this is the categoryData decoded $decodedCategory")
             // Now call getCategory method from the ViewModel
             expenseManagementViewModel.getCategory(decodedCategory.categoryId)
-//            expenseManagementViewModel.setSelectedCategory(decodedCategory)
+        }
+
+        // Display success message from update category
+        arguments?.getString("successMessage")?.let { message ->
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
 
         expenseManagementViewModel.getCategory.observe(viewLifecycleOwner, { categoryData ->
@@ -70,22 +110,6 @@ class CategoryDetailFragment : Fragment() {
                 category = it.data
             }
         })
-
-        // Display success message from update category
-        arguments?.getString("successMessage")?.let { message ->
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-        }
-
-        // Initialize UI components
-        categoryName = view.findViewById(R.id.categoryNameTextView)
-        categoryDescription = view.findViewById(R.id.categoryDescriptionTextView)
-        categoryCreateDate = view.findViewById(R.id.categoryCreateDateTextView)
-        categoryUpdateDate = view.findViewById(R.id.categoryUpdateDateTextView)
-        categoryId = view.findViewById(R.id.categoryIdTextView)
-        categoryColor = view.findViewById(R.id.categoryColorTextView)
-
-        updateCategoryButton = view.findViewById(R.id.btnUpdateCategoryDetails)
-        addBudgetButton = view.findViewById(R.id.btnAddBudgetDetails)
 
         updateCategoryButton.setOnClickListener{
             // Create a Bundle to pass category data to the UpdateCategoryFragment
@@ -131,13 +155,25 @@ class CategoryDetailFragment : Fragment() {
             val allBudgets = response.data
             Log.d("FetchAllBudgets", "this is budget data ${allBudgets}")
 
+            val filteredBudgets = allBudgets.filter { budget ->
+                budget.category_id == category.categoryId
+            }
+            Log.d("FetchAllBudgets", "this is filteredBudgets $filteredBudgets")
+
+            // Update the RecyclerView with the filtered budgets
+            budgetAdapter = BudgetAdapter(filteredBudgets)  // Update the adapter with filtered budgets
+            budgetsRecyclerView.adapter = budgetAdapter
+
+            val total = budgetAdapter.getTotalBudget()
+            totalBudget.text = totalBudget.context.getString(R.string.budget_adapter_total_budget_label, total)
         }
 
     }
     fun formatDate(dateString: String): String {
+
         val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
-        val parsedDate = formatter.parse(dateString)
-        return DateTimeFormatter.ofPattern("yyyy-MM-dd").format(parsedDate)
+        val parsedDate = ZonedDateTime.parse(dateString, formatter)
+        return DateTimeFormatter.ofPattern("MMMM d, yyyy").format(parsedDate)
     }
 
 }
