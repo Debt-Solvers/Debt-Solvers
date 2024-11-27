@@ -81,7 +81,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             when(item.itemId){
                 R.id.menuHome -> replaceFragment(HomeFragment())
                 R.id.menuProfile -> replaceFragment(ProfileFragment())
-                R.id.menuBudget -> replaceFragment(CategoryFragment())
+                R.id.menuBudget -> replaceFragment(BudgetFragment())
                 R.id.menuStats -> replaceFragment(StatsFragment())
             }
             true
@@ -99,41 +99,31 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         // Observe user data
         // Observe user data from SharedViewModel
         sharedViewModel.userData.observe(this, Observer { userData ->
-            Log.d("DashboardActivity", "userData before check $userData")
             if (userData != null) {
                 // Update UI with user data
-                Log.d("DashboardActivity", "if userData not null $userData")
                 displayUserData(userData)
 
             } else {
                 // Show an error message if fetching data failed
-                Log.d("DashboardActivity", "Failed to fetch userData $userData")
-//                Toast.makeText(this, "Failed to fetch user data", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to fetch user data", Toast.LENGTH_SHORT).show()
             }
         })
 
         sharedViewModel.logoutSuccess.observe(this, Observer { success ->
             if (success) {
-                Log.d("DashboardActivity", "Successfully logged out $success")
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 finish()
             } else {
-//                Toast.makeText(this, "Logout failed", Toast.LENGTH_SHORT).show()
-                Log.d("DashboardActivity", "Failed to logged out $success")
+                Toast.makeText(this, "Logout failed", Toast.LENGTH_SHORT).show()
+
             }
         })
         sharedViewModel.fetchUserData()
 
     }
 
-//    fun replaceFragment(fragment: Fragment){
-//
-//        val fragmentTransaction = fragmentManager.beginTransaction()
-//        fragmentTransaction.replace(R.id.frame_layout, fragment)
-//        fragmentTransaction.commit()
-//
-//    }
+
 fun replaceFragment(fragment: Fragment) {
     val fragmentTransaction = supportFragmentManager.beginTransaction()
     fragmentTransaction.replace(R.id.frame_layout, fragment) // Replace the current fragment

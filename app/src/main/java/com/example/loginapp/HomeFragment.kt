@@ -22,7 +22,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<LinearLayout>(R.id.layoutFinance)?.setOnClickListener{
-            navigateToFragment(FinanceFragment())
+            navigateToFragment(CategoryFragment())
         }
         view.findViewById<LinearLayout>(R.id.layoutGroup)?.setOnClickListener{
             navigateToFragment(GroupsFragment())
