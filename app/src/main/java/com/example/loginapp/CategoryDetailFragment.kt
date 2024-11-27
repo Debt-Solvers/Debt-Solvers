@@ -44,8 +44,8 @@ class CategoryDetailFragment : Fragment() {
     private lateinit var budgetAdapter: BudgetAdapter
     private lateinit var budgetsRecyclerView: RecyclerView
     private lateinit var binding: FragmentCategoryDetailsBinding
-//    private var category: Category ? = null
-    private lateinit var category: Category
+    private var category: Category ? = null
+//    private lateinit var category: Category
     private val expenseManagementViewModel: ExpenseManagementViewModel by viewModels()
 
     override fun onCreateView(
@@ -156,17 +156,11 @@ class CategoryDetailFragment : Fragment() {
         expenseManagementViewModel.allBudgets.observe(viewLifecycleOwner) { response ->
 
             val allBudgets = response.data
-            Log.d("FetchAllBudgets", "this is budget data ${allBudgets}")
-
             val filteredBudgets = allBudgets.filter { budget ->
-                budget.category_id == category.categoryId
+                budget.category_id == category?.categoryId
             }
             Log.d("FetchAllBudgets", "this is filteredBudgets $filteredBudgets")
 
-            // Update the RecyclerView with the filtered budgets
-//            budgetAdapter = BudgetAdapter(filteredBudgets) { budgetId ->
-//                expenseManagementViewModel.deleteBudget(budgetId)
-//            }
             budgetAdapter.updateBudgets(filteredBudgets)
 
             // Update the adapter with filtered budgets
