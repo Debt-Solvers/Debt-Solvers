@@ -106,7 +106,7 @@ class CategoryDetailFragment : Fragment() {
         }
 
         addBudgetButton.setOnClickListener {
-            expenseManagementViewModel.getSelectedCategory()?.let { currentCategory ->
+            category?.let { currentCategory ->
                 val singleCategory = Json.encodeToString(category)
                 val bundle = Bundle().apply {
                     putString("CATEGORY_ID", currentCategory.categoryId)

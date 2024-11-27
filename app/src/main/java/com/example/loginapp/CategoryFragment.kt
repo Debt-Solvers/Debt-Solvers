@@ -20,7 +20,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 
-class BudgetFragment : Fragment() {
+class CategoryFragment : Fragment() {
 
 
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -36,7 +36,7 @@ class BudgetFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_budget, container, false)
+        return inflater.inflate(R.layout.fragment_category, container, false)
     }
 
     private fun navigateToCategoryDetails(category: Category) {

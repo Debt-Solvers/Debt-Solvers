@@ -35,9 +35,9 @@ class AddCategoryFragment : Fragment() {
         backButton = view.findViewById(R.id.back_button)
 
         backButton.setOnClickListener {
-            // Navigate back to BudgetFragment when the back button is clicked
-            val budgetFragment = BudgetFragment()
-            navigateToFragment(budgetFragment)
+            // Navigate back to categoryFragment when the back button is clicked
+            val categoryFragment = CategoryFragment()
+            navigateToFragment(categoryFragment)
         }
         addCategoryButton = view.findViewById(R.id.btnAddNewCategory)
         addCategoryButton.setOnClickListener{
@@ -53,7 +53,7 @@ class AddCategoryFragment : Fragment() {
         // Observe the addCategory success response
         expenseManagementViewModel.addCategories.observe(viewLifecycleOwner) { response ->
             if (response != null) { // Check if response is successful
-                navigateToFragment(BudgetFragment(), response.message)
+                navigateToFragment(CategoryFragment(), response.message)
             }
         }
 
@@ -63,7 +63,7 @@ class AddCategoryFragment : Fragment() {
     }
 
     private fun navigateToFragment(fragment: Fragment, message: String? = null) {
-        if (message != null && fragment is BudgetFragment) {
+        if (message != null && fragment is CategoryFragment) {
             val bundle = Bundle()
             bundle.putString("successMessage", message)
             fragment.arguments = bundle
