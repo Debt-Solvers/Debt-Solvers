@@ -14,6 +14,7 @@ import com.example.loginapp.DeleteBudgetResponse
 import com.example.loginapp.DeleteCategoryResponse
 import com.example.loginapp.GetAllBudgetsResponse
 import com.example.loginapp.GetAllCategoriesResponse
+import com.example.loginapp.GetAllExpensesResponse
 import com.example.loginapp.GetCategoryResponse
 import com.example.loginapp.UpdateBudgetResponse
 import com.example.loginapp.UpdateCategoryResponse
@@ -59,6 +60,10 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
 
     private val _selectedCategory = MutableLiveData<Category?>()
     val selectedCategory: LiveData<Category?> get() = _selectedCategory
+
+
+    private val _allExpenses = MutableLiveData<GetAllExpensesResponse>()
+    val allExpenses: LiveData<GetAllExpensesResponse> get() = _allExpenses
 
     // LiveData for error messages
     private val _error = MutableLiveData<String>()
@@ -221,4 +226,24 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
             }
         })
     }
+
+    /*
+        Expenses
+     */
+    // Load all expenses from the ExpenseManagementRepository
+    fun fetchAllExpenses() {
+        viewModelScope.launch {
+            expenseRepository.getAllExpenses(object : ExpenseManagementRepository.AllExpensesCallback {
+                override fun onSuccess(response: GetAllExpensesResponse) {
+                    Log.d("FetchAllExpenses", "responses in viewModel $response")
+                    _allExpenses.postValue(response)
+                }
+
+                override fun onError(error: String) {
+                    _error.postValue(error)
+                }
+            })
+        }
+    }
+
 }

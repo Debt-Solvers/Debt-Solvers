@@ -14,6 +14,7 @@ import com.example.loginapp.DeleteBudgetResponse
 import com.example.loginapp.DeleteCategoryResponse
 import com.example.loginapp.GetAllBudgetsResponse
 import com.example.loginapp.GetAllCategoriesResponse
+import com.example.loginapp.GetAllExpensesResponse
 import com.example.loginapp.GetCategoryResponse
 import com.example.loginapp.GetUserPasswordResponse
 import com.example.loginapp.TokenManager
@@ -76,6 +77,11 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
     }
     interface UpdateBudgetCallback {
         fun onSuccess(response: UpdateBudgetResponse)
+        fun onError(error: String)
+    }
+
+    interface AllExpensesCallback {
+        fun onSuccess(response: GetAllExpensesResponse)
         fun onError(error: String)
     }
 
@@ -505,6 +511,52 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
                 }
             })
 
+        } else {
+            callback.onError("No token found")
+        }
+    }
+
+
+    // Get All the expenses
+    fun getAllExpenses(callback: AllExpensesCallback) {
+        val token = tokenManager.getToken()
+        val backEndURL= "http://10.0.2.2:8081/api/v1/expenses"
+//        val backEndURL="http://4.236.128.116:30001/api/v1/budgets"
+        if (token != null) {
+            val request = Request.Builder()
+                .url(backEndURL)
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    Log.d("FetchAllExpenses", "Network Error: ")
+                    callback.onError("Network Error, ${e.message}")
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val responseBody = response.body?.string()
+                    Log.d("FetchAllExpenses", "responseBody: $responseBody")
+                    if (response.isSuccessful) {
+                        Log.d("FetchAllExpenses", "response is successful: ")
+                        if (responseBody != null) {
+                            try {
+                                val responseData = Json.decodeFromString<GetAllExpensesResponse>(responseBody)
+                                Log.d("FetchAllExpenses", "response is not null: $responseData ")
+                                callback.onSuccess(responseData)
+                            } catch (e: Exception) {
+                                Log.d("FetchAllExpenses", "response is null ${e.message}:")
+                                callback.onError("Error parsing response: ${e.message}")
+                            }
+                        } else {
+                            Log.d("FetchAllExpenses", "response is nulllll:")
+                            callback.onError("expense Data is null")
+                        }
+                    } else {
+                        callback.onError("Error fetchinq expense data")
+                    }
+                }
+            })
         } else {
             callback.onError("No token found")
         }
