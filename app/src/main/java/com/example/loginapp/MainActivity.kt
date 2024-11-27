@@ -30,11 +30,12 @@ class MainActivity : AppCompatActivity() {
         // Restore theme preference
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         val isDarkMode = sharedPreferences.getBoolean("switch_dark_mode", false)
-        if (isDarkMode) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        val nightMode = if (isDarkMode) {
+            AppCompatDelegate.MODE_NIGHT_YES
         } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            AppCompatDelegate.MODE_NIGHT_NO
         }
+        AppCompatDelegate.setDefaultNightMode(nightMode)
 
         setContentView(R.layout.activity_main)
 

@@ -25,8 +25,8 @@ private val _registrationStatus = MutableLiveData<RegistrationResult>()
     }
 
     fun register(firstName: String, lastName: String, email: String, password: String) {
-//        val backEndURL = "http://10.0.2.2:8080/api/v1/signup"
-        val backEndURL="http://4.236.128.116:30000/api/v1/signup"
+        val backEndURL = "http://10.0.2.2:8080/api/v1/signup"
+//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/signup"
         val requestData = RegisterRequest(firstName, lastName, email, password)
         val userRegisterData = Json.encodeToString(requestData)
         val requestBody = userRegisterData.toRequestBody(("application/json; charset=utf-8").toMediaType())

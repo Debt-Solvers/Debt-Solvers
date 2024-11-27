@@ -37,21 +37,19 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         // Handle Dark Mode SwitchPreferenceCompat
         val darkModeSwitch: SwitchPreferenceCompat? = findPreference("dark_mode")
-        darkModeSwitch?.setOnPreferenceChangeListener { _, newValue ->
+        darkModeSwitch?.setOnPreferenceChangeListener { preference, newValue ->
             val isDarkMode = newValue as Boolean
-            val currentMode = AppCompatDelegate.getDefaultNightMode()
 
-            val newMode = if (isDarkMode) {
+            val nightMode = if (isDarkMode) {
                 AppCompatDelegate.MODE_NIGHT_YES
             } else {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
+            AppCompatDelegate.setDefaultNightMode(nightMode)
 
-            // Only recreate the activity if the mode is actually changing
-            if (currentMode != newMode) {
-                AppCompatDelegate.setDefaultNightMode(newMode)
-                requireActivity().recreate() // Recreate activity to apply the theme instantly
-            }
+            // Optional: Persist the setting manually if needed
+            preference.sharedPreferences?.edit()?.putBoolean("dark_mode", isDarkMode)?.apply()
+
             true // Save the new preference value
         }
 

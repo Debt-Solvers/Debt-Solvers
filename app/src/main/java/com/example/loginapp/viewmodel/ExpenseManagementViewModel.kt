@@ -70,7 +70,6 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
     }
 
     fun setSelectedCategory(category: Category) {
-        Log.d("CategoryDetailFragment", "Category selected View: $category")
         _selectedCategory.value = category
     }
 
@@ -99,7 +98,7 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
     // Load all categories from the ExpenseManagementRepository
     fun fetchAllCategories() {
         viewModelScope.launch {
-            expenseRepository. getAllCategories(object : ExpenseManagementRepository.AllCategoriesCallback {
+            expenseRepository.getAllCategories(object : ExpenseManagementRepository.AllCategoriesCallback {
                 override fun onSuccess(response: GetAllCategoriesResponse) {
                     _allCategories.postValue(response)
                 }
