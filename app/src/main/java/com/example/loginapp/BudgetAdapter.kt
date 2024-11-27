@@ -1,6 +1,8 @@
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.loginapp.Budget
@@ -8,12 +10,15 @@ import com.example.loginapp.R
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-class BudgetAdapter(private val budgets: List<Budget>) :
-    RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
+class BudgetAdapter(
+    private var budgets: List<Budget>,
+    private val onDeleteClicked: (String) -> Unit
+    ) : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
 
     inner class BudgetViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val amountTextView: TextView = view.findViewById(R.id.budgetAmount)
         val dateTextView: TextView = view.findViewById(R.id.budgetDate)
+        val deleteBudgetButton: ImageView = view.findViewById(R.id.btnDeleteBudget)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BudgetViewHolder {
@@ -27,6 +32,10 @@ class BudgetAdapter(private val budgets: List<Budget>) :
         holder.amountTextView.text = holder.itemView.context.getString(R.string.budget_adapter_amount_label, budget.amount)
         holder.amountTextView.setTextColor(holder.itemView.context.getColor(R.color.green))
         holder.dateTextView.text = formatDate(budget.start_date)
+
+        holder.deleteBudgetButton.setOnClickListener {
+            onDeleteClicked(budget.budget_id)
+        }
     }
 
     override fun getItemCount(): Int = budgets.size
@@ -40,6 +49,11 @@ class BudgetAdapter(private val budgets: List<Budget>) :
 
     fun getTotalBudget(): Float {
         return budgets.sumOf { it.amount.toDouble()}.toFloat()
+    }
+
+    fun updateBudgets(newBudgets: List<Budget>) {
+        this.budgets = newBudgets
+        notifyDataSetChanged()  // Notify the adapter that the data has changed
     }
 
 }

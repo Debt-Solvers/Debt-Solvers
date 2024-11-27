@@ -40,6 +40,7 @@ class CategoryDetailFragment : Fragment() {
     private lateinit var totalExpenses: TextView
     private lateinit var totalBalance: TextView
 
+
     private lateinit var budgetAdapter: BudgetAdapter
     private lateinit var budgetsRecyclerView: RecyclerView
     private lateinit var binding: FragmentCategoryDetailsBinding
@@ -77,7 +78,9 @@ class CategoryDetailFragment : Fragment() {
         budgetsRecyclerView = view.findViewById(R.id.budgetsRecyclerView)
 
         // Initialize RecyclerView and adapter
-        budgetAdapter = BudgetAdapter(emptyList())  // Initialize with empty list, update later
+        budgetAdapter = BudgetAdapter(emptyList()) { budgetId ->
+            expenseManagementViewModel.deleteBudget(budgetId)
+        }  // Initialize with empty list, update later
         budgetsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         budgetsRecyclerView.adapter = budgetAdapter
 
@@ -93,7 +96,7 @@ class CategoryDetailFragment : Fragment() {
 
         // Display success message from update category
         arguments?.getString("successMessage")?.let { message ->
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+
         }
 
         expenseManagementViewModel.getCategory.observe(viewLifecycleOwner, { categoryData ->
@@ -161,12 +164,31 @@ class CategoryDetailFragment : Fragment() {
             Log.d("FetchAllBudgets", "this is filteredBudgets $filteredBudgets")
 
             // Update the RecyclerView with the filtered budgets
-            budgetAdapter = BudgetAdapter(filteredBudgets)  // Update the adapter with filtered budgets
+//            budgetAdapter = BudgetAdapter(filteredBudgets) { budgetId ->
+//                expenseManagementViewModel.deleteBudget(budgetId)
+//            }
+            budgetAdapter.updateBudgets(filteredBudgets)
+
+            // Update the adapter with filtered budgets
             budgetsRecyclerView.adapter = budgetAdapter
 
             val total = budgetAdapter.getTotalBudget()
             totalBudget.text = totalBudget.context.getString(R.string.budget_adapter_total_budget_label, total)
         }
+        expenseManagementViewModel.deleteBudget.observe(viewLifecycleOwner) { response ->
+
+            Log.d("DeleteBudget", "Delete Budget Response: $response")
+            if (response !=null && response.status == 200){
+                Log.d("DeleteBudget", "Delete Budget is success: $response")
+                Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
+                expenseManagementViewModel.fetchAllBudgets()
+            }else {
+                Log.d("DeleteBudget", "Delete Budget is failed: $response")
+                Toast.makeText(requireContext(), response.message, Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
 
     }
     fun formatDate(dateString: String): String {
