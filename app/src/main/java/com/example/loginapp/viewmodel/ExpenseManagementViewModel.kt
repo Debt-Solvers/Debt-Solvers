@@ -12,6 +12,7 @@ import com.example.loginapp.Category
 import com.example.loginapp.CategoryDefaultDataResponse
 import com.example.loginapp.DeleteBudgetResponse
 import com.example.loginapp.DeleteCategoryResponse
+import com.example.loginapp.DeleteExpenseResponse
 import com.example.loginapp.GetAllBudgetsResponse
 import com.example.loginapp.GetAllCategoriesResponse
 import com.example.loginapp.GetAllExpensesResponse
@@ -64,6 +65,9 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
 
     private val _allExpenses = MutableLiveData<GetAllExpensesResponse>()
     val allExpenses: LiveData<GetAllExpensesResponse> get() = _allExpenses
+
+    private val _deleteExpense = MutableLiveData<DeleteExpenseResponse>()
+    val deleteExpense: LiveData<DeleteExpenseResponse> get() = _deleteExpense
 
     // LiveData for error messages
     private val _error = MutableLiveData<String>()
@@ -244,6 +248,21 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
                 }
             })
         }
+    }
+
+    //Delete Expense from a category
+    fun deleteExpense(id: String) {
+        expenseRepository.deleteExpense(id, object : ExpenseManagementRepository.DeleteExpenseCallback {
+            override fun onSuccess(response: DeleteExpenseResponse) {
+                _deleteExpense.postValue(response)
+
+                // Fetch the budget list data after deleting (refresh)
+                fetchAllExpenses()
+            }
+            override fun onError(error: String) {
+                _error.postValue(error)
+            }
+        })
     }
 
 }
