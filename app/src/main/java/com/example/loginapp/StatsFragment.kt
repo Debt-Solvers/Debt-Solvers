@@ -39,8 +39,22 @@ data class ExpenseData(
 
 data class CategoryBreakdown(
     val category_id: String,
-    val percentage: Double,
-    val total: Double
+    val percentage: Float,
+    val total: Double,
+    val category_name: String? = null // Add an optional category name
+
+)
+data class AllCategoriesResponse(
+    val status: Int,
+    val message: String,
+    val data: List<CategoryDetails>
+)
+
+data class CategoryDetails(
+    val category_id: String,
+    val name: String,
+    val description: String,
+    val color_code: String
 )
 
 // Retrofit interface for API calls
@@ -48,12 +62,22 @@ interface ExpenseAnalysisService {
     @GET("/api/v1/expenses/analysis")
     suspend fun getExpenseAnalysis(): ExpenseAnalysisResponse
 }
+// Interface for fetching all categories
+interface CategoryService {
+    @GET("/api/v1/categories/")
+    suspend fun getAllCategories(): AllCategoriesResponse
+}
 
 class StatsFragment : Fragment() {
     private lateinit var pieChart: PieChart
     private lateinit var totalSpendingTextView: TextView
     private lateinit var averageSpendingTextView: TextView
     private lateinit var tokenManager: TokenManager
+
+    // Add CategoryService to your retrofit setup
+    private val categoryService by lazy {
+        retrofit.create(CategoryService::class.java)
+    }
 
     // Authentication Interceptor
     private inner class AuthInterceptor(private val tokenManager: TokenManager) : Interceptor {
@@ -117,16 +141,46 @@ class StatsFragment : Fragment() {
     private fun fetchExpenseAnalysis() {
         viewLifecycleOwner.lifecycleScope.launch {
             try {
-                val response = expenseService.getExpenseAnalysis()
-                Log.d("StatsFragment", "Full Response: $response")
-                Log.d("StatsFragment", "Response Data: ${response.data}")
-                updateUI(response.data)
+                // Fetch expense analysis and all categories concurrently
+                val (expenseResponse, categoriesResponse) = withContext(Dispatchers.IO) {
+                    Pair(
+                        expenseService.getExpenseAnalysis(),
+                        categoryService.getAllCategories()
+                    )
+                }
+
+                // Create a map of category IDs to names
+                val categoryMap = categoriesResponse.data.associate {
+                    it.category_id to it.name
+                }
+
+                // Map categories with their names
+                val categoriesWithNames = expenseResponse.data.category_breakdown.map { category ->
+                    category.copy(
+                        category_name = categoryMap[category.category_id] ?: category.category_id
+                    )
+                }
+
+                // Update UI with categories that now have names
+                updateUI(ExpenseData(
+                    total_spending = expenseResponse.data.total_spending,
+                    average_spending = expenseResponse.data.average_spending,
+                    category_breakdown = categoriesWithNames
+                ))
             } catch (e: Exception) {
                 Log.e("StatsFragment", "Error details: ${e.message}")
                 Log.e("StatsFragment", "Error stacktrace: ", e)
             }
         }
     }
+
+    // New data class to hold category with name
+    data class CategoryWithName(
+        val id: String,
+        val name: String,
+        val percentage: Float,
+        val total: Float
+    )
 
     private fun updateUI(expenseData: ExpenseData) {
         // Update TextViews
@@ -135,7 +189,7 @@ class StatsFragment : Fragment() {
 
         // Prepare Pie Chart Data
         val entries = expenseData.category_breakdown.map { category ->
-            PieEntry(category.percentage.toFloat(), category.category_id)
+            PieEntry(category.percentage.toFloat(), category.category_name ?: category.category_id)
         }
 
         val dataSet = PieDataSet(entries, "Expense Categories")
@@ -151,7 +205,7 @@ class StatsFragment : Fragment() {
             centerText = "Expense Breakdown"
             setCenterTextSize(14f)
             setEntryLabelColor(android.R.color.black)
-            setEntryLabelTextSize(10f)
+            setEntryLabelTextSize(15f)
             animateY(1000)
             invalidate() // refresh
         }
