@@ -42,7 +42,7 @@ class UpdateCategoryFragment : Fragment() {
             categoryId = it.getString("CATEGORY_ID")
 
         }
-
+        Log.d("UpdateCategory", "categoryId outside listener $categoryId")
         updateCategoryButton.setOnClickListener{
             val categoryName = updateCategoryName.text.toString()
             val categoryDescription = updateCategoryDescription.text.toString()
