@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter
 
 class ExpensesAdapter(
     private var expenses: List<Expense2>,
-//    private val onDeleteClicked: (String) -> Unit
+    private val onDeleteClicked: (String) -> Unit
 ) : RecyclerView.Adapter<ExpensesAdapter.ExpenseViewHolder>() {
 
     inner class ExpenseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -34,7 +34,7 @@ class ExpensesAdapter(
         holder.dateTextView.text = formatDate(expense.date)
 
         holder.deleteExpenseButton.setOnClickListener {
-//            onDeleteClicked(expense.expenseId)
+            onDeleteClicked(expense.expenseId)
             Log.d("DeleteExpense", "Temp message inside onClick")
         }
     }

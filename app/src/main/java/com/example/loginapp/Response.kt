@@ -244,3 +244,10 @@ data class Expense2(
     @SerialName("updated_at") val updatedAt: String
 )
 
+@Serializable
+data class DeleteExpenseResponse(
+    val status: Int,
+    val message: String
+)
+
+
