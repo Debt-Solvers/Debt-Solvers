@@ -1,14 +1,19 @@
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.loginapp.R
 import com.example.loginapp.TokenManager
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
@@ -39,7 +44,7 @@ data class ExpenseData(
 
 data class CategoryBreakdown(
     val category_id: String,
-    val percentage: Float,
+    val percentage: Double,
     val total: Double,
     val category_name: String? = null // Add an optional category name
 
@@ -73,6 +78,8 @@ class StatsFragment : Fragment() {
     private lateinit var totalSpendingTextView: TextView
     private lateinit var averageSpendingTextView: TextView
     private lateinit var tokenManager: TokenManager
+    private lateinit var categoryDetailsContainer: LinearLayout
+
 
     // Add CategoryService to your retrofit setup
     private val categoryService by lazy {
@@ -133,6 +140,7 @@ class StatsFragment : Fragment() {
         pieChart = view.findViewById(R.id.pieChart)
         totalSpendingTextView = view.findViewById(R.id.total_spending_tv)
         averageSpendingTextView = view.findViewById(R.id.average_spending_tv)
+        categoryDetailsContainer = view.findViewById(R.id.category_details_container)
 
         fetchExpenseAnalysis()
         return view
@@ -178,8 +186,8 @@ class StatsFragment : Fragment() {
     data class CategoryWithName(
         val id: String,
         val name: String,
-        val percentage: Float,
-        val total: Float
+        val percentage: Double,
+        val total: Double
     )
 
     private fun updateUI(expenseData: ExpenseData) {
@@ -202,12 +210,39 @@ class StatsFragment : Fragment() {
         pieChart.apply {
             data = pieData
             description.isEnabled = false
+            legend.isEnabled = false // Disable the legend
             centerText = "Expense Breakdown"
-            setCenterTextSize(14f)
-            setEntryLabelColor(android.R.color.black)
+            setCenterTextSize(18f)
+            setCenterTextColor(R.color.secondaryColor)
+            setEntryLabelColor(R.color.secondaryColor)
             setEntryLabelTextSize(15f)
             animateY(1000)
+            val legend = pieChart.legend
+            legend.textColor = ContextCompat.getColor(requireContext(), R.color.secondaryColor)
+            legend.textSize = 16f
             invalidate() // refresh
+        }
+        // Clear any existing category details
+        categoryDetailsContainer.removeAllViews()
+
+        // Sort categories by percentage in descending order
+        val sortedCategories = expenseData.category_breakdown
+            .sortedByDescending { it.percentage }
+
+        // Create a TextView for each category
+        sortedCategories.forEach { category ->
+            val categoryDetailView = TextView(requireContext()).apply {
+                text = String.format(
+                    "%s: $%.2f (%.1f%%)",
+                    category.category_name ?: category.category_id,
+                    category.total,
+                    category.percentage
+                )
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
+                setPadding(0, 8, 0, 8)
+                setTypeface(null, Typeface.BOLD)
+            }
+            categoryDetailsContainer.addView(categoryDetailView)
         }
     }
 }
