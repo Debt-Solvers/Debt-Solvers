@@ -10,7 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class CategoryAdapter(private var categories: MutableList<Category>,
                       private val onCategoryClick: (Category) -> Unit, // Callback for handling item clicks
-                      private val onCategoryDeleteClick: (String) -> Unit
+                      private val onCategoryDeleteClick: (String) -> Unit,
+                      private val onCategoryExpenseClick: (Category) -> Unit
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
    inner class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -18,6 +19,7 @@ class CategoryAdapter(private var categories: MutableList<Category>,
        val name: TextView = view.findViewById(R.id.categoryName)
        val deleteButton: ImageView = view.findViewById(R.id.categoryDeleteButton)
        val budgetSectionButton: ImageView = view.findViewById(R.id.budgetSectionButton)
+       val expensesSectionButton: ImageView = view.findViewById(R.id.expenseSectionButton)
 
 
        init {
@@ -36,6 +38,11 @@ class CategoryAdapter(private var categories: MutableList<Category>,
                // Trigger the callback when an item is clicked
                val category = categories[adapterPosition]
                onCategoryClick(category)
+           }
+           expensesSectionButton.setOnClickListener{
+               // Trigger the callback when an item is clicked
+               val category = categories[adapterPosition]
+               onCategoryExpenseClick(category)
            }
        }
     }

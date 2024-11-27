@@ -64,6 +64,29 @@ class CategoryFragment : Fragment() {
             .addToBackStack(null) // Optional: Allows back navigation
             .commit()
     }
+
+    private fun navigateToCategoryExpensesDetails(category: Category) {
+        // Create the CategoryDetailFragment
+
+        val categoryExpenseDetailFragment = CategoryExpenseDetailFragment()
+        // Serialize the category object to a JSON string
+        val categoryJson = Json.encodeToString(category)
+        // Pass data as arguments
+        val bundle = Bundle().apply {
+//            putString("CATEGORY_NAME", category.name)
+            putString("CATEGORY_DATA", categoryJson)
+//            putDouble("CATEGORY_AMOUNT", category.amount)
+        }
+
+        categoryExpenseDetailFragment.arguments = bundle
+
+        // Navigate to CategoryDetailFragment
+        parentFragmentManager.beginTransaction()
+//            .replace(R.id.fragment_container, categoryDetailFragment)
+            .replace(R.id.frame_layout, categoryExpenseDetailFragment) // Does this make sense ? I'm confused
+            .addToBackStack(null) // Optional: Allows back navigation
+            .commit()
+    }
     private fun navigateToFragment(fragment: Fragment){
         (activity as? DashboardActivity)?.replaceFragment(fragment)
     }
@@ -94,11 +117,11 @@ class CategoryFragment : Fragment() {
         categoryRecyclerView.layoutManager = linearLayoutManager
 
 
-        categoryAdapter = CategoryAdapter(categories, { category ->
-            navigateToCategoryDetails(category)
-        }, { categoryId ->
-            deleteCategory(categoryId)
-        })
+        categoryAdapter = CategoryAdapter(categories,
+            { category -> navigateToCategoryDetails(category) },
+            { categoryId -> deleteCategory(categoryId) },
+            { category -> navigateToCategoryExpensesDetails(category)}
+            )
 
         categoryRecyclerView.adapter = categoryAdapter
 
