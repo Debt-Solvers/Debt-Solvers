@@ -44,7 +44,8 @@
 
     <!-- Category Adapter-->
     <string name="category_adapter_delete_category">Delete category</string>
-
+    <string name="category_adapter_budget_section">Budget Section</string>
+    <string name="category_adapter_expense_section">Expense Section</string>
     <!-- Budget Adapter-->
     <string name="budget_adapter_amount_label">\$ %.2f</string>
     <string name="budget_adapter_total_budget_label">\$ %.2f</string>

@@ -15,21 +15,27 @@ class CategoryAdapter(private var categories: MutableList<Category>,
 
    inner class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        val name: TextView = view.findViewById(R.id.categoryName)
+       val name: TextView = view.findViewById(R.id.categoryName)
        val deleteButton: ImageView = view.findViewById(R.id.categoryDeleteButton)
+       val budgetSectionButton: ImageView = view.findViewById(R.id.budgetSectionButton)
 
 
        init {
-           view.setOnClickListener {
-               // Trigger the callback when an item is clicked
-               val category = categories[adapterPosition]
-               onCategoryClick(category)
-           }
+//           view.setOnClickListener {
+//               // Trigger the callback when an item is clicked
+//               val category = categories[adapterPosition]
+//               onCategoryClick(category)
+//           }
 
            // When the delete button is clicked
            deleteButton.setOnClickListener {
                val categoryId = categories[adapterPosition].categoryId  // Assuming category has an 'id' field
                onCategoryDeleteClick(categoryId)
+           }
+           budgetSectionButton.setOnClickListener{
+               // Trigger the callback when an item is clicked
+               val category = categories[adapterPosition]
+               onCategoryClick(category)
            }
        }
     }
