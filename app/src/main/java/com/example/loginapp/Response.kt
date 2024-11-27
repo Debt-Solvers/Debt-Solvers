@@ -213,4 +213,34 @@ data class UpdateBudgetResponse(
     val data: Budget
 )
 
+@Serializable
+data class GetAllExpensesResponse(
+    val data: ExpensesData2,
+    val message: String,
+    val status: Int
+)
+@Serializable
+data class ExpensesData2(
+    val expenses: List<Expense2>,
+    val pagination: Pagination2
+)
+@Serializable
+data class Pagination2(
+    val page: Int,
+    @SerialName("per_page") val perPage: Int,
+    @SerialName("total_count") val totalCount: Int,
+    @SerialName("total_pages") val totalPages: Int
+)
+@Serializable
+data class Expense2(
+    @SerialName("expense_id") val expenseId: String,
+    @SerialName("user_id") val userId: String,
+    @SerialName("category_id") val categoryId: String,
+    val amount: Float,
+    val date: String,
+    val description: String,
+    @SerialName("receipt_id") val receiptId: String?,
+    @SerialName("created_at") val createdAt: String,
+    @SerialName("updated_at") val updatedAt: String
+)
 
