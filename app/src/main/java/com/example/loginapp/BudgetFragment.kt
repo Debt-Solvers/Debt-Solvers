@@ -157,7 +157,7 @@ class BudgetFragment : Fragment() {
             )
             setDrawValues(true)
             valueTextSize = 10f
-            valueTextColor = Color.BLACK
+            valueTextColor = R.color.secondaryColor
             valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
                     return String.format("$%.2f", value)
@@ -207,7 +207,8 @@ class BudgetFragment : Fragment() {
                 text = buildCategoryDetailText(category)
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
                 setPadding(0, 8, 0, 8)
-                setTypeface(null, Typeface.BOLD)
+                    setTypeface(null, Typeface.BOLD)
+                setTextColor(ContextCompat.getColor(requireContext(), R.color.secondaryColor))
 
                 // Color text based on budget status
                 setTextColor(

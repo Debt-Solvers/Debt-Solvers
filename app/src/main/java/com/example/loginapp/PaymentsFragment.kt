@@ -51,11 +51,31 @@ data class PaginationInfo(
     val per_page: Int,
     val total_pages: Int
 )
+// Data classes for Budgets API response
+data class BudgetsResponse(
+    val status: String,
+    val message: String,
+    val data: List<BudgetItem>
+)
+
+data class BudgetItem(
+    val budget_id: String,
+    val user_id: String,
+    val category_id: String,
+    val amount: Double,
+    val start_date: String,
+    val end_date: String
+)
 
 // Retrofit interface for fetching expenses
 interface ExpensesService {
     @GET("/api/v1/expenses/")
     suspend fun getExpenses(): ExpensesResponse
+}
+// Retrofit interface for fetching budgets
+interface BudgetsService {
+    @GET("/api/v1/budgets/")
+    suspend fun getBudgets(): BudgetsResponse
 }
 class PaymentsFragment : Fragment() {
     private lateinit var tokenManager: TokenManager
@@ -102,6 +122,10 @@ class PaymentsFragment : Fragment() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
+    // Budgets Service
+    private val budgetsService by lazy {
+        retrofit.create(BudgetsService::class.java)
+    }
 
     private val expensesService by lazy {
         retrofit.create(ExpensesService::class.java)
@@ -125,8 +149,9 @@ class PaymentsFragment : Fragment() {
         expenseRecyclerView.layoutManager = LinearLayoutManager(context)
         incomeRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        // Fetch expenses
+        // Fetch expenses and budgets
         fetchExpenses()
+        fetchBudgets()
 
         return view
     }
@@ -148,6 +173,26 @@ class PaymentsFragment : Fragment() {
             } catch (e: Exception) {
                 Log.e("PaymentsFragment", "Error details: ${e.message}")
                 Log.e("PaymentsFragment", "Error stacktrace: ", e)
+            }
+        }
+    }
+    private fun fetchBudgets() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val response = budgetsService.getBudgets()
+                Log.d("PaymentsFragment", "Budgets Response: $response")
+
+                // Update Income (Budget) RecyclerView
+                val budgetAdapter = BudgetAdapter(response.data)
+                incomeRecyclerView.adapter = budgetAdapter
+
+                // Update summary information
+                val totalBudgets = response.data.sumByDouble { it.amount }
+                incomeTextView.text = String.format("$%.2f", totalBudgets)
+
+            } catch (e: Exception) {
+                Log.e("PaymentsFragment", "Budget fetch error: ${e.message}")
+                Log.e("PaymentsFragment", "Budget error stacktrace: ", e)
             }
         }
     }

@@ -7,49 +7,41 @@
     android:padding="16dp"
     android:background="?android:attr/selectableItemBackground">
 
-    <!-- Top Row: Description, Date, and Amount -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <!-- Description and Date Section -->
-        <LinearLayout
+        <TextView
+            android:id="@+id/budget_category"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            tools:text="Food Category" />
 
-            <!-- Expense Description -->
-            <TextView
-                android:id="@+id/expense_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                tools:text="Expense Description" />
-
-            <!-- Expense Date -->
-            <TextView
-                android:id="@+id/expense_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                tools:text="2024-01-01 - 2024-01-31" />
-        </LinearLayout>
-
-        <!-- Amount Section -->
         <TextView
-            android:id="@+id/expense_amount"
+            android:id="@+id/budget_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/green"
             android:textStyle="bold"
-            android:textColor="@color/red"
             android:textSize="16sp"
-            tools:text="$123.45" />
+            tools:text="$500.00" />
+
     </LinearLayout>
 
-    <!-- Divider -->
+    <TextView
+        android:id="@+id/budget_period"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/secondaryColor"
+        android:textSize="14sp"
+        tools:text="2024-01-01 - 2024-01-31" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

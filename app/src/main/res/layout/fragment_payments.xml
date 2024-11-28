@@ -181,7 +181,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="250dp"
                     android:id="@+id/recycler_income"></androidx.recyclerview.widget.RecyclerView>
 
                 <TextView
@@ -197,7 +197,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="350dp"
+                    android:layout_height="250dp"
                     android:id="@+id/recycler_expense">
 
                 </androidx.recyclerview.widget.RecyclerView>
