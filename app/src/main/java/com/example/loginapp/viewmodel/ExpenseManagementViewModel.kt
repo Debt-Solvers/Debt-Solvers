@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.loginapp.AddBudgetResponse
 import com.example.loginapp.AddCategoryResponse
+import com.example.loginapp.AddExpenseResponse
 import com.example.loginapp.Category
 import com.example.loginapp.CategoryDefaultDataResponse
 import com.example.loginapp.DeleteBudgetResponse
@@ -62,9 +63,11 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
     private val _selectedCategory = MutableLiveData<Category?>()
     val selectedCategory: LiveData<Category?> get() = _selectedCategory
 
-
     private val _allExpenses = MutableLiveData<GetAllExpensesResponse>()
     val allExpenses: LiveData<GetAllExpensesResponse> get() = _allExpenses
+
+    private val _addExpense = MutableLiveData<AddExpenseResponse>()
+    val addExpense: LiveData<AddExpenseResponse> get() = _addExpense
 
     private val _deleteExpense = MutableLiveData<DeleteExpenseResponse>()
     val deleteExpense: LiveData<DeleteExpenseResponse> get() = _deleteExpense
@@ -259,6 +262,18 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
                 // Fetch the budget list data after deleting (refresh)
                 fetchAllExpenses()
             }
+            override fun onError(error: String) {
+                _error.postValue(error)
+            }
+        })
+    }
+    //Add expense to the list
+    fun addExpense(categoryId: String, amount: Float, date: String, description: String) {
+        expenseRepository.addExpense(categoryId, amount, date, description, object : ExpenseManagementRepository.AddExpenseCallback {
+            override fun onSuccess(response: AddExpenseResponse) {
+                _addExpense.postValue(response)
+            }
+
             override fun onError(error: String) {
                 _error.postValue(error)
             }

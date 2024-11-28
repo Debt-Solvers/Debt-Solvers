@@ -145,11 +145,11 @@ class CategoryExpenseDetailFragment : Fragment() {
                     putString("CATEGORY_ID", currentCategory.categoryId)
                     putString("CATEGORY_SINGLE_DATA", singleCategory)
                 }
-                val addBudgetFragment = AddBudgetFragment().apply {
+                val addExpenseFragment = AddExpenseFragment().apply {
                     arguments = bundle
                 }
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.frame_layout, addBudgetFragment)
+                    .replace(R.id.frame_layout, addExpenseFragment)
                     .addToBackStack(null)
                     .commit()
             } ?: run {
