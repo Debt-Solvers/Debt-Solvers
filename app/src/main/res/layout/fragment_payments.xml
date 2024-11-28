@@ -82,7 +82,7 @@
                         android:textColor="@color/secondaryColor"
                         android:gravity="center"
                         android:fontFamily="@font/roboto_bold"
-                        android:text="Income">
+                        android:text="Budget">
 
                     </TextView>
                 </RelativeLayout>
@@ -174,7 +174,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Income History"
+                    android:text="Budget History"
                     android:fontFamily="@font/roboto_bold"
                     android:background="@drawable/gradient_background"
                     android:textAppearance="?android:textAppearanceLarge" />

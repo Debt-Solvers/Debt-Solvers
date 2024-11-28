@@ -1,4 +1,5 @@
 package com.example.loginapp
+import BudgetFragment
 import StatsFragment
 import android.app.Activity
 import android.os.Bundle

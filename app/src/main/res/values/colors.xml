@@ -26,4 +26,9 @@
     <color name="negative_balance">#FF5722</color>
     <color name="low_balance">#FFC107</color>
     <color name="healthy_balance">#4CAF50</color>
+
+    <color name="budget_color">#4CAF50</color>  <!-- Green for budgeted amount -->
+    <color name="spent_color">#FF5722</color>  <!-- Orange for spent amount -->
+    <color name="budget_over_color">#F44336</color>  <!-- Red for over budget -->
+    <color name="budget_under_color">#4CAF50</color>  <!-- Green for under budget -->
 </resources>

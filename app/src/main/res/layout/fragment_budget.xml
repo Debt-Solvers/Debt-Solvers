@@ -1,6 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Budget Statistics"
+        android:fontFamily="@font/roboto_bold"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:padding="10dp"
+        android:background="@drawable/gradient_background">
+    </TextView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+                <TextView
+                    android:id="@+id/total_budgeted_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/roboto_bold"
+                    android:textColor="@color/primaryColor"
+                    android:text="Total Budgeted: $0.00"/>
+                <TextView
+                    android:id="@+id/total_spent_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/roboto_bold"
+                    android:textColor="@color/secondaryColor"
+                    android:text="Total Spent: $0.00"/>
+            </LinearLayout>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginTop="16dp"
+                app:cardElevation="4dp"
+                app:cardCornerRadius="8dp">
+
+                <com.github.mikephil.charting.charts.HorizontalBarChart
+                    android:id="@+id/budgetBarChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="8dp"/>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/category_breakdown_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Category Breakdown"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:padding="10dp"/>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="16dp">
+                <LinearLayout
+                    android:id="@+id/budget_details_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
+            </ScrollView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_regular"
+                android:padding="10dp"
+                android:textColor="@color/grey"
+                android:textStyle="italic"
+                android:text="SAVE MONEY"
+                android:textAppearance="?android:textAppearanceLarge">
+            </TextView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="60dp"
+                android:layout_marginTop="-30dp"
+                android:layout_marginBottom="30dp"
+                android:textStyle="italic"
+                android:fontFamily="@font/roboto_bold"
+                android:textColor="@color/grey"
+                android:text="LIVE BETTER"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:padding="10dp">
+            </TextView>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
