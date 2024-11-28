@@ -172,8 +172,8 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     fun resetPassword(token: String, new_password: String) {
 
-//        val backEndURL = "http://10.0.2.2:8080/api/v1/password-reset/confirm"
-        val backEndURL="http://caa900debtsolverappbe.eastus.cloudapp.azure.com:30000/api/v1/password-reset/confirm"
+        val backEndURL = "http://10.0.2.2:8080/api/v1/password-reset/confirm"
+//        val backEndURL="http://caa900debtsolverappbe.eastus.cloudapp.azure.com:30000/api/v1/password-reset/confirm"
         val requestData = ConfirmResetRequest(token, new_password)
         val emailResetData = Json.encodeToString(requestData)
         val requestBody = emailResetData.toRequestBody(("application/json; charset=utf-8").toMediaType())
