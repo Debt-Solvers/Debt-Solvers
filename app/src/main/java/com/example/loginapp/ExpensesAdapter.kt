@@ -18,7 +18,9 @@ class ExpensesAdapter(
     inner class ExpenseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val amountTextView: TextView = view.findViewById(R.id.expenseAmount)
         val dateTextView: TextView = view.findViewById(R.id.expenseDate)
+        val descriptionTextView: TextView = view.findViewById(R.id.expenseDescription)
         val deleteExpenseButton: ImageView = view.findViewById(R.id.btnDeleteExpense)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseViewHolder {
@@ -31,6 +33,7 @@ class ExpensesAdapter(
         val expense = expenses[position]
         holder.amountTextView.text = holder.itemView.context.getString(R.string.budget_adapter_amount_label, expense.amount)
         holder.amountTextView.setTextColor(holder.itemView.context.getColor(R.color.red))
+        holder.descriptionTextView.text = expense.description
         holder.dateTextView.text = formatDate(expense.date)
 
         holder.deleteExpenseButton.setOnClickListener {

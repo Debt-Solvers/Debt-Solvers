@@ -2,6 +2,7 @@ package com.example.loginapp.model
 
 import AddBudgetRequest
 import AddCategoryRequest
+import AddExpenseRequest
 import UpdateBudgetRequest
 import UpdateCategoryRequest
 import android.content.Context
@@ -9,6 +10,8 @@ import android.util.Log
 import com.example.loginapp.AddBudgetResponse
 import com.example.loginapp.AddCategoryErrResponse
 import com.example.loginapp.AddCategoryResponse
+import com.example.loginapp.AddExpenseErrResponse
+import com.example.loginapp.AddExpenseResponse
 import com.example.loginapp.CategoryDefaultDataResponse
 import com.example.loginapp.DeleteBudgetResponse
 import com.example.loginapp.DeleteCategoryResponse
@@ -83,6 +86,10 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
 
     interface AllExpensesCallback {
         fun onSuccess(response: GetAllExpensesResponse)
+        fun onError(error: String)
+    }
+    interface AddExpenseCallback {
+        fun onSuccess(response: AddExpenseResponse)
         fun onError(error: String)
     }
     interface DeleteExpenseCallback {
@@ -569,6 +576,67 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
         }
     }
 
+    // Add a budget to a category
+    fun addExpense(categoryId: String, amount: Float, date:String, description: String, callback: AddExpenseCallback) {
+        val token = tokenManager.getToken()
+        val backEndURL = "http://10.0.2.2:8081/api/v1/expenses"
+
+        if (token != null) {
+            val requestData = AddExpenseRequest(categoryId, amount, date, description)
+            val addBudgetData = Json.encodeToString(requestData)
+            val requestBody = addBudgetData.toRequestBody(("application/json; charset=utf-8").toMediaType())
+
+            val request = Request.Builder()
+                .url(backEndURL)
+                .post(requestBody)
+                .addHeader("Authorization", "Bearer $token")
+                .build()
+
+            client.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback.onError("Network Error, ${e.message}")
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    val responseBody = response.body?.string()
+                    Log.d("AddExpense", "addExpense onResponse $responseBody")
+
+                    if (responseBody.isNullOrEmpty()) {
+                        Log.d("AddExpense", "Response body is null or empty.")
+                        callback.onError("No response from server.")
+                        return
+                    }
+
+                    try {
+                        if (response.isSuccessful) {
+                            val responseData = Json.decodeFromString<AddExpenseResponse>(responseBody)
+                            if (responseData != null) {
+                                callback.onSuccess(responseData)
+                            } else {
+                                callback.onError("No data, data is null")
+                            }
+                        } else {
+                            // Handle error response (e.g., 409 Conflict)
+                            val responseData = Json.decodeFromString<AddExpenseErrResponse>(responseBody)
+                            if (responseData.status == 400) {
+                                // Handle specific error (e.g., budget period overlaps)
+                                Log.d("AddExpense", "Error response: ${responseData.message}")
+                                Log.d("AddExpense", "Error response: ${responseData}")
+                                callback.onError(responseData.error)
+                            } else {
+                                callback.onError("Invalid input data")
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Log.e("AddExpense", "Error parsing response: ${e.message}")
+                        callback.onError("Failed to parse response. ${e.message}")
+                    }
+                }
+            })
+        } else {
+            callback.onError("No token found")
+        }
+    }
     fun deleteExpense(id: String, callback: DeleteExpenseCallback){
         val token = tokenManager.getToken()
         val backEndURL= "http://10.0.2.2:8081/api/v1/expenses/${id}"

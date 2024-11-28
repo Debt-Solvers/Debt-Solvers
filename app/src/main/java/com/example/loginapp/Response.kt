@@ -245,6 +245,19 @@ data class Expense2(
 )
 
 @Serializable
+data class AddExpenseResponse(
+    val status: Int,
+    val message: String,
+    val data: Expense2
+)
+@Serializable
+data class AddExpenseErrResponse(
+    val status: Int,
+    val message: String,
+    val error: String
+)
+
+@Serializable
 data class DeleteExpenseResponse(
     val status: Int,
     val message: String
