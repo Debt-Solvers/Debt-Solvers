@@ -37,7 +37,7 @@ class BudgetAdapter(private val budgets: List<BudgetItem>) :
 
             amountTextView.text = String.format("$%.2f", budget.amount)
             periodTextView.text = "$formattedStartDate - $formattedEndDate"
-            categoryTextView.text = budget.category_id // You might want to replace this with actual category name
+            categoryTextView.text = budget.category // You might want to replace this with actual category name
         }
     }
 

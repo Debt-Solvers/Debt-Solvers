@@ -1,5 +1,6 @@
 package com.example.loginapp
 
+import BudgetAnalysisResponse
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.loginapp.R
 import com.example.loginapp.TokenManager
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -58,10 +60,21 @@ data class BudgetsResponse(
     val data: List<BudgetItem>
 )
 
+data class BudgetAnalysisItem(
+    val category_id: String,
+    val category: String,
+    val budgeted_amount: Double,
+    val total_spent: Double,
+    val remaining_budget: Double,
+    val percentage_spent: Double,
+    val exceeds_budget: Boolean
+)
+
 data class BudgetItem(
     val budget_id: String,
     val user_id: String,
     val category_id: String,
+    var category: String, // Changed from val to var to allow updating
     val amount: Double,
     val start_date: String,
     val end_date: String
@@ -76,6 +89,11 @@ interface ExpensesService {
 interface BudgetsService {
     @GET("/api/v1/budgets/")
     suspend fun getBudgets(): BudgetsResponse
+}
+// Add the BudgetAnalysisService interface
+interface BudgetAnalysisService {
+    @GET("/api/v1/budgets/analysis")
+    suspend fun getBudgetAnalysis(): BudgetAnalysisResponse
 }
 class PaymentsFragment : Fragment() {
     private lateinit var tokenManager: TokenManager
@@ -130,6 +148,10 @@ class PaymentsFragment : Fragment() {
     private val expensesService by lazy {
         retrofit.create(ExpensesService::class.java)
     }
+    // Budget Analysis Service
+    private val budgetAnalysisService by lazy {
+        retrofit.create(BudgetAnalysisService::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -151,7 +173,7 @@ class PaymentsFragment : Fragment() {
 
         // Fetch expenses and budgets
         fetchExpenses()
-        fetchBudgets()
+        fetchBudgetsWithAnalysis()
 
         return view
     }
@@ -166,13 +188,50 @@ class PaymentsFragment : Fragment() {
                 val expenseAdapter = ExpenseAdapter(response.data.expenses)
                 expenseRecyclerView.adapter = expenseAdapter
 
-                // Update summary information (you might want to create additional API endpoints for these)
+                // Update summary information
                 val totalExpenses = response.data.expenses.sumByDouble { it.amount }
                 expenseTextView.text = String.format("$%.2f", totalExpenses)
 
             } catch (e: Exception) {
                 Log.e("PaymentsFragment", "Error details: ${e.message}")
                 Log.e("PaymentsFragment", "Error stacktrace: ", e)
+            }
+        }
+    }
+
+    private fun fetchBudgetsWithAnalysis() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                // Fetch both budgets and budget analysis concurrently
+                val budgetsDeferred = async { budgetsService.getBudgets() }
+                val budgetAnalysisDeferred = async { budgetAnalysisService.getBudgetAnalysis() }
+
+                val budgetsResponse = budgetsDeferred.await()
+                val budgetAnalysisResponse = budgetAnalysisDeferred.await()
+
+                Log.d("PaymentsFragment", "Budgets Response: $budgetsResponse")
+                Log.d("PaymentsFragment", "Budget Analysis Response: $budgetAnalysisResponse")
+
+                // Create a map of category_id to category name from budget analysis
+                val categoryMap = budgetAnalysisResponse.data
+                    .associate { it.category_id to it.category }
+
+                // Update budgets with actual category names
+                val updatedBudgets = budgetsResponse.data.map { budget ->
+                    budget.copy(category = categoryMap[budget.category_id] ?: budget.category_id)
+                }
+
+                // Update Income (Budget) RecyclerView
+                val budgetAdapter = BudgetAdapter(updatedBudgets)
+                incomeRecyclerView.adapter = budgetAdapter
+
+                // Update summary information
+                val totalBudgets = updatedBudgets.sumByDouble { it.amount }
+                incomeTextView.text = String.format("$%.2f", totalBudgets)
+
+            } catch (e: Exception) {
+                Log.e("PaymentsFragment", "Budget fetch error: ${e.message}")
+                Log.e("PaymentsFragment", "Budget error stacktrace: ", e)
             }
         }
     }

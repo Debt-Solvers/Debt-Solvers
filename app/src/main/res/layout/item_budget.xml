@@ -20,7 +20,7 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="16sp"
-            tools:text="Food Category" />
+            tools:text="Groceries" />
 
         <TextView
             android:id="@+id/budget_amount"
@@ -29,18 +29,59 @@
             android:textColor="@color/green"
             android:textStyle="bold"
             android:textSize="16sp"
-            tools:text="$500.00" />
+            tools:text="Budgeted: $500.00" />
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/budget_period"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textColor="@color/secondaryColor"
-        android:textSize="14sp"
-        tools:text="2024-01-01 - 2024-01-31" />
+        android:orientation="horizontal"
+        android:layout_marginTop="4dp">
+
+        <TextView
+            android:id="@+id/budget_period"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/secondaryColor"
+            android:textSize="14sp"
+            tools:text="Within Budget" />
+
+        <TextView
+            android:id="@+id/budget_remaining"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/secondaryColor"
+            android:textSize="14sp"
+            tools:text="Remaining: $20.00" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="4dp">
+
+        <TextView
+            android:id="@+id/budget_total_spent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/secondaryColor"
+            android:textSize="14sp"
+            tools:text="Total Spent: $650.25" />
+
+        <TextView
+            android:id="@+id/budget_percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:textSize="14sp"
+            tools:text="130.05%" />
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
