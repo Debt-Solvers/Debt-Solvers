@@ -1,5 +1,6 @@
 package com.example.loginapp
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -51,7 +52,14 @@ class UpdateCategoryFragment : Fragment() {
             val id = categoryId
 
             if (id !=null && categoryName.isNotEmpty() && categoryDescription.isNotEmpty() && categoryColor.isNotEmpty()) {
-                expenseManagementViewModel.updateCategory(id, categoryName, categoryDescription, categoryColor)
+
+                val parsedColor =  parseColorInput(categoryColor)
+                if (parsedColor == null) {
+                    Toast.makeText(requireContext(), "Invalid color. Please use a valid name or hex code.", Toast.LENGTH_SHORT).show()
+                } else {
+                    expenseManagementViewModel.updateCategory(id, categoryName, categoryDescription, categoryColor)
+                }
+
             } else {
                 Toast.makeText(requireContext(), "Please fill in both fields", Toast.LENGTH_SHORT).show()
             }
@@ -75,5 +83,12 @@ class UpdateCategoryFragment : Fragment() {
             fragment.arguments = bundle
         }
         (activity as? DashboardActivity)?.replaceFragment(fragment)
+    }
+    private fun parseColorInput(colorInput: String): Int? {
+        return try {
+            Color.parseColor(colorInput.trim())
+        } catch (e: IllegalArgumentException) {
+            null // Return null if parsing fails
+        }
     }
 }
