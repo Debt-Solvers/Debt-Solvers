@@ -1,227 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background_light"
+    android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".PaymentsFragment">
 
+    <!-- Enhanced Summary Card with Glassmorphic Design -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        app:cardElevation="5dp"
-        android:elevation="10dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="8dp"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="@color/card_background_translucent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-                android:orientation="horizontal">
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:layout_height="wrap_content"
-                    android:background="@color/primaryColor">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="@color/black"
-                        android:gravity="center"
-                        android:text="Balance"
-                        android:fontFamily="@font/roboto_bold"
-                        android:textStyle="bold">
-
-                    </TextView>
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:layout_height="wrap_content"
-                    android:background="@color/primaryColor">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="@color/secondaryColor"
-                        android:gravity="center"
-                        android:id="@+id/balance_set_result"
-                        android:text="000.00"
-                        android:maxLines="1"
-                        android:ellipsize="end"
-                        android:textStyle="bold">
-
-                    </TextView>
-                </RelativeLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:orientation="horizontal">
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="@color/secondaryColor"
-                        android:gravity="center"
-                        android:fontFamily="@font/roboto_bold"
-                        android:text="Income">
-
-                    </TextView>
-                </RelativeLayout>
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="@color/red"
-                        android:gravity="center"
-                        android:fontFamily="@font/roboto_bold"
-                        android:text="Expense">
-
-                    </TextView>
-                </RelativeLayout>
-            </LinearLayout>
+            <!-- Financial Overview with Improved Visual Hierarchy -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="7dp">
-                <RelativeLayout
+                android:weightSum="2">
+
+                <LinearLayout
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_height="wrap_content">
+                    android:orientation="vertical"
+                    android:background="@drawable/rounded_financial_background"
+                    android:padding="12dp"
+                    android:layout_marginEnd="8dp">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="@color/black"
-                        android:gravity="center"
-                        android:fontFamily="@font/roboto_regular"
+                        android:text="Budget"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        android:textAllCaps="true"/>
+
+                    <TextView
                         android:id="@+id/income_set_result"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:text="000.00"
-                        android:maxLines="1"
-                        android:ellipsize="end">
+                        android:textColor="@color/text_primary"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
 
-                    </TextView>
-                </RelativeLayout>
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_height="wrap_content">
+                    android:orientation="vertical"
+                    android:background="@drawable/rounded_financial_background"
+                    android:padding="12dp"
+                    android:layout_marginStart="8dp">
 
                     <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="@color/red"
-                        android:id="@+id/expense_set_result"
-                        android:text="000.00"
-                        android:fontFamily="@font/roboto_regular"
-                        android:maxLines="1"
-                        android:ellipsize="end">
+                        android:text="Expense"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        android:textAllCaps="true"/>
 
-                    </TextView>
-                </RelativeLayout>
+                    <TextView
+                        android:id="@+id/expense_set_result"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="000.00"
+                        android:textColor="@color/accent_red"
+                        android:textSize="20sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
             </LinearLayout>
 
+            <!-- Enhanced Balance and Progress Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical"
+                android:background="@drawable/rounded_progress_background"
+                android:padding="12dp">
+
+                <TextView
+                    android:id="@+id/balance_set_result"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Total Balance"
+                    android:textAlignment="center"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:textAllCaps="true"/>
+
+                <ProgressBar
+                    android:id="@+id/budget_progress_bar"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_marginTop="8dp"
+                    android:progress="65"
+                    android:progressTint="@color/primary_color"
+                    android:progressBackgroundTint="@color/progress_background"/>
+            </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-
-
+    <!-- Main Content with Enhanced Scrolling Experience -->
+    <!-- Main Content with Horizontal RecyclerViews -->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:scrollbarThumbVertical="@drawable/custom_scrollbar">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
-                <TextView
+                <!-- Side-by-Side Headers and RecyclerViews -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="Income History"
-                    android:fontFamily="@font/roboto_bold"
-                    android:background="@drawable/gradient_background"
-                    android:textAppearance="?android:textAppearanceLarge" />
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:id="@+id/recycler_income"></androidx.recyclerview.widget.RecyclerView>
+                    <!-- Budget History Section -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="8dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Expense History"
-                    android:fontFamily="@font/roboto_bold"
-                    android:textAppearance="?android:textAppearanceLarge"
-                    android:padding="10dp"
-                    android:background="@drawable/gradient_background">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Budget History"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"
+                            android:padding="16dp"
+                            android:background="@drawable/gradient_header_background"
+                            android:elevation="4dp"/>
 
-                </TextView>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycler_income"
+                            android:layout_width="match_parent"
+                            android:layout_height="400dp"
+                            android:background="@drawable/recycler_background"
+                            android:elevation="2dp"/>
+                    </LinearLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="350dp"
-                    android:id="@+id/recycler_expense">
+                    <!-- Expense History Section -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginStart="8dp">
 
-                </androidx.recyclerview.widget.RecyclerView>
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Expense History"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"
+                            android:padding="16dp"
+                            android:background="@drawable/gradient_header_background"
+                            android:elevation="4dp"/>
 
-
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycler_expense"
+                            android:layout_width="match_parent"
+                            android:layout_height="400dp"
+                            android:background="@drawable/recycler_background"
+                            android:elevation="2dp"/>
+                    </LinearLayout>
+                </LinearLayout>
 
             </LinearLayout>
         </ScrollView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fb_main_lus_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/primaryColor"
-            android:contentDescription="TODO"
-            android:src="@drawable/ic_income"
-            app:fabSize="normal">
-
-        </com.google.android.material.floatingactionbutton.FloatingActionButton>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-
 
 </LinearLayout>
