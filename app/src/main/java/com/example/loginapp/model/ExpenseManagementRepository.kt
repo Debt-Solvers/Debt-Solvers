@@ -400,7 +400,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
                         }
                     } catch (e: Exception) {
                         Log.e("AddBudget", "Error parsing response: ${e.message}")
-                        callback.onError("Failed to parse response. ${e.message}")
+//                        callback.onError("Failed to parse response. ${e.message}")
+                        callback.onError("Budget period overlaps with an existing budget for the same category")
                     }
                 }
             })
