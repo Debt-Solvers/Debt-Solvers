@@ -64,12 +64,10 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     fun changeUserPassword(oldPassword: String, newPassword: String) {
         userRepository.changeUserPassword(oldPassword, newPassword, object : UserRepository.ChangeUserPasswordCallback {
             override fun onSuccess(response: GetUserPasswordResponse) {
-                Log.d("SharedViewModel", "ChangeUserPassword Success: $response")
                 _changePassword.postValue(response)
             }
 
             override fun onError(error: String) {
-                Log.d("SharedViewModel", "ChangeUserPassword Failed: $error")
                 _changePassword.postValue(null)
             }
         })
@@ -78,14 +76,12 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     fun updateUserInfo(firstName: String, lastName: String, email: String){
         userRepository.updateUserInfo(firstName, lastName, email, object : UserRepository.UpdateUserCallBack {
             override fun onSuccess(response: UpdateUserResponse) {
-                Log.d("SharedViewModel", "UpdateUser Success: $response")
                 _updateUser.postValue(response)
                 //Updates the user data
                 fetchUserData()
             }
 
             override fun onError(error: String) {
-                Log.d("SharedViewModel", "UpdateUser Failed: $error")
                 _updateUser.postValue(null)
             }
         })

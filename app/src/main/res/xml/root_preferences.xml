@@ -30,6 +30,11 @@
             android:title="Update User Info"
             android:summary="Update your information"
             android:background="@color/white" />
+        <SwitchPreferenceCompat
+            android:key="dark_mode"
+            android:title="Dark Mode"
+            android:summary="Enable or disable dark mode"
+            android:defaultValue="false"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

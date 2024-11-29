@@ -1,4 +1,6 @@
 package com.example.loginapp
+import BudgetFragment
+import StatsFragment
 import android.app.Activity
 import android.os.Bundle
 import android.view.MenuItem
@@ -7,19 +9,15 @@ import android.Manifest
 import android.app.Dialog
 import androidx.appcompat.app.ActionBarDrawerToggle
 import android.util.Log
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import android.provider.MediaStore
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.ViewModelProvider
 import com.example.loginapp.databinding.ActivityDashboardBinding
 import com.google.android.material.navigation.NavigationView
 import com.example.loginapp.viewmodel.DashboardViewModel
-import com.example.loginapp.viewmodel.DashboardViewModelFactory
 
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -49,6 +47,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -60,6 +59,7 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 // e.g., show it in an ImageView
                 //findViewById<ImageView>(R.id.captured_image_view).setImageBitmap(imageBitmap)
                 savedImageUri = saveImageToInternalStorage(imageBitmap)
+                Log.d("Image", "taken: $savedImageUri")
                 showImagePopup(savedImageUri)
             }
         }
@@ -101,41 +101,31 @@ class DashboardActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         // Observe user data
         // Observe user data from SharedViewModel
         sharedViewModel.userData.observe(this, Observer { userData ->
-            Log.d("DashboardActivity", "userData before check $userData")
             if (userData != null) {
                 // Update UI with user data
-                Log.d("DashboardActivity", "if userData not null $userData")
                 displayUserData(userData)
 
             } else {
                 // Show an error message if fetching data failed
-                Log.d("DashboardActivity", "Failed to fetch userData $userData")
-//                Toast.makeText(this, "Failed to fetch user data", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Failed to fetch user data", Toast.LENGTH_SHORT).show()
             }
         })
 
         sharedViewModel.logoutSuccess.observe(this, Observer { success ->
             if (success) {
-                Log.d("DashboardActivity", "Successfully logged out $success")
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 finish()
             } else {
-//                Toast.makeText(this, "Logout failed", Toast.LENGTH_SHORT).show()
-                Log.d("DashboardActivity", "Failed to logged out $success")
+                Toast.makeText(this, "Logout failed", Toast.LENGTH_SHORT).show()
+
             }
         })
         sharedViewModel.fetchUserData()
 
     }
 
-//    fun replaceFragment(fragment: Fragment){
-//
-//        val fragmentTransaction = fragmentManager.beginTransaction()
-//        fragmentTransaction.replace(R.id.frame_layout, fragment)
-//        fragmentTransaction.commit()
-//
-//    }
+
 fun replaceFragment(fragment: Fragment) {
     val fragmentTransaction = supportFragmentManager.beginTransaction()
     fragmentTransaction.replace(R.id.frame_layout, fragment) // Replace the current fragment

@@ -10,9 +10,50 @@
     <color name="grey">#616060</color>
     <color name="blue">#3498db</color>
     <color name="red">#FF0011</color>
-    <color name="green">#1DFF00</color>
+<!--    <color name="green">#1DFF00</color>-->
+    <color name="green">#17cc00</color>
     <color name="primaryColor">#5E4BD4</color> <!-- Light purple -->
     <color name="secondaryColor">#000000</color> <!-- Black for text -->
     <color name="backgroundColor">#E7E4E4</color>
     <color name="lightBackground">#efeff0</color>
+
+    <color name="primary_color2">#3367D6</color>
+    <color name="secondary_color2">#4CAF50</color>
+    <color name="background_light2">#F7F9FC</color>
+    <color name="text_primary2">#2C3E50</color>
+    <color name="text_secondary2">#34495E</color>
+
+    <color name="negative_balance">#FF5722</color>
+    <color name="low_balance">#FFC107</color>
+    <color name="healthy_balance">#4CAF50</color>
+
+    <color name="budget_color">#4CAF50</color>  <!-- Green for budgeted amount -->
+    <color name="spent_color">#FF5722</color>  <!-- Orange for spent amount -->
+    <color name="budget_over_color">#F44336</color>  <!-- Red for over budget -->
+    <color name="budget_under_color">#4CAF50</color>  <!-- Green for under budget -->
+
+    <!-- Primary Color Palette -->
+    <color name="primary_color">#3F51B5</color>
+    <color name="primary_color_dark">#303F9F</color>
+    <color name="primary_color_light">#C5CAE9</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_hint">#BDBDBD</color>
+
+    <!-- Background Colors -->
+    <color name="background_light">#FAFAFA</color>
+    <color name="background_light_accent">#F5F5F5</color>
+
+    <!-- Accent Colors -->
+    <color name="accent_red">#F44336</color>
+    <color name="accent_green">#4CAF50</color>
+    <color name="accent_blue">#2196F3</color>
+
+    <!-- Translucent card background -->
+    <color name="card_background_translucent">#CCFFFFFF</color>
+
+    <!-- Progress bar background -->
+    <color name="progress_background">#30888888</color>
 </resources>

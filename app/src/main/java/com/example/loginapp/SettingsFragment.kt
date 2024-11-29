@@ -3,24 +3,27 @@ package com.example.loginapp
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreferenceCompat
+import androidx.preference.PreferenceManager
 import com.example.loginapp.viewmodel.SharedViewModel
 import com.example.loginapp.viewmodel.UpdateUserFragment
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
     private lateinit var sharedViewModel: SharedViewModel
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
         // Handle "Change Password" preference click
         val changePasswordPreference: Preference? = findPreference("change_password")
         changePasswordPreference?.setOnPreferenceClickListener {
-            // Replace SettingsFragment with ChangeUserPasswordFragment
             replaceFragment(ChangeUserPasswordFragment())
             true
         }
@@ -28,28 +31,45 @@ class SettingsFragment : PreferenceFragmentCompat() {
         // Handle "Update User Information" preference click
         val updateUserPreference: Preference? = findPreference("update_userinfo")
         updateUserPreference?.setOnPreferenceClickListener {
-            // Replace SettingsFragment with ChangeUserPasswordFragment
             replaceFragment(UpdateUserFragment())
             true
         }
 
+        // Handle Dark Mode SwitchPreferenceCompat
+        val darkModeSwitch: SwitchPreferenceCompat? = findPreference("dark_mode")
+        darkModeSwitch?.setOnPreferenceChangeListener { preference, newValue ->
+            val isDarkMode = newValue as Boolean
+
+            val nightMode = if (isDarkMode) {
+                AppCompatDelegate.MODE_NIGHT_YES
+            } else {
+                AppCompatDelegate.MODE_NIGHT_NO
+            }
+            AppCompatDelegate.setDefaultNightMode(nightMode)
+
+            // Optional: Persist the setting manually if needed
+            preference.sharedPreferences?.edit()?.putBoolean("dark_mode", isDarkMode)?.apply()
+
+            true // Save the new preference value
+        }
+
     }
-    // Use onViewCreated to observe user data when the fragment view is available
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
-        // Observe userData LiveData to access the user data after the view is created
         sharedViewModel.userData.observe(viewLifecycleOwner, Observer { passwordData ->
             Log.d("SettingsFragment", "check password data $passwordData")
         })
     }
+
     // Helper function to replace fragments
     private fun replaceFragment(fragment: Fragment) {
         val transaction = parentFragmentManager.beginTransaction()
         transaction.replace(R.id.frame_layout, fragment)
-        transaction.addToBackStack(null)  // Add to back stack to allow back navigation
+        transaction.addToBackStack(null) // Add to back stack to allow back navigation
         transaction.commit()
     }
 }

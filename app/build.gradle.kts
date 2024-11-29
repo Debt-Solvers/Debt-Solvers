@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.loginapp"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -46,7 +46,12 @@ android {
 }
 
 dependencies {
-    implementation("androidx.appcompat:appcompat")
+    implementation(libs.androidx.appcompat.appcompat)
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.google.code.gson:gson:2.8.9")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation (libs.mpandroidchart)
     implementation(libs.google.material)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -69,6 +74,8 @@ dependencies {
     implementation (libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.navigation.dynamic.features.fragment)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

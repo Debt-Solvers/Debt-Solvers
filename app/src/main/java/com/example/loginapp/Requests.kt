@@ -37,3 +37,43 @@ data class UpdateUserRequest(
     val last_name: String,
     val email: String
 )
+
+@Serializable
+data class AddCategoryRequest(
+    val name: String,
+    val description: String
+)
+@Serializable
+data class GetCategoryRequest(
+    val category_id: String
+)
+
+@Serializable
+data class UpdateCategoryRequest(
+    val name: String,
+    val description: String,
+    val color_code: String
+)
+@Serializable
+data class AddBudgetRequest(
+    val category_id: String,
+    val amount: Float,
+    val start_date: String,
+    val end_date: String
+)
+
+@Serializable
+data class UpdateBudgetRequest(
+    val category_id: String,
+    val amount: Float,
+    val start_date: String,
+    val end_date: String
+)
+
+@Serializable
+data class AddExpenseRequest(
+    val category_id: String,
+    val amount: Float,
+    val date: String,
+    val description: String
+)

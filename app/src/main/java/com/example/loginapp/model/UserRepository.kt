@@ -48,7 +48,7 @@ class UserRepository(private val tokenManager: TokenManager) {
     fun getUserData(callback: UserDataCallback) {
         val token = tokenManager.getToken()
         val backEndURL= "http://10.0.2.2:8080/api/v1/user"
-//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/user"
+//        val backEndURL="http://caa900debtsolverappbe.eastus.cloudapp.azure.com:30000/api/v1/user"
         if (token != null) {
             val request = Request.Builder()
                 .url(backEndURL)
@@ -87,7 +87,7 @@ class UserRepository(private val tokenManager: TokenManager) {
     fun logout(callback: LogoutCallback) {
         val token = tokenManager.getToken()
         val backEndURL="http://10.0.2.2:8080/api/v1/logout"
-//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/logout"
+//        val backEndURL="http://caa900debtsolverappbe.eastus.cloudapp.azure.com:30000/api/v1/logout"
         if (token != null) {
             val request = Request.Builder()
                 .url(backEndURL)
@@ -117,7 +117,7 @@ class UserRepository(private val tokenManager: TokenManager) {
     fun changeUserPassword(oldPassword: String, newPassword: String, callback: ChangeUserPasswordCallback){
         val token = tokenManager.getToken()
         val backEndURL = "http://10.0.2.2:8080/api/v1/change-password"
-//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/change-password"
+//        val backEndURL="http://caa900debtsolverappbe.eastus.cloudapp.azure.com:30000/api/v1/change-password"
         if (token != null) {
             val requestData = ChangeUserPasswordRequest(oldPassword, newPassword)
             val passwordResetData = Json.encodeToString(requestData)
@@ -158,7 +158,7 @@ class UserRepository(private val tokenManager: TokenManager) {
     fun updateUserInfo(firstName: String, lastName: String, email: String, callback: UpdateUserCallBack) {
         val token = tokenManager.getToken()
         val backEndURL = "http://10.0.2.2:8080/api/v1/user/update"
-//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/user/update"
+//        val backEndURL="http://caa900debtsolverappbe.eastus.cloudapp.azure.com:30000/api/v1/user/update"
         if (token != null) {
             val requestData = UpdateUserRequest(firstName, lastName, email)
             val updateUserData = Json.encodeToString(requestData)
