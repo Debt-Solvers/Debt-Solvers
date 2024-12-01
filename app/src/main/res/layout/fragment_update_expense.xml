@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".UpdateBudgetFragment">
+
+    <EditText
+        android:id="@+id/etUpdateExpenseAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Amount"
+        android:inputType="numberDecimal"
+        android:minHeight="48dp"/>
+
+    <EditText
+        android:id="@+id/etUpdateExpenseDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="YYYY-MM-DD"
+        android:inputType="none"
+        android:minHeight="48dp"/>
+
+    <EditText
+        android:id="@+id/etUpdateExpenseDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Description"
+        android:inputType="text"
+        android:minHeight="48dp"/>
+
+    <Button
+        android:id="@+id/UpdateExpenseButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update Expense" />
+
+</LinearLayout>

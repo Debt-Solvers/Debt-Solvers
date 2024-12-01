@@ -71,7 +71,7 @@ class CategoryExpenseDetailFragment : Fragment() {
         categoryId = view.findViewById(R.id.categoryIdTextView)
         categoryColor = view.findViewById(R.id.categoryColorView)
 
-        //Financial UI Componenets
+        //Financial UI Components
 //        totalBudget = view.findViewById(R.id.totalBudgetTextView)
         totalExpenses = view.findViewById(R.id.totalExpensesTextView)
 //        totalBalance = view.findViewById(R.id.remainingBalanceTextView)
@@ -81,10 +81,20 @@ class CategoryExpenseDetailFragment : Fragment() {
         expensesRecyclerView = view.findViewById(R.id.expensesRecyclerView)
 
         // Initialize RecyclerView and adapter
-        expenseAdapter = ExpensesAdapter(emptyList()) { expenseId ->
+        expenseAdapter = ExpensesAdapter(emptyList(), { expenseId ->
             expenseManagementViewModel.deleteExpense(expenseId)
-
-        }
+        }, { selectedExpense -> // Handle the expense to update
+            val bundle = Bundle().apply {
+                putString("EXPENSE_DATA", Json.encodeToString(selectedExpense)) // Pass the budget as JSON
+            }
+            val updateExpenseFragment = UpdateExpenseFragment().apply {
+                arguments = bundle
+            }
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, updateExpenseFragment)
+                .addToBackStack(null)
+                .commit()
+        })
           // Initialize with empty list, update later
         expensesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         expensesRecyclerView.adapter = expenseAdapter

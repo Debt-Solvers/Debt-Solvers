@@ -20,6 +20,7 @@ import com.example.loginapp.GetAllExpensesResponse
 import com.example.loginapp.GetCategoryResponse
 import com.example.loginapp.UpdateBudgetResponse
 import com.example.loginapp.UpdateCategoryResponse
+import com.example.loginapp.UpdateExpenseResponse
 import com.example.loginapp.manager.ExpenseManager
 import com.example.loginapp.model.ExpenseManagementRepository
 import com.example.loginapp.model.ExpenseManagementRepository.UpdateCategoryCallback
@@ -72,6 +73,9 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
     private val _deleteExpense = MutableLiveData<DeleteExpenseResponse>()
     val deleteExpense: LiveData<DeleteExpenseResponse> get() = _deleteExpense
 
+    private val _updateExpense = MutableLiveData<UpdateExpenseResponse>()
+    val updateExpense: LiveData<UpdateExpenseResponse> get() = _updateExpense
+
     // LiveData for error messages
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
@@ -89,10 +93,6 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
         return _selectedCategory.value
     }
 
-
-    //    fun getSelectedCategory(): LiveData<Category> {
-//        return selectedCategory
-//    }
     // Load categories from the repository
     fun fetchDefaultCategories() {
         viewModelScope.launch {
@@ -272,6 +272,18 @@ class ExpenseManagementViewModel(application: Application) : AndroidViewModel(ap
         expenseRepository.addExpense(categoryId, amount, date, description, object : ExpenseManagementRepository.AddExpenseCallback {
             override fun onSuccess(response: AddExpenseResponse) {
                 _addExpense.postValue(response)
+            }
+
+            override fun onError(error: String) {
+                _error.postValue(error)
+            }
+        })
+    }
+    // Update Expense to the list
+    fun updateExpense(expenseId: String, categoryId: String, amount: Float, date: String, description: String) {
+        expenseRepository.updateExpense( expenseId, categoryId, amount, date, description, object : ExpenseManagementRepository.UpdateExpenseCallback {
+            override fun onSuccess(response: UpdateExpenseResponse) {
+                _updateExpense.postValue(response)
             }
 
             override fun onError(error: String) {
