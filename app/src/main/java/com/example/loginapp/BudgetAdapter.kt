@@ -12,13 +12,15 @@ import java.time.format.DateTimeFormatter
 
 class BudgetAdapter(
     private var budgets: List<Budget>,
-    private val onDeleteClicked: (String) -> Unit
-    ) : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
+    private val onDeleteClicked: (String) -> Unit,
+    private val onUpdateClicked: (Budget) -> Unit
+) : RecyclerView.Adapter<BudgetAdapter.BudgetViewHolder>() {
 
     inner class BudgetViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val amountTextView: TextView = view.findViewById(R.id.budgetAmount)
         val dateTextView: TextView = view.findViewById(R.id.budgetDate)
         val deleteBudgetButton: ImageView = view.findViewById(R.id.btnDeleteBudget)
+        val updateBudgetButton: ImageView = view.findViewById(R.id.btnUpdateBudget)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BudgetViewHolder {
@@ -35,6 +37,9 @@ class BudgetAdapter(
 
         holder.deleteBudgetButton.setOnClickListener {
             onDeleteClicked(budget.budget_id)
+        }
+        holder.updateBudgetButton.setOnClickListener{
+            onUpdateClicked(budget)
         }
     }
 

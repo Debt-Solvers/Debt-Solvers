@@ -512,14 +512,19 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
 
                 override fun onResponse(call: Call, response: Response) {
                     val responseBody = response.body?.string()
+                    Log.d("UpdateBudget", "resposneBody is $responseBody")
                     if (response.isSuccessful) {
+                        Log.d("UpdateBudget", "inside on response is success")
                         try {
+
                             val responseData = Json.decodeFromString<UpdateBudgetResponse>(responseBody ?: "")
+                            Log.d("UpdateBudget", "responseData is $responseData")
                             callback.onSuccess(responseData)
                         } catch (e: Exception) {
                             Log.d("UpdateBudget", "Inside e.exception, ${e.message}")
                             callback.onError("Error parsing response: ${e.message}")
                         }
+                    } else {
                         Log.d("UpdateBudget", "response in not successful")
                         callback.onError("Failed to update Budget")
                     }

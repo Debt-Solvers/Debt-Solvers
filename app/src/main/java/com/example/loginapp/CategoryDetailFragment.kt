@@ -40,7 +40,6 @@ class CategoryDetailFragment : Fragment() {
     private lateinit var totalExpenses: TextView
     private lateinit var totalBalance: TextView
 
-
     private lateinit var budgetAdapter: BudgetAdapter
     private lateinit var budgetsRecyclerView: RecyclerView
     private lateinit var binding: FragmentCategoryDetailsBinding
@@ -78,9 +77,20 @@ class CategoryDetailFragment : Fragment() {
         budgetsRecyclerView = view.findViewById(R.id.budgetsRecyclerView)
 
         // Initialize RecyclerView and adapter
-        budgetAdapter = BudgetAdapter(emptyList()) { budgetId ->
+        budgetAdapter = BudgetAdapter(emptyList(), { budgetId ->
             expenseManagementViewModel.deleteBudget(budgetId)
-        }  // Initialize with empty list, update later
+        }, { selectedBudget -> // Handle the budget to update
+            val bundle = Bundle().apply {
+                putString("BUDGET_DATA", Json.encodeToString(selectedBudget)) // Pass the budget as JSON
+            }
+            val updateBudgetFragment = UpdateBudgetFragment().apply {
+                arguments = bundle
+            }
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.frame_layout, updateBudgetFragment)
+                .addToBackStack(null)
+                .commit()
+        })
         budgetsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         budgetsRecyclerView.adapter = budgetAdapter
 
