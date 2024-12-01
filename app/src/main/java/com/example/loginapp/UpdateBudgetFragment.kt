@@ -84,12 +84,6 @@ class UpdateBudgetFragment : Fragment() {
                 Toast.makeText(requireContext(), "Please fill in all the fields", Toast.LENGTH_SHORT).show()
             }
         }
-        // Observe the addCategory success response
-        expenseManagementViewModel.addBudget.observe(viewLifecycleOwner) { response ->
-            if (response != null && response.status == 201) { // Check if response is successful
-                navigateToFragment(CategoryDetailFragment(), response.message)
-            }
-        }
         expenseManagementViewModel.updateBudget.observe(viewLifecycleOwner) { response ->
             if (response != null && response.status == 200) { // Check if response is successful
                 navigateToFragment(CategoryDetailFragment(), response.message)
