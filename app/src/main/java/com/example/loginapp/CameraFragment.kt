@@ -13,7 +13,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -34,6 +37,7 @@ import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -44,9 +48,24 @@ interface ReceiptUploadService {
     @POST("/api/v1/receipts/upload")
     suspend fun uploadReceipt(
         @Part file: MultipartBody.Part,
-        @Part("description") description: RequestBody
+        @Part("description") description: RequestBody,
+        @Part("category_id") categoryId: RequestBody
     ): ApiResponse
+
+    @GET("/api/v1/categories/")
+    suspend fun fetchCategories(): CategoryResponse
 }
+data class CategoryResponse(
+    val status: Int,
+    val message: String,
+    val data: List<CategoryReceipt>
+)
+
+data class CategoryReceipt(
+    val category_id: String,
+    val name: String,
+    val description: String
+)
 
 data class ApiResponse(
     val status: Int,
@@ -63,15 +82,90 @@ class CameraFragment : Fragment() {
     private var capturedImageFile: File? = null
 
     private lateinit var tokenManager: TokenManager
+
+    private val categoriesService by lazy {
+        createCategoriesService()
+    }
+
     private val receiptService by lazy {
         createReceiptService()
     }
+
+    private fun fetchCategories() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            try {
+                val response = withContext(Dispatchers.IO) {
+                    categoriesService.fetchCategories() // Use categoriesService instead of receiptService
+                }
+
+                if (response.status == 200) {
+                    val categories = response.data
+                    showCategorySelectionDialog(categories)
+                    categories.forEach { category ->
+                        Log.d("FetchCategories", "Fetched category: id=${category.category_id}, name=${category.name}")
+                    }
+
+                } else {
+                    Toast.makeText(requireContext(), "Failed to fetch categories", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Log.e("FetchCategories", "Error fetching categories", e)
+                Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun showCategorySelectionDialog(categories: List<CategoryReceipt>) {
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_category_selection)
+
+        val spinner = dialog.findViewById<Spinner>(R.id.categorySpinner)
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            categories.map { it.name }
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+
+        dialog.findViewById<Button>(R.id.btnSelect).setOnClickListener {
+            val selectedCategoryIndex = spinner.selectedItemPosition
+            val selectedCategory = categories[selectedCategoryIndex]
+            //Show selected id
+            Log.d("CategorySelection", "Selected category: id=${selectedCategory.category_id}, name=${selectedCategory.name}")
+
+            dialog.dismiss()
+            uploadReceipt(selectedCategory.category_id)
+        }
+
+        dialog.show()
+    }
+
 
     private fun createReceiptService(): ReceiptUploadService {
         tokenManager = TokenManager.getInstance(requireContext())
 
         val retrofit = Retrofit.Builder()
             .baseUrl("http://10.0.2.2:8082/") // Replace with your actual base URL
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor(AuthInterceptor(tokenManager))
+                    .connectTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .writeTimeout(30, TimeUnit.SECONDS)
+                    .build()
+            )
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        return retrofit.create(ReceiptUploadService::class.java)
+    }
+
+    private fun createCategoriesService(): ReceiptUploadService {
+        tokenManager = TokenManager.getInstance(requireContext())
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://10.0.2.2:8081/") // Categories service base URL
             .client(
                 OkHttpClient.Builder()
                     .addInterceptor(AuthInterceptor(tokenManager))
@@ -120,10 +214,10 @@ class CameraFragment : Fragment() {
                 if (imageBitmap != null) {
                     savedImageUri = saveImageToInternalStorage(imageBitmap)
                     Log.d("Image", "Image taken: $savedImageUri")
-                    showImagePopup(savedImageUri)
+                    //showImagePopup(savedImageUri)
 
-                    // Prepare for upload after capturing
-                    capturedImageFile?.let { uploadReceipt(it) }
+                    // Fetch categories after capturing the image
+                    fetchCategories()
                 } else {
                     Log.e("Image", "Captured image bitmap is null")
                 }
@@ -148,20 +242,21 @@ class CameraFragment : Fragment() {
         }
     }
 
-    private fun uploadReceipt(file: File) {
-        if (!file.exists()) {
+    private fun uploadReceipt(categoryId: String) {
+        if (capturedImageFile == null || !capturedImageFile!!.exists()) {
             Log.e("UploadReceipt", "File does not exist")
             return
         }
 
-        val requestBody = RequestBody.create("image/jpeg".toMediaTypeOrNull(), file)
-        val multipartBody = MultipartBody.Part.createFormData("file", file.name, requestBody)
+        val requestBody = RequestBody.create("image/jpeg".toMediaTypeOrNull(), capturedImageFile!!)
+        val multipartBody = MultipartBody.Part.createFormData("file", capturedImageFile!!.name, requestBody)
         val description = RequestBody.create("text/plain".toMediaTypeOrNull(), "Receipt Description")
+        val categoryRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), categoryId)
 
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val response = withContext(Dispatchers.IO) {
-                    receiptService.uploadReceipt(multipartBody, description)
+                    receiptService.uploadReceipt(multipartBody, description, categoryRequestBody) // Use receiptService
                 }
 
                 Log.d("UploadReceipt", "Response status: ${response.status}")
@@ -184,6 +279,7 @@ class CameraFragment : Fragment() {
             }
         }
     }
+
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
