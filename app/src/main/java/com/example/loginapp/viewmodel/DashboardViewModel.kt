@@ -28,7 +28,8 @@ class DashboardViewModel(private val tokenManager: TokenManager) : ViewModel() {
     fun logout() {
         val token = tokenManager.getToken()
         if (token != null) {
-            val backEndURL = "http://10.0.2.2:8080/api/v1/logout"
+//            val backEndURL = "http://10.0.2.2:8080/api/v1/logout"
+            val backEndURL = "http://caa900debtsolverappbe.eastus.cloudapp.azure.com:30000/api/v1/logout"
             val request = Request.Builder()
                 .url(backEndURL)
                 .post(ByteArray(0).toRequestBody())
@@ -59,7 +60,8 @@ class DashboardViewModel(private val tokenManager: TokenManager) : ViewModel() {
     fun getUserData() {
         val token = tokenManager.getToken()
         if (token != null) {
-            val backEndURL = "http://10.0.2.2:8080/api/v1/user"
+//            val backEndURL = "http://10.0.2.2:8080/api/v1/user"
+            val backEndURL = "http://caa900debtsolverappbe.eastus.cloudapp.azure.com:30000/api/v1/user"
             val request = Request.Builder()
                 .url(backEndURL)
                 .get()

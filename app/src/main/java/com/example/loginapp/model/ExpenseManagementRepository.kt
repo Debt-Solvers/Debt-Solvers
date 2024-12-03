@@ -108,8 +108,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
     // Get categories from SharedPreferences
     fun getDefaultCategories(callback: CategoryCallback) {
         val token = tokenManager.getToken()
-        val backEndURL= "http://10.0.2.2:8081/api/v1/categories/defaults"
-//        val backEndURL="http://4.236.128.116:30001/api/v1/categories/defaults"
+//        val backEndURL= "http://10.0.2.2:8081/api/v1/categories/defaults"
+        val backEndURL="http://74.235.241.67:30001/api/v1/categories/defaults"
         if (token != null) {
             val request = Request.Builder()
                 .url(backEndURL)
@@ -147,8 +147,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
     // Get categories from SharedPreferences
     fun getAllCategories(callback: AllCategoriesCallback) {
         val token = tokenManager.getToken()
-        val backEndURL= "http://10.0.2.2:8081/api/v1/categories"
-//        val backEndURL="http://4.236.128.116:30001/api/v1/categories"
+//        val backEndURL= "http://10.0.2.2:8081/api/v1/categories"
+        val backEndURL="http://74.235.241.67:30001/api/v1/categories"
         if (token != null) {
             val request = Request.Builder()
                 .url(backEndURL)
@@ -186,8 +186,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
 
     fun addCategory(name: String, description: String, callback: AddCategoryCallback){
         val token = tokenManager.getToken()
-        val backEndURL= "http://10.0.2.2:8081/api/v1/categories"
-//        val backEndURL="http://4.236.128.116:30001/api/v1/categories"
+//        val backEndURL= "http://10.0.2.2:8081/api/v1/categories"
+        val backEndURL="http://74.235.241.67:30001/api/v1/categories"
         if (token != null) {
 
             val requestData = AddCategoryRequest(name, description)
@@ -228,8 +228,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
     }
     fun getCategory(category_id: String, callback: SingleCategoryCallback){
         val token = tokenManager.getToken()
-        val backEndURL= "http://10.0.2.2:8081/api/v1/categories/${category_id}"
-//        val backEndURL="http://4.236.128.116:30001/api/v1/categories"
+//        val backEndURL= "http://10.0.2.2:8081/api/v1/categories/${category_id}"
+        val backEndURL="http://74.235.241.67:30001/api/v1/categories/${category_id}"
         if (token != null) {
             val request = Request.Builder()
                 .url(backEndURL)
@@ -265,8 +265,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
     }
     fun deleteCategory(id: String, callback: DeleteCategoryCallback){
         val token = tokenManager.getToken()
-        val backEndURL= "http://10.0.2.2:8081/api/v1/categories/${id}"
-//        val backEndURL="http://4.236.128.116:30001/api/v1/categories/${id}"
+//        val backEndURL= "http://10.0.2.2:8081/api/v1/categories/${id}"
+        val backEndURL="http://74.235.241.67:30001/api/v1/categories/${id}"
         if (token != null) {
 
             val request = Request.Builder()
@@ -305,8 +305,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
 
     fun updateCategory(id: String, name: String, description: String, color_code: String, callback: UpdateCategoryCallback){
         val token = tokenManager.getToken()
-        val backEndURL= "http://10.0.2.2:8081/api/v1/categories/${id}"
-//        val backEndURL="http://4.236.128.116:30001/api/v1/categories/${id}"
+//        val backEndURL= "http://10.0.2.2:8081/api/v1/categories/${id}"
+        val backEndURL="http://74.235.241.67:30001/api/v1/categories/${id}"
         if (token != null) {
             val requestData = UpdateCategoryRequest(name, description, color_code)
             val updateCategoryData = Json.encodeToString(requestData)
@@ -357,8 +357,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
     // Add a budget to a category
     fun addBudget(categoryId: String, amount: Float, start_date: String, end_date: String, callback: AddBudgetCallback) {
         val token = tokenManager.getToken()
-        val backEndURL = "http://10.0.2.2:8081/api/v1/budgets"
-
+//        val backEndURL = "http://10.0.2.2:8081/api/v1/budgets"
+        val backEndURL="http://74.235.241.67:30001/api/v1/budgets"
         if (token != null) {
             val requestData = AddBudgetRequest(categoryId, amount, start_date, end_date)
             val addBudgetData = Json.encodeToString(requestData)
@@ -421,8 +421,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
     // Get All the budgets
     fun getAllBudgets(callback: AllBudgetsCallback) {
         val token = tokenManager.getToken()
-        val backEndURL= "http://10.0.2.2:8081/api/v1/budgets"
-//        val backEndURL="http://4.236.128.116:30001/api/v1/budgets"
+//        val backEndURL= "http://10.0.2.2:8081/api/v1/budgets"
+        val backEndURL="http://74.235.241.67:30001/api/v1/budgets"
         if (token != null) {
             val request = Request.Builder()
                 .url(backEndURL)
@@ -460,8 +460,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
 
     fun deleteBudget(id: String, callback: DeleteBudgetCallback){
         val token = tokenManager.getToken()
-        val backEndURL= "http://10.0.2.2:8081/api/v1/budgets/${id}"
-//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/budgets/${id}"
+//        val backEndURL= "http://10.0.2.2:8081/api/v1/budgets/${id}"
+        val backEndURL="http://74.235.241.67:30001/api/v1/budgets/${id}"
         if (token != null) {
 
             val request = Request.Builder()
@@ -499,8 +499,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
 
     fun updateBudget(budgetId: String, categoryId: String, amount: Float, start_date: String, end_date: String, callback: UpdateBudgetCallback){
         val token = tokenManager.getToken()
-        val backEndURL= "http://10.0.2.2:8081/api/v1/budgets/${budgetId}"
-//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/budgets/${budgetId}"
+//        val backEndURL= "http://10.0.2.2:8081/api/v1/budgets/${budgetId}"
+        val backEndURL="http://74.235.241.67:30001/api/v1/budgets/${budgetId}"
         if (token != null) {
             val requestData = UpdateBudgetRequest(categoryId, amount, start_date, end_date)
             val updateCategoryData = Json.encodeToString(requestData)
@@ -547,8 +547,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
     // Get All the expenses
     fun getAllExpenses(callback: AllExpensesCallback) {
         val token = tokenManager.getToken()
-        val backEndURL= "http://10.0.2.2:8081/api/v1/expenses"
-//        val backEndURL="http://4.236.128.116:30001/api/v1/budgets"
+//        val backEndURL= "http://10.0.2.2:8081/api/v1/expenses"
+        val backEndURL="http://74.235.241.67:30001/api/v1/expenses"
         if (token != null) {
             val request = Request.Builder()
                 .url(backEndURL)
@@ -592,8 +592,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
     // Add a budget to a category
     fun addExpense(categoryId: String, amount: Float, date:String, description: String, callback: AddExpenseCallback) {
         val token = tokenManager.getToken()
-        val backEndURL = "http://10.0.2.2:8081/api/v1/expenses"
-
+//        val backEndURL = "http://10.0.2.2:8081/api/v1/expenses"
+        val backEndURL="http://74.235.241.67:30001/api/v1/expenses"
         if (token != null) {
             val requestData = AddExpenseRequest(categoryId, amount, date, description)
             val addBudgetData = Json.encodeToString(requestData)
@@ -652,8 +652,8 @@ class ExpenseManagementRepository(private val expenseManager: ExpenseManager, co
     }
     fun deleteExpense(id: String, callback: DeleteExpenseCallback){
         val token = tokenManager.getToken()
-        val backEndURL= "http://10.0.2.2:8081/api/v1/expenses/${id}"
-//        val backEndURL="http://caa900debtsolverapp.eastus.cloudapp.azure.com:8080/api/v1/budgets/${id}"
+//        val backEndURL= "http://10.0.2.2:8081/api/v1/expenses/${id}"
+        val backEndURL="http://74.235.241.67:30001/api/v1/expenses/${id}"
         if (token != null) {
 
             val request = Request.Builder()

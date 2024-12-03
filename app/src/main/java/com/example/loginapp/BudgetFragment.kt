@@ -85,7 +85,7 @@
             tokenManager = TokenManager.getInstance(requireContext())
 
             Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8081/") // Replace with your actual base URL
+                .baseUrl("http://74.235.241.67:30001/") // Replace with your actual base URL
                 .client(
                     OkHttpClient.Builder()
                         .addInterceptor(AuthInterceptor(tokenManager))
