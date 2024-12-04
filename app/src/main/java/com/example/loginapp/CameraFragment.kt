@@ -43,6 +43,9 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import java.util.concurrent.TimeUnit
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 
 interface ReceiptUploadService {
     @Multipart
@@ -83,6 +86,11 @@ class CameraFragment : Fragment() {
     private var capturedImageFile: File? = null
 
     private lateinit var tokenManager: TokenManager
+
+    private val cameraViewModel: CameraViewModel by activityViewModels()
+    private val viewModel: CameraViewModel by viewModels()
+
+
 
     private val categoriesService by lazy {
         createCategoriesService()
@@ -208,6 +216,29 @@ class CameraFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Restore saved captures when fragment is created
+        cameraViewModel.restoreSavedCaptures()
+
+        // Observe recent captures using StateFlow
+        viewLifecycleOwner.lifecycleScope.launch {
+            cameraViewModel.recentCaptures.collect { captures ->
+                binding.recentCapturesContainer1.removeAllViews()
+                binding.recentCapturesContainer2.removeAllViews()
+
+                // Only add unique captures to prevent duplicates
+                val uniqueCaptures = captures.distinct()
+
+                uniqueCaptures.forEachIndexed { index, uri ->
+                    val containerToUse = if (index % 2 == 0) {
+                        binding.recentCapturesContainer1
+                    } else {
+                        binding.recentCapturesContainer2
+                    }
+                    addImageToContainer(uri, containerToUse)
+                }
+            }
+        }
+
         // Initialize the launcher for capturing a picture
         takePictureLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -216,20 +247,26 @@ class CameraFragment : Fragment() {
                     savedImageUri = saveImageToInternalStorage(imageBitmap)
                     Log.d("Image", "Image taken: $savedImageUri")
                     //showImagePopup(savedImageUri)
-                    // Alternate between containers for recent captures
 
-                    val containerToUse = if (binding.recentCapturesContainer1.childCount <= binding.recentCapturesContainer2.childCount) {
-                        binding.recentCapturesContainer1
-                    } else {
-                        binding.recentCapturesContainer2
+                    // Only update the ViewModel, and let the observer handle UI updates
+                    savedImageUri?.let { uri ->
+                        cameraViewModel.addCapture(uri)
+
                     }
-                    addImageToContainer(savedImageUri!!, containerToUse)
-                    // Fetch categories after capturing the image
                     fetchCategories()
-                } else {
-                    Log.e("Image", "Captured image bitmap is null")
                 }
             }
+        }
+
+        // Restore saved image URI if available
+        viewModel.savedImageUri?.let {
+            // Display the saved image in the appropriate container
+            val containerToUse = if (binding.recentCapturesContainer1.childCount <= binding.recentCapturesContainer2.childCount) {
+                binding.recentCapturesContainer1
+            } else {
+                binding.recentCapturesContainer2
+            }
+            addImageToContainer(it, containerToUse)
         }
 
         // Set up the FAB to capture a picture
@@ -348,6 +385,9 @@ class CameraFragment : Fragment() {
 
             uri = Uri.fromFile(file)
 
+            // Save the file reference in ViewModel
+            viewModel.capturedImageFile = file
+            viewModel.savedImageUri = uri
             // Also save the file reference for upload
             capturedImageFile = file
 
