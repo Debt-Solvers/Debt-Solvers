@@ -35,6 +35,7 @@ import java.io.FileOutputStream
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -215,7 +216,14 @@ class CameraFragment : Fragment() {
                     savedImageUri = saveImageToInternalStorage(imageBitmap)
                     Log.d("Image", "Image taken: $savedImageUri")
                     //showImagePopup(savedImageUri)
+                    // Alternate between containers for recent captures
 
+                    val containerToUse = if (binding.recentCapturesContainer1.childCount <= binding.recentCapturesContainer2.childCount) {
+                        binding.recentCapturesContainer1
+                    } else {
+                        binding.recentCapturesContainer2
+                    }
+                    addImageToContainer(savedImageUri!!, containerToUse)
                     // Fetch categories after capturing the image
                     fetchCategories()
                 } else {
@@ -248,15 +256,19 @@ class CameraFragment : Fragment() {
             return
         }
 
-        val requestBody = RequestBody.create("image/jpeg".toMediaTypeOrNull(), capturedImageFile!!)
-        val multipartBody = MultipartBody.Part.createFormData("file", capturedImageFile!!.name, requestBody)
+        val fileRequestBody = capturedImageFile!!.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        val multipartBody = MultipartBody.Part.createFormData(
+            "receipt",
+            capturedImageFile!!.name,
+            fileRequestBody
+        )
         val description = RequestBody.create("text/plain".toMediaTypeOrNull(), "Receipt Description")
         val categoryRequestBody = RequestBody.create("text/plain".toMediaTypeOrNull(), categoryId)
 
         viewLifecycleOwner.lifecycleScope.launch {
             try {
                 val response = withContext(Dispatchers.IO) {
-                    receiptService.uploadReceipt(multipartBody, description, categoryRequestBody) // Use receiptService
+                    receiptService.uploadReceipt(multipartBody, description, categoryRequestBody)
                 }
 
                 Log.d("UploadReceipt", "Response status: ${response.status}")
@@ -272,7 +284,20 @@ class CameraFragment : Fragment() {
                     }
                 }
             } catch (e: Exception) {
+                Log.e("UploadReceipt", "Complete error details:", e)
                 Log.e("UploadReceipt", "Error uploading receipt", e)
+                Log.d("UploadReceipt", "File: ${capturedImageFile!!.name}")
+                Log.d("UploadReceipt", "Description: Receipt Description")
+                Log.d("UploadReceipt", "Category ID: $categoryId")
+                Log.d("UploadReceipt", "File path: ${capturedImageFile!!.absolutePath}")
+                Log.d("UploadReceipt", "File exists: ${capturedImageFile!!.exists()}")
+                Log.d("UploadReceipt", "File size: ${capturedImageFile!!.length()} bytes")
+
+                if (e is retrofit2.HttpException) {
+                    val errorBody = e.response()?.errorBody()?.string()
+                    Log.e("UploadReceipt", "Detailed HTTP error: $errorBody")
+                }
+
                 withContext(Dispatchers.Main) {
                     Toast.makeText(requireContext(), "Upload error: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
@@ -325,6 +350,7 @@ class CameraFragment : Fragment() {
 
             // Also save the file reference for upload
             capturedImageFile = file
+
         } catch (e: Exception) {
             Log.e("SaveImage", "Error saving image", e)
             e.printStackTrace()
@@ -334,6 +360,29 @@ class CameraFragment : Fragment() {
 
     companion object {
         private const val CAMERA_REQUEST_CODE = 1001
+    }
+
+    private fun addImageToContainer(imageUri: Uri, container: ViewGroup) {
+        val imageView = ImageView(requireContext())
+        val layoutParams = ViewGroup.LayoutParams(
+            resources.getDimensionPixelSize(R.dimen.recent_capture_width), // Define this dimension in dimens.xml
+            resources.getDimensionPixelSize(R.dimen.recent_capture_height)
+        )
+        imageView.layoutParams = layoutParams
+        imageView.setImageURI(imageUri)
+        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+        imageView.adjustViewBounds = true
+
+        // Add padding between images
+        val padding = resources.getDimensionPixelSize(R.dimen.recent_capture_padding)
+        imageView.setPadding(padding, 0, padding, 0)
+
+        // Optional: Add click listener to show full image
+        imageView.setOnClickListener {
+            showImagePopup(imageUri)
+        }
+
+        container.addView(imageView)
     }
 
     override fun onDestroyView() {
