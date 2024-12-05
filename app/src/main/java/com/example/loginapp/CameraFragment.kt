@@ -82,6 +82,7 @@ class CameraFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var takePictureLauncher: ActivityResultLauncher<Intent>
+    private lateinit var selectGalleryLauncher: ActivityResultLauncher<Intent>
     private var savedImageUri: Uri? = null
     private var capturedImageFile: File? = null
 
@@ -239,6 +240,22 @@ class CameraFragment : Fragment() {
             }
         }
 
+        // Initialize the launcher for selecting an image from gallery
+        selectGalleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val selectedImageUri = result.data?.data
+                if (selectedImageUri != null) {
+                    savedImageUri = copyGalleryImageToInternalStorage(selectedImageUri)
+                    Log.d("Image", "Image selected from gallery: $savedImageUri")
+
+                    savedImageUri?.let { uri ->
+                        cameraViewModel.addCapture(uri)
+                    }
+                    fetchCategories()
+                }
+            }
+        }
+
         // Initialize the launcher for capturing a picture
         takePictureLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -271,7 +288,7 @@ class CameraFragment : Fragment() {
 
         // Set up the FAB to capture a picture
         binding.fabTakePicture.setOnClickListener {
-            openCamera()
+            showImageSourceDialog()
         }
     }
 
@@ -368,6 +385,46 @@ class CameraFragment : Fragment() {
             }
         } else {
             Toast.makeText(requireContext(), "Error displaying image.", Toast.LENGTH_SHORT).show()
+        }
+    }
+    // New method to show dialog for choosing image source
+    private fun showImageSourceDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_image_source)
+
+        val btnCamera = dialog.findViewById<Button>(R.id.btnCamera)
+        val btnGallery = dialog.findViewById<Button>(R.id.btnGallery)
+
+        btnCamera.setOnClickListener {
+            dialog.dismiss()
+            openCamera()
+        }
+
+        btnGallery.setOnClickListener {
+            dialog.dismiss()
+            openGallery()
+        }
+
+        dialog.show()
+    }
+
+    // New method to open gallery
+    private fun openGallery() {
+        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        selectGalleryLauncher.launch(galleryIntent)
+    }
+
+    // New method to copy gallery image to internal storage
+    private fun copyGalleryImageToInternalStorage(imageUri: Uri): Uri? {
+        return try {
+            // Read the bitmap from the gallery
+            val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageUri)
+
+            // Save the bitmap to internal storage
+            saveImageToInternalStorage(bitmap)
+        } catch (e: Exception) {
+            Log.e("CopyGalleryImage", "Error copying gallery image", e)
+            null
         }
     }
 
