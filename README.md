@@ -15,4 +15,10 @@ Note:
 If you are using a new DNS name or IP address, you must update "network_security_config.xml" file.
 It is located at the path app/src/main/res/xml.
 
+Files that need to be modified for the URL:
+ExpenseManagementUserRepository
+UserRepository
+LoginViewModel
+RegisterViewModel
+
 Once you are done updating the URL address, run the android app using android studio. It may take some time as it is installing and building the gradle files.
