@@ -1,4 +1,4 @@
-After cloning and hosting the database infrastructure on cloud, you have to update the back-end url to send the API requests.
+#After cloning and hosting the database infrastructure on cloud, you have to update the back-end url to send the API requests.
 
 When you define the URL to send API Requests to the backend,
 
@@ -15,10 +15,14 @@ Note:
 If you are using a new DNS name or IP address, you must update "network_security_config.xml" file.
 It is located at the path app/src/main/res/xml.
 
-Files that need to be modified for the URL:
+#Files that need to be modified for the URL:
 ExpenseManagementUserRepository
-UserRepository
-LoginViewModel
-RegisterViewModel
+UserRepository.kt
+LoginViewModel.kt
+RegisterViewModel.kt
+StatsFragment.kt
+BudgetFragment.kt
+PaymentsFragment.kt
+CameraFragment.kt   
 
 Once you are done updating the URL address, run the android app using android studio. It may take some time as it is installing and building the gradle files.
