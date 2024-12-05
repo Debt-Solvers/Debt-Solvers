@@ -128,7 +128,7 @@ class PaymentsFragment : Fragment() {
         tokenManager = TokenManager.getInstance(requireContext())
 
         Retrofit.Builder()
-            .baseUrl("http://74.235.241.67:30001/") // Replace with your actual base URL
+            .baseUrl("http://caa900debtsolverappbe.eastus.cloudapp.azure.com:30001/") // Replace with your actual base URL
             .client(
                 OkHttpClient.Builder()
                     .addInterceptor(AuthInterceptor(tokenManager))

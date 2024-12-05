@@ -155,7 +155,7 @@ class CameraFragment : Fragment() {
         tokenManager = TokenManager.getInstance(requireContext())
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8082/") // Replace with your actual base URL
+            .baseUrl("http://caa900debtsolverappbe.eastus.cloudapp.azure.com:30002/") // Replace with your actual base URL
             .client(
                 OkHttpClient.Builder()
                     .addInterceptor(AuthInterceptor(tokenManager))
@@ -174,7 +174,7 @@ class CameraFragment : Fragment() {
         tokenManager = TokenManager.getInstance(requireContext())
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8081/") // Categories service base URL
+            .baseUrl("http://caa900debtsolverappbe.eastus.cloudapp.azure.com:30001/") // Categories service base URL
             .client(
                 OkHttpClient.Builder()
                     .addInterceptor(AuthInterceptor(tokenManager))
@@ -314,6 +314,7 @@ class CameraFragment : Fragment() {
                 if (response.status == 200) {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(requireContext(), "Upload successful", Toast.LENGTH_SHORT).show()
+
                     }
                 } else {
                     withContext(Dispatchers.Main) {
