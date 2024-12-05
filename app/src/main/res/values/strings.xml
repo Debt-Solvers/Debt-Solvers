@@ -51,11 +51,13 @@
     <string name="budget_adapter_amount_label">\$%.2f</string>
     <string name="budget_adapter_total_budget_label">\$%.2f</string>
     <string name="budget_adapter_delete">Delete Budget</string>
+    <string name="budget_adapter_update">Update Budget</string>
 
     <!-- Expense Adapter-->
     <string name="expense_adapter_amount_label">\$%.2f</string>
     <string name="expense_adapter_total_expense_label">\$%.2f</string>
     <string name="expense_adapter_delete">Delete Expense</string>
+    <string name="expense_adapter_update">Update Expense</string>
 
 
 </resources>

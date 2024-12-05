@@ -71,6 +71,14 @@ data class UpdateBudgetRequest(
 )
 
 @Serializable
+data class UpdateExpenseRequest(
+    val amount: Float,
+    val category_id: String,
+    val date: String,
+    val description: String
+)
+
+@Serializable
 data class AddExpenseRequest(
     val category_id: String,
     val amount: Float,

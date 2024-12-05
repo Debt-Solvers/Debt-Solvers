@@ -262,5 +262,11 @@ data class DeleteExpenseResponse(
     val status: Int,
     val message: String
 )
+@Serializable
+data class UpdateExpenseResponse(
+    val status: Int,
+    val message: String,
+    val data: Expense2
+)
 
 

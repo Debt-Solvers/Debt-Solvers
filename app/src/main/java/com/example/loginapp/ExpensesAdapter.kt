@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.loginapp.Budget
 import com.example.loginapp.Expense2
 import com.example.loginapp.R
 import java.time.ZonedDateTime
@@ -12,7 +13,8 @@ import java.time.format.DateTimeFormatter
 
 class ExpensesAdapter(
     private var expenses: List<Expense2>,
-    private val onDeleteClicked: (String) -> Unit
+    private val onDeleteClicked: (String) -> Unit,
+    private val onUpdateClicked: (Expense2) -> Unit
 ) : RecyclerView.Adapter<ExpensesAdapter.ExpenseViewHolder>() {
 
     inner class ExpenseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -20,6 +22,7 @@ class ExpensesAdapter(
         val dateTextView: TextView = view.findViewById(R.id.expenseDate)
         val descriptionTextView: TextView = view.findViewById(R.id.expenseDescription)
         val deleteExpenseButton: ImageView = view.findViewById(R.id.btnDeleteExpense)
+        val updateExpenseButton: ImageView = view.findViewById(R.id.btnUpdateExpense)
 
     }
 
@@ -39,6 +42,9 @@ class ExpensesAdapter(
         holder.deleteExpenseButton.setOnClickListener {
             onDeleteClicked(expense.expenseId)
             Log.d("DeleteExpense", "Temp message inside onClick")
+        }
+        holder.updateExpenseButton.setOnClickListener{
+            onUpdateClicked(expense)
         }
     }
 

@@ -32,7 +32,7 @@
                 android:textColor="#333333"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                tools:text="May 2023" />
+                tools:text="" />
 
             <TextView
                 android:id="@+id/budgetAmount"
@@ -40,8 +40,20 @@
                 android:layout_height="wrap_content"
                 android:textColor="#4CAF50"
                 android:textSize="14sp"
-                tools:text="$500.00" />
+                tools:text="" />
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btnUpdateBudget"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="8dp"
+            android:src="@drawable/edit"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            android:scaleType="centerInside"
+            android:contentDescription="@string/budget_adapter_update" />
 
         <ImageView
             android:id="@+id/btnDeleteBudget"
@@ -54,5 +66,6 @@
             android:background="?attr/selectableItemBackground"
             android:scaleType="centerInside"
             android:contentDescription="@string/budget_adapter_delete" />
+
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

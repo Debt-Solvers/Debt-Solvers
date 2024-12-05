@@ -258,25 +258,18 @@
             app:layout_constraintBottom_toBottomOf="parent"
             tools:layout_editor_absoluteX="0dp">
 
-
-            <!-- Add Button -->
             <Button
                 android:id="@+id/btnUpdateCategoryDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="#4CAF50"
-                android:text="Update Category"
-                android:textColor="#FFFFFF" />
+                android:text="Update Category" />
 
-            <!-- Edit Button -->
             <Button
                 android:id="@+id/btnAddBudgetDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:background="#2196F3"
-                android:text="Add Budget"
-                android:textColor="#FFFFFF" />
+                android:text="Add Budget" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
