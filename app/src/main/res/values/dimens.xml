@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="recent_capture_width">120dp</dimen>
+    <dimen name="recent_capture_height">120dp</dimen>
+    <dimen name="recent_capture_padding">4dp</dimen>
+</resources>
